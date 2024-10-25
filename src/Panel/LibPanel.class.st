@@ -8,5 +8,5 @@ Class {
 { #category : 'accessing - platform' }
 LibPanel >> unix64LibraryName [
 
-	^ FFIUnix64LibraryFinder findLibrary: 'libpanel.so'
+	^ FFIUnix64LibraryFinder findLibrary: 'libpanel-1.so'
 ]
