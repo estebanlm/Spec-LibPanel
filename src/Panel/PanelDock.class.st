@@ -1,8 +1,14 @@
+"
+https://gnome.pages.gitlab.gnome.org/libpanel/class.Dock.html
+"
 Class {
 	#name : 'PanelDock',
 	#superclass : 'GtkWidget',
 	#traits : 'LibTPanel',
 	#classTraits : 'LibTPanel classTrait',
+	#pools : [
+		'PanelArea'
+	],
 	#category : 'Panel',
 	#package : 'Panel'
 }
@@ -19,6 +25,12 @@ PanelDock class >> new [
 	^ self gtkNew initialize
 ]
 
+{ #category : 'accessing' }
+PanelDock >> bottomHeight: height [
+
+	self ffiCall: #(void panel_dock_set_bottom_height (self, int height))
+]
+
 { #category : 'signaling' }
 PanelDock >> connectCreateFrame: aBlock [
 
@@ -26,4 +38,97 @@ PanelDock >> connectCreateFrame: aBlock [
 		connect: 'create-frame' 
 		signature: #(void* (void* handle, void* position, gpointer data)) 
 		do: aBlock
+]
+
+{ #category : 'accessing' }
+PanelDock >> endWidth: width [
+
+	self ffiCall: #(void panel_dock_set_end_width (self, int width))
+]
+
+{ #category : 'testing' }
+PanelDock >> isAreaRevealed: aPanelArea [
+
+	aPanelArea = PANEL_AREA_TOP ifTrue: [ ^ self isTopRevealed ].
+	aPanelArea = PANEL_AREA_START ifTrue: [ ^ self isStartRevealed ].
+	aPanelArea = PANEL_AREA_BOTTOM ifTrue: [ ^ self isBottomRevealed ].
+	aPanelArea = PANEL_AREA_END ifTrue: [ ^ self isEndRevealed ].			
+			
+	"is center"
+	^ true
+]
+
+{ #category : 'testing' }
+PanelDock >> isBottomRevealed [
+
+	^ self ffiCall: #(gboolean panel_dock_get_reveal_bottom (self))
+]
+
+{ #category : 'testing' }
+PanelDock >> isEndRevealed [
+
+	^ self ffiCall: #(gboolean panel_dock_get_reveal_end (self))
+]
+
+{ #category : 'testing' }
+PanelDock >> isStartRevealed [
+
+	^ self ffiCall: #(gboolean panel_dock_get_reveal_start (self))
+]
+
+{ #category : 'testing' }
+PanelDock >> isTopRevealed [
+
+	^ self ffiCall: #(gboolean panel_dock_get_reveal_top (self))
+]
+
+{ #category : 'accessing' }
+PanelDock >> remove: widget [
+
+	self ffiCall: #(void panel_dock_remove (self, GtkWidget* widget))
+]
+
+{ #category : 'accessing' }
+PanelDock >> revealArea: aPanelArea [
+
+	aPanelArea = PANEL_AREA_TOP ifTrue: [ ^ self revealTop: true ].
+	aPanelArea = PANEL_AREA_START ifTrue: [ ^ self revealStart: true ].
+	aPanelArea = PANEL_AREA_BOTTOM ifTrue: [ ^ self revealBottom: true ].
+	aPanelArea = PANEL_AREA_END ifTrue: [ ^ self revealEnd: true ]				
+]
+
+{ #category : 'accessing' }
+PanelDock >> revealBottom: reveal_bottom [
+
+	self ffiCall: #(void panel_dock_set_reveal_bottom (self, gboolean reveal_bottom))
+]
+
+{ #category : 'accessing' }
+PanelDock >> revealEnd: reveal_end [
+
+	self ffiCall: #(void panel_dock_set_reveal_end (self, gboolean reveal_end))
+]
+
+{ #category : 'accessing' }
+PanelDock >> revealStart: reveal_start [
+
+	self ffiCall: #(void panel_dock_set_reveal_start (self, gboolean reveal_start))
+]
+
+{ #category : 'accessing' }
+PanelDock >> revealTop: reveal_top [
+
+	self ffiCall: #(void panel_dock_set_reveal_top (self, gboolean reveal_top))
+]
+
+{ #category : 'accessing' }
+PanelDock >> startWidth: width [
+
+	self ffiCall: #(void panel_dock_set_start_width (self, int width))
+]
+
+{ #category : 'accessing' }
+PanelDock >> topHeight: height [
+
+	self ffiCall: #(void panel_dock_set_top_height (self, int height))
 ]

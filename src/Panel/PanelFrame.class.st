@@ -1,3 +1,6 @@
+"
+https://gnome.pages.gitlab.gnome.org/libpanel/class.Frame.html
+"
 Class {
 	#name : 'PanelFrame',
 	#superclass : 'GtkWidget',

@@ -1,3 +1,6 @@
+"
+https://gnome.pages.gitlab.gnome.org/libpanel/class.Grid.html
+"
 Class {
 	#name : 'PanelGrid',
 	#superclass : 'GtkWidget',
