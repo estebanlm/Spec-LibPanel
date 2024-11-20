@@ -7,7 +7,9 @@ Class {
 	#instVars : [
 		'titlebar',
 		'dock',
-		'widgets'
+		'widgets',
+		'grid',
+		'statusbar'
 	],
 	#category : 'Panel',
 	#package : 'Panel'
@@ -70,11 +72,35 @@ PanelDocumentWorkspace >> getDock [
 	^ self ffiCall: #(PanelDock* panel_document_workspace_get_dock (self))
 ]
 
+{ #category : 'private' }
+PanelDocumentWorkspace >> getGrid [
+
+	^ self ffiCall: #(PanelGrid* panel_document_workspace_get_grid (self))
+]
+
+{ #category : 'accessing' }
+PanelDocumentWorkspace >> getStatusbar [
+
+	^ self ffiCall: #(PanelStatusbar* panel_document_workspace_get_statusbar (self))
+]
+
+{ #category : 'accessing' }
+PanelDocumentWorkspace >> grid [
+
+	^ grid ifNil: [ grid := self getGrid ]
+]
+
 { #category : 'initialization' }
 PanelDocumentWorkspace >> initialize [
 
 	super initialize.
 	widgets := Set new
+]
+
+{ #category : 'accessing' }
+PanelDocumentWorkspace >> statusbar [
+
+	^ statusbar ifNil: [ statusbar := self getStatusbar ]
 ]
 
 { #category : 'accessing' }

@@ -13,7 +13,7 @@ DockAreaEnd >> asPanelArea [
 ]
 
 { #category : 'converting' }
-DockAreaEnd >> asPanelPosition [
+DockAreaEnd >> toPanelPosition [
 
 	^ PanelPosition end
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'GtkWorkspaceAdapter',
+	#name : 'GtkDockWindowAdapter',
 	#superclass : 'GtkAdapter',
 	#instVars : [
 		'lastSizeAllocation'
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'building' }
-GtkWorkspaceAdapter >> addModelTo: gtkWindow [
+GtkDockWindowAdapter >> addModelTo: gtkWindow [
 
 	super addModelTo: gtkWindow.
 
@@ -33,7 +33,7 @@ GtkWorkspaceAdapter >> addModelTo: gtkWindow [
 ]
 
 { #category : 'building' }
-GtkWorkspaceAdapter >> addTitlebarTo: gtkWindow [
+GtkDockWindowAdapter >> addTitlebarTo: gtkWindow [
 	
 	gtkWindow titlebar: (AdwHeaderBar new  
 		titleWidget: (GtkLabel newLabel: self presenter title);
@@ -41,19 +41,19 @@ GtkWorkspaceAdapter >> addTitlebarTo: gtkWindow [
 ]
 
 { #category : 'building' }
-GtkWorkspaceAdapter >> addVisibleSettingsTo: gtkWidget [
+GtkDockWindowAdapter >> addVisibleSettingsTo: gtkWidget [
 	"windows fo not have visibility settings, they are shown or hide"
 ]
 
 { #category : 'private - announcing' }
-GtkWorkspaceAdapter >> announceClosed [
+GtkDockWindowAdapter >> announceClosed [
 
 	self presenter windowIsClosing.
 	self presenter windowClosed
 ]
 
 { #category : 'private - announcing' }
-GtkWorkspaceAdapter >> announceOpened [
+GtkDockWindowAdapter >> announceOpened [
 	"ensure not in callback"
 	
 	self runInSystem: [ 
@@ -61,7 +61,7 @@ GtkWorkspaceAdapter >> announceOpened [
 ]
 
 { #category : 'private - announcing' }
-GtkWorkspaceAdapter >> announceResized: newSize [
+GtkDockWindowAdapter >> announceResized: newSize [
 	| windowSize |
 
 	"We keep last size allocation to compare, because size-allocate can be signaled 
@@ -70,6 +70,7 @@ GtkWorkspaceAdapter >> announceResized: newSize [
 	 there is no real resizing). "
 	lastSizeAllocation = newSize ifTrue: [ ^ self ].
 	lastSizeAllocation := newSize.
+	
 	"It seems the allocated extent is not necessarly the resulting size of the window, 
 	 Instead using that extent as newSize informed, we ask the real size of the 
 	 window to send."
@@ -81,7 +82,7 @@ GtkWorkspaceAdapter >> announceResized: newSize [
 ]
 
 { #category : 'private - announcing' }
-GtkWorkspaceAdapter >> announceWillClose [
+GtkDockWindowAdapter >> announceWillClose [
 	| ann |
 
 	ann := SpWindowWillClose new
@@ -94,14 +95,26 @@ GtkWorkspaceAdapter >> announceWillClose [
 ]
 
 { #category : 'accessing' }
-GtkWorkspaceAdapter >> close [
+GtkDockWindowAdapter >> bottomHeight: aNumber [
+
+	self widgetDo: [ :w | w dock bottomHeight: aNumber ]
+]
+
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> bottomVisible: aBoolean [
+
+	self widgetDo: [ :w | w dock revealBottom: aBoolean ]
+]
+
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> close [
 
 	self announceWillClose ifFalse: [ ^ self ].
 	self widgetDo: [ :w | w beNotVisible ]
 ]
 
 { #category : 'private' }
-GtkWorkspaceAdapter >> closeFromSignal [
+GtkDockWindowAdapter >> closeFromSignal [
 	"this is called from connectDestroy (just one time)"
 
 	self announceClosed.
@@ -109,7 +122,7 @@ GtkWorkspaceAdapter >> closeFromSignal [
 ]
 
 { #category : 'private - building' }
-GtkWorkspaceAdapter >> connectToGtkSignals: gtkWindow [
+GtkDockWindowAdapter >> connectToGtkSignals: gtkWindow [
 
 	"add close events (delete is sent before)"
 
@@ -124,7 +137,7 @@ GtkWorkspaceAdapter >> connectToGtkSignals: gtkWindow [
 ]
 
 { #category : 'accessing' }
-GtkWorkspaceAdapter >> dockWindow: aDockableWindow [
+GtkDockWindowAdapter >> dockWindow: aDockableWindow [
 
 	self widgetDo: [ :w |
 		self dockWindow: aDockableWindow to: w ]
@@ -134,21 +147,34 @@ GtkWorkspaceAdapter >> dockWindow: aDockableWindow [
 ]
 
 { #category : 'accessing' }
-GtkWorkspaceAdapter >> dockWindow: aDockableWindow to: gtkWindow [
+GtkDockWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 	| panelWidget panelPosition panelArea |
  
-	panelPosition := aDockableWindow dockArea asPanelPosition.
-	panelArea := aDockableWindow dockArea asPanelArea.
+	panelPosition := aDockableWindow dockPosition toPanelPosition.
 	panelWidget := aDockableWindow build.
 	gtkWindow 
 		addWidget: panelWidget 
 		at: panelPosition.
+
+	panelArea := aDockableWindow dockArea asPanelArea.
 	(gtkWindow dock isAreaRevealed: panelArea)
 		ifFalse: [ gtkWindow dock revealArea: panelArea ]	
 ]
 
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> endVisible: aBoolean [
+
+	self widgetDo: [ :w | w dock revealEnd: aBoolean ]
+]
+
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> endWidth: aNumber [
+
+	self widgetDo: [ :w | w dock endWidth: aNumber ]
+]
+
 { #category : 'testing' }
-GtkWorkspaceAdapter >> isAreaVisible: aDockArea [
+GtkDockWindowAdapter >> isAreaVisible: aDockArea [
 
 	aDockArea = DockArea center ifTrue: [ ^ true ].
 	
@@ -156,8 +182,17 @@ GtkWorkspaceAdapter >> isAreaVisible: aDockArea [
 		 w dock isAreaRevealed: aDockArea asPanelArea ]
 ]
 
+{ #category : 'testing' }
+GtkDockWindowAdapter >> isTopWindow [
+
+	^ self widgetDo: [ :w |
+		GEngine current ensureApplication activeWindow
+			ifNotNil: [ :active | active getHandle = w getHandle ]
+			ifNil: [ false ] ]
+]
+
 { #category : 'building' }
-GtkWorkspaceAdapter >> newWidget [
+GtkDockWindowAdapter >> newWidget [
 
 	^ self widgetClass new 
 		autoRelease;
@@ -166,7 +201,7 @@ GtkWorkspaceAdapter >> newWidget [
 ]
 
 { #category : 'accessing' }
-GtkWorkspaceAdapter >> openWithDeferredAction: aBlock [
+GtkDockWindowAdapter >> openWithDeferredAction: aBlock [
  
 	self hasWidget ifFalse: [ ^ nil ].
 	self widgetDo: [ :w | w present ].
@@ -176,7 +211,7 @@ GtkWorkspaceAdapter >> openWithDeferredAction: aBlock [
 ]
 
 { #category : 'private' }
-GtkWorkspaceAdapter >> processInitializationDeferredActions [
+GtkDockWindowAdapter >> processInitializationDeferredActions [
 	
 	self presenter traversePresentersDo: [ :each | 
 		each adapter ifNotNil: [ :anAdapter |
@@ -184,32 +219,56 @@ GtkWorkspaceAdapter >> processInitializationDeferredActions [
 ]
 
 { #category : 'accessing' }
-GtkWorkspaceAdapter >> title: aString [ 
+GtkDockWindowAdapter >> startVisible: aBoolean [
+
+	self widgetDo: [ :w | w dock revealStart: aBoolean ]
+]
+
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> startWidth: aNumber [
+
+	self widgetDo: [ :w | w dock startWidth: aNumber ]
+]
+
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> title: aString [ 
 	
 	self widgetDo: [ :w | 
 		w titlebar titleWidget label: aString ]
 ]
 
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> topHeight: aNumber [
+
+	self widgetDo: [ :w | w dock topHeight: aNumber ]
+]
+
+{ #category : 'accessing' }
+GtkDockWindowAdapter >> topVisible: aBoolean [
+
+	self widgetDo: [ :w | w dock revealTop: aBoolean ]
+]
+
 { #category : 'building' }
-GtkWorkspaceAdapter >> widgetClass [
+GtkDockWindowAdapter >> widgetClass [
 
 	^ PanelDocumentWorkspaceWindow
 ]
 
 { #category : 'test support' }
-GtkWorkspaceAdapter >> widgetIsVisible [
+GtkDockWindowAdapter >> widgetIsVisible [
 
 	^ self widgetDo: [ :w | w isVisible ]
 ]
 
 { #category : 'test support' }
-GtkWorkspaceAdapter >> widgetSize [
+GtkDockWindowAdapter >> widgetSize [
 
 	^ self widgetDo: [ :w | w defaultSize ]
 ]
 
 { #category : 'test support' }
-GtkWorkspaceAdapter >> widgetTitle [
+GtkDockWindowAdapter >> widgetTitle [
 
 	^ self widgetDo: [ :w | w titlebar titleWidget label ]
 ]

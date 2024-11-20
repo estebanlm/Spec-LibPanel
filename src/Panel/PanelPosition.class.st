@@ -57,3 +57,39 @@ PanelPosition >> area: area [
 
 	^ self ffiCall: #(void panel_position_set_area (self, PanelArea area))
 ]
+
+{ #category : 'accessing' }
+PanelPosition >> column [
+
+	^ self ffiCall: #(guint panel_position_get_column (self))
+]
+
+{ #category : 'accessing' }
+PanelPosition >> column: column [
+
+	^ self ffiCall: #(void panel_position_set_column (self, guint column))
+]
+
+{ #category : 'accessing' }
+PanelPosition >> depth [
+
+	^ self ffiCall: #(guint panel_position_get_depth (self))
+]
+
+{ #category : 'testing' }
+PanelPosition >> isIndeterminate [
+
+	^ self ffiCall: #(gboolean panel_position_is_indeterminate (self))
+]
+
+{ #category : 'accessing' }
+PanelPosition >> row [
+
+	^ self ffiCall: #(guint panel_position_get_row (self))
+]
+
+{ #category : 'accessing' }
+PanelPosition >> row: row [
+
+	^ self ffiCall: #(void panel_position_set_row (self, guint row))
+]

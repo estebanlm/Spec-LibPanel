@@ -1,7 +1,7 @@
 Trait {
 	#name : 'DockTDockableWindow',
 	#instVars : [
-		'dockArea'
+		'dockPosition'
 	],
 	#category : 'Spec-Panel-Base',
 	#package : 'Spec-Panel',
@@ -9,13 +9,13 @@ Trait {
 }
 
 { #category : 'accessing' }
-DockTDockableWindow >> dockArea [
+DockTDockableWindow >> dockPosition [
 
-	^ dockArea
+	^ dockPosition
 ]
 
 { #category : 'accessing' }
-DockTDockableWindow >> dockArea: aDockArea [
+DockTDockableWindow >> dockPosition: aDockPosition [
 
-	dockArea := aDockArea
+	dockPosition := aDockPosition
 ]

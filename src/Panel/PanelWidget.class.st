@@ -31,6 +31,26 @@ PanelWidget >> canMaximize: can_maximize [
 	self ffiCall: #(void panel_widget_set_can_maximize (self, gboolean can_maximize))
 ]
 
+{ #category : 'signaling' }
+PanelWidget >> connectGetDefaultFocus: aBlock [
+
+	self 
+		connect: 'get-default-focus'
+	 	signature:  #(void* (void *widget, gpointer user_data))
+		do: [ :widget :user_data | 
+			aBlock value ]
+]
+
+{ #category : 'signaling' }
+PanelWidget >> connectPresented: aBlock [
+
+	self 
+		connect: 'presented'
+	 	signature:  #(void (void *widget, gpointer user_data))
+		do: [ :widget :user_data | 
+			aBlock value ]
+]
+
 { #category : 'private' }
 PanelWidget >> getMenuModel [
 

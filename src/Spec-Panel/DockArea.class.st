@@ -60,7 +60,13 @@ DockArea >> asPanelArea [
 ]
 
 { #category : 'converting' }
-DockArea >> asPanelPosition [
+DockArea >> toPanelPosition [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'converting' }
+DockArea >> toPosition [
+
+	^ DockPosition newArea: self
 ]
