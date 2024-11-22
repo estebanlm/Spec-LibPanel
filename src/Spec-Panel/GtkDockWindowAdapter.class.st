@@ -15,21 +15,18 @@ GtkDockWindowAdapter >> addModelTo: gtkWindow [
 	super addModelTo: gtkWindow.
 
 	gtkWindow defaultSize: self presenter initialExtent.
-
+	
 	self addTitlebarTo: gtkWindow.
 
 	self connectToGtkSignals: gtkWindow.
 
 	self presenter presenters do: [ :each | 
-		self dockWindow: each to: gtkWindow ]
+		self dockWindow: each to: gtkWindow ].
 
-	"add window properties"
-	"self presenter initialExtent ifNotNil: [ :extent |
-		gtkWindow defaultSize: extent ]."
-	"self presenter initialPosition
-		ifNotNil: [ :position | gtkWindow moveTo: position ]."
-	"gtkWindow decorated: self presenter hasDecorations.
-	self subscribeDecorations."
+	"gtkWindow dock forEachFrameDo: [ :aPanelFrame | aPanelFrame crTrace ].
+	gtkWindow dock connectCreateFrame: [ :handle :position :user_data |
+		'HERE' crTrace.
+		PanelFrame new getHandle ]"
 ]
 
 { #category : 'building' }

@@ -66,6 +66,13 @@ PanelDocumentWorkspace >> dock [
 		dock := self getDock initialize ]
 ]
 
+{ #category : 'accessing' }
+PanelDocumentWorkspace >> dock: aPanelDock [
+
+	self setDock: aPanelDock.
+	dock := aPanelDock
+]
+
 { #category : 'private' }
 PanelDocumentWorkspace >> getDock [
 
@@ -95,6 +102,12 @@ PanelDocumentWorkspace >> initialize [
 
 	super initialize.
 	widgets := Set new
+]
+
+{ #category : 'private' }
+PanelDocumentWorkspace >> setDock: aPanelDock [
+
+	^ self ffiCall: #(void panel_document_workspace_get_dock (self, PanelDock *aPanelDock))
 ]
 
 { #category : 'accessing' }

@@ -1,9 +1,9 @@
 Class {
 	#name : 'DockAreaStart',
 	#superclass : 'DockArea',
-	#category : 'Spec-Panel-Base',
+	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
-	#tag : 'Base'
+	#tag : 'Presenter'
 }
 
 { #category : 'converting' }

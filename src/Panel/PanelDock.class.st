@@ -25,6 +25,15 @@ PanelDock class >> new [
 	^ self gtkNew initialize
 ]
 
+{ #category : 'private' }
+PanelDock >> basicForEachFrame: callback [
+
+	self ffiCall: #(void panel_dock_foreach_frame (
+		self,
+  		"PanelFrameCallback"GCallback callback,
+  		"gpointer user_data"NULL))
+]
+
 { #category : 'accessing' }
 PanelDock >> bottomHeight: height [
 
@@ -44,6 +53,18 @@ PanelDock >> connectCreateFrame: aBlock [
 PanelDock >> endWidth: width [
 
 	self ffiCall: #(void panel_dock_set_end_width (self, int width))
+]
+
+{ #category : 'accessing' }
+PanelDock >> forEachFrameDo: aBlock [ 
+	| callback |
+	
+	callback := GCallback 
+		signature: #(void (void *frameHandle, gpointer user_data)) 
+		block: [ :frameHandle :user_data |
+			aBlock value: (PanelFrame fromHandleUnreferenced: frameHandle) ].
+		
+	self basicForEachFrame: callback
 ]
 
 { #category : 'testing' }

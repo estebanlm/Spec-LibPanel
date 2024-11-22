@@ -4,9 +4,9 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : 'Spec-Panel-Base',
+	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
-	#tag : 'Base'
+	#tag : 'Presenter'
 }
 
 { #category : 'accessing' }
@@ -68,5 +68,5 @@ DockArea >> toPanelPosition [
 { #category : 'converting' }
 DockArea >> toPosition [
 
-	^ DockPosition newArea: self
+	^ DockPanelPosition newArea: self
 ]

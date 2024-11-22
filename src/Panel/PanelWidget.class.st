@@ -7,7 +7,8 @@ Class {
 	#traits : 'LibTPanel + GtkTBin',
 	#classTraits : 'LibTPanel classTrait + GtkTBin classTrait',
 	#instVars : [
-		'menuModel'
+		'menuModel',
+		'saveDelegate'
 	],
 	#category : 'Panel',
 	#package : 'Panel'
@@ -31,6 +32,12 @@ PanelWidget >> canMaximize: can_maximize [
 	self ffiCall: #(void panel_widget_set_can_maximize (self, gboolean can_maximize))
 ]
 
+{ #category : 'accessing' }
+PanelWidget >> close [
+
+	self ffiCall: #(void panel_widget_close (self))
+]
+
 { #category : 'signaling' }
 PanelWidget >> connectGetDefaultFocus: aBlock [
 
@@ -49,6 +56,12 @@ PanelWidget >> connectPresented: aBlock [
 	 	signature:  #(void (void *widget, gpointer user_data))
 		do: [ :widget :user_data | 
 			aBlock value ]
+]
+
+{ #category : 'accessing' }
+PanelWidget >> forceClose [
+
+	self ffiCall: #(void panel_widget_force_close (self))
 ]
 
 { #category : 'private' }
@@ -131,9 +144,28 @@ PanelWidget >> needsAttention: needs_attention [
 ]
 
 { #category : 'accessing' }
+PanelWidget >> raise [
+
+	self ffiCall: #(void panel_widget_raise (self))
+]
+
+{ #category : 'accessing' }
 PanelWidget >> reorderable: reorderable [
 
 	self ffiCall: #(void panel_widget_set_reorderable (self, gboolean reorderable))
+]
+
+{ #category : 'accessing' }
+PanelWidget >> saveDelegate [
+
+	^ saveDelegate
+]
+
+{ #category : 'accessing' }
+PanelWidget >> saveDelegate: aSaveDelegate [
+
+	saveDelegate := aSaveDelegate.
+	self setSaveDelegate: aSaveDelegate
 ]
 
 { #category : 'private' }
@@ -146,6 +178,14 @@ PanelWidget >> setChild: aWidget [
 PanelWidget >> setMenuModel: menu_model [
 
 	self ffiCall: #(void panel_widget_set_menu_model (self, GMenuModel* menu_model))
+]
+
+{ #category : 'private' }
+PanelWidget >> setSaveDelegate: save_delegate [
+
+	self ffiCall: #(void panel_widget_set_save_delegate (
+		self, 
+		PanelSaveDelegate* save_delegate))
 ]
 
 { #category : 'accessing' }

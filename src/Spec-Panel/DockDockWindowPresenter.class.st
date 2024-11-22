@@ -7,9 +7,9 @@ Class {
 		'#presenters',
 		'#initialExtent'
 	],
-	#category : 'Spec-Panel-Base',
+	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
-	#tag : 'Base'
+	#tag : 'Presenter'
 }
 
 { #category : 'specs' }

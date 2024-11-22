@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockPosition',
+	#name : 'DockPanelPosition',
 	#superclass : 'Object',
 	#instVars : [
 		'area',
@@ -7,13 +7,13 @@ Class {
 		'column',
 		'row'
 	],
-	#category : 'Spec-Panel-Base',
+	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
-	#tag : 'Base'
+	#tag : 'Presenter'
 }
 
 { #category : 'instance creation' }
-DockPosition class >> newArea: aDockArea [
+DockPanelPosition class >> newArea: aDockArea [
 
 	^ self new 
 		area: aDockArea;
@@ -21,43 +21,43 @@ DockPosition class >> newArea: aDockArea [
 ]
 
 { #category : 'accessing' }
-DockPosition >> area [
+DockPanelPosition >> area [
 
 	^ area
 ]
 
 { #category : 'accessing' }
-DockPosition >> area: aDockArea [
+DockPanelPosition >> area: aDockArea [
 
 	area := aDockArea
 ]
 
 { #category : 'accessing' }
-DockPosition >> column [
+DockPanelPosition >> column [
 
 	^ column
 ]
 
 { #category : 'accessing' }
-DockPosition >> column: aNumber [
+DockPanelPosition >> column: aNumber [
 
 	column := aNumber
 ]
 
 { #category : 'accessing' }
-DockPosition >> row [
+DockPanelPosition >> row [
 
 	^ row
 ]
 
 { #category : 'accessing' }
-DockPosition >> row: aNumber [
+DockPanelPosition >> row: aNumber [
 
 	row := aNumber
 ]
 
 { #category : 'converting' }
-DockPosition >> toPanelPosition [
+DockPanelPosition >> toPanelPosition [
 	| panelPosition |
 
 	panelPosition := self area toPanelPosition.
@@ -67,7 +67,7 @@ DockPosition >> toPanelPosition [
 ]
 
 { #category : 'converting' }
-DockPosition >> toPosition [
+DockPanelPosition >> toPosition [
 
 	^ self
 ]

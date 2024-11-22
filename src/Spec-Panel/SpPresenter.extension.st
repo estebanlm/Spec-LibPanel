@@ -1,21 +1,21 @@
 Extension { #name : 'SpPresenter' }
 
 { #category : '*Spec-Panel' }
-SpPresenter >> dockableWindow [
-	"as 'window', but answers the tiled window"
-	self isDockableWindow ifTrue: [ ^ self ].
-	self hasOwner ifTrue: [ ^ self owner tileWindow ].
-	^ nil
-]
-
-{ #category : '*Spec-Panel' }
-SpPresenter >> isDockableWindow [
+SpPresenter >> isPanelWindow [
 	
 	^ false
 ]
 
 { #category : '*Spec-Panel' }
-SpPresenter >> withDockableWindowDo: aBlock [
+SpPresenter >> panelWindow [
+	"as 'window', but answers the tiled window"
+	self isPanelWindow ifTrue: [ ^ self ].
+	self hasOwner ifTrue: [ ^ self owner panelWindow ].
+	^ nil
+]
 
-	^ self dockableWindow ifNotNil: aBlock
+{ #category : '*Spec-Panel' }
+SpPresenter >> withPanelWindowDo: aBlock [
+
+	^ self panelWindow ifNotNil: aBlock
 ]

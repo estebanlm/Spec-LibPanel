@@ -1,21 +1,21 @@
 Trait {
-	#name : 'DockTDockableWindow',
+	#name : 'DockTPanelWindow',
 	#instVars : [
 		'dockPosition'
 	],
-	#category : 'Spec-Panel-Base',
+	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
-	#tag : 'Base'
+	#tag : 'Presenter'
 }
 
 { #category : 'accessing' }
-DockTDockableWindow >> dockPosition [
+DockTPanelWindow >> dockPosition [
 
 	^ dockPosition
 ]
 
 { #category : 'accessing' }
-DockTDockableWindow >> dockPosition: aDockPosition [
+DockTPanelWindow >> dockPosition: aDockPosition [
 
 	dockPosition := aDockPosition
 ]
