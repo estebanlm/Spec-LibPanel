@@ -17,17 +17,43 @@ DockPanelWindowPresenter class >> adapterName [
 	^ #PanelWindowAdapter
 ]
 
+{ #category : 'api' }
+DockPanelWindowPresenter >> close [
+	"Close current window."
+
+	self withAdapterDo: [ :anAdapter | 
+		anAdapter close ]
+]
+
+{ #category : 'private' }
+DockPanelWindowPresenter >> closeFromKeyboard [
+	"a close signal has been triggered. I need to verify I am in a panel that is closable like that."
+
+	"Just panels in the center can be closed with meta+w"
+	self dockPosition area = DockArea center ifFalse: [ ^ self ].
+	
+	self close
+]
+
 { #category : 'accessing' }
 DockPanelWindowPresenter >> dockArea [
 	
 	^ self dockPosition area
 ]
 
-{ #category : 'testing' }
+{ #category : 'initialization' }
 DockPanelWindowPresenter >> initialize [
 
 	super initialize.
-	modified := false
+	modified := false.
+	self registerActions
+]
+
+{ #category : 'initialization' }
+DockPanelWindowPresenter >> initializeWindow [
+
+	super initializeWindow.
+	self presenter initializePanelWindow: self
 ]
 
 { #category : 'testing' }
@@ -66,6 +92,15 @@ DockPanelWindowPresenter >> raise [
 	self withAdapterDo: [ :anAdapter | anAdapter raise ]
 ]
 
+{ #category : 'initialization' }
+DockPanelWindowPresenter >> registerActions [
+
+	self ensureInternalActions 
+		addShortcutWith: [ :action | action
+			shortcutKey: $w actionModifier;
+			action: [ self closeFromKeyboard ] ]
+]
+
 { #category : 'api' }
 DockPanelWindowPresenter >> unmaximize [
 
@@ -77,6 +112,24 @@ DockPanelWindowPresenter >> whenDiscardDo: aBlock [
 
 	self announcer 
 		when: DockPanelWindowDiscard
+		do: aBlock
+		for: aBlock receiver
+]
+
+{ #category : 'api - events' }
+DockPanelWindowPresenter >> whenFocusLostDo: aBlock [
+
+	self announcer
+		when: DockPanelWindowFocusLost
+		do: aBlock
+		for: aBlock receiver
+]
+
+{ #category : 'api - events' }
+DockPanelWindowPresenter >> whenFocusReceivedDo: aBlock [
+
+	self announcer
+		when: DockPanelWindowFocusReceived 
 		do: aBlock
 		for: aBlock receiver
 ]
@@ -97,7 +150,7 @@ DockPanelWindowPresenter >> whenPresentedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenSaveDo: aBlock [ 
+DockPanelWindowPresenter >> whenSaveDo: aBlock [
 	"Announces when the window is dirty (modified) and user wants to close it by pressing the 
 	 close button (or with <meta+w>. 
 	 DockPanelWindowSave ann needs to be setted to success (using beSuccess) for the window to
@@ -115,4 +168,10 @@ DockPanelWindowPresenter >> window [
 	 need to answer the closest one)."
 	
 	^ self nearWindow
+]
+
+{ #category : 'private' }
+DockPanelWindowPresenter >> windowClosed [
+
+	isClosed := true
 ]

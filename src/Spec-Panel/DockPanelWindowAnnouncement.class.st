@@ -12,13 +12,13 @@ Class {
 { #category : 'accessing' }
 DockPanelWindowAnnouncement >> beFailed [
 
-	success := false
+	self success: false
 ]
 
 { #category : 'accessing' }
 DockPanelWindowAnnouncement >> beSuccess [
 
-	success := true
+	self success: true
 ]
 
 { #category : 'initialization' }
@@ -38,4 +38,10 @@ DockPanelWindowAnnouncement >> isFailed [
 DockPanelWindowAnnouncement >> isSuccess [
 
 	^ success
+]
+
+{ #category : 'accessing' }
+DockPanelWindowAnnouncement >> success: aBoolean [
+
+	success := aBoolean
 ]

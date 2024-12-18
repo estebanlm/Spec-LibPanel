@@ -44,14 +44,29 @@ DockDockWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 DockDockWindowPresenter >> addWindow: aDockableWindow [
 	
 	aDockableWindow owner: self.
-	presenters := self presenters copyWith: aDockableWindow.
-	self withAdapterDo: [ :anAdapter | anAdapter dockWindow: aDockableWindow ]
+	aDockableWindow whenClosedDo: [
+		self basicRemovePresenter: aDockableWindow ].
+	self basicAddPresenter: aDockableWindow.
+	self withAdapterDo: [ :anAdapter |
+		anAdapter dockWindow: aDockableWindow ]
 ]
 
 { #category : 'showing' }
 DockDockWindowPresenter >> asWindow [
 
 	^ self
+]
+
+{ #category : 'private' }
+DockDockWindowPresenter >> basicAddPresenter: aDockableWindow [
+	
+	presenters := self presenters copyWith: aDockableWindow
+]
+
+{ #category : 'private' }
+DockDockWindowPresenter >> basicRemovePresenter: aDockableWindow [
+	
+	presenters := self presenters copyWithout: aDockableWindow
 ]
 
 { #category : 'api' }
@@ -309,6 +324,11 @@ DockDockWindowPresenter >> windowClosed [
 	
 	isClosed := true.
 	self application windowClosed: self
+]
+
+{ #category : 'accessing' }
+DockDockWindowPresenter >> windowIcon: anIcon [
+	"For background compatibility"
 ]
 
 { #category : 'updating' }

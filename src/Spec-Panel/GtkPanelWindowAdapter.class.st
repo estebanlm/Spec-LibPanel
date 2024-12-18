@@ -15,21 +15,36 @@ GtkPanelWindowAdapter >> addModelTo: panelWidget [
 		connectSave: [ self runInSystem: [ self announceSave ] ];
 		connectDiscard: [ self runInSystem: [ self announceDiscard ] ];
 		connectClose: [ "self announceDiscard" ];
-		yourself). 
-
+		yourself).
+	panelWidget connectDestroy: [ self announceClosed ].
+				
 	childWidget := SpBindings
 		value: self presenter application adapterBindings
 		during: [ self presenter presenter build ].
+
 	panelWidget 
 		title: self presenter title;
-		child: childWidget;
+		child: childWidget.
+	
+	"Events"
+	panelWidget
 		connectPresented: [
 			self runInSystem: [  
 				self announcePresented.
-				self presenter presenter takeKeyboardFocus ] ].
+				self presenter presenter takeKeyboardFocus ] ];
+		addFocusEnterEvent: [ :event |
+			self runInSystem: [ self announceFocusEnter ] ];
+		addFocusLeaveEvent: [ :event |
+			self runInSystem: [ self announceFocusLeave ] ].
 	
 	self presenter whenModifiedChangedDo: [ :aBoolean |
 		self updateModifiedTo: aBoolean ]
+]
+
+{ #category : 'private - announcing' }
+GtkPanelWindowAdapter >> announceClosed [
+
+	self presenter windowClosed
 ]
 
 { #category : 'private - announcing' }
@@ -40,6 +55,22 @@ GtkPanelWindowAdapter >> announceDiscard [
 	self presenter announce: ann.
 	ann isSuccess ifTrue: [ 
 		self forceClose ]
+]
+
+{ #category : 'private - announcing' }
+GtkPanelWindowAdapter >> announceFocusEnter [
+
+	self presenter announce: (DockPanelWindowFocusReceived new 
+		window: self presenter;
+		yourself)
+]
+
+{ #category : 'private - announcing' }
+GtkPanelWindowAdapter >> announceFocusLeave [
+
+	self presenter announce: (DockPanelWindowFocusLost new 
+		window: self presenter;
+		yourself)
 ]
 
 { #category : 'private - announcing' }
