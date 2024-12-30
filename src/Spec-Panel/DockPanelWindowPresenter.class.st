@@ -35,6 +35,12 @@ DockPanelWindowPresenter >> closeFromKeyboard [
 	self close
 ]
 
+{ #category : 'api - focus' }
+DockPanelWindowPresenter >> defaultKeyboardFocus [
+
+	^ self presenter
+]
+
 { #category : 'accessing' }
 DockPanelWindowPresenter >> dockArea [
 	
