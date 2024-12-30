@@ -26,6 +26,9 @@ GtkPanelWindowAdapter >> addModelTo: panelWidget [
 		title: self presenter title;
 		child: childWidget.
 	
+	self presenter windowIcon 
+		ifNotNil: [ :aForm | panelWidget icon: aForm asGdkPaintable ].
+	
 	"Events"
 	panelWidget
 		connectPresented: [
