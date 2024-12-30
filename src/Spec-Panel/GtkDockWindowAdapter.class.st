@@ -204,6 +204,7 @@ GtkDockWindowAdapter >> openWithDeferredAction: aBlock [
 	self widgetDo: [ :w | w present ].
 	self processInitializationDeferredActions.
 	self announceOpened.
+	self presenter takeKeyboardFocus.
 	aBlock value
 ]
 
