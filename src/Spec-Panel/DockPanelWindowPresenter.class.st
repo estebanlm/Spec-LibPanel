@@ -50,6 +50,18 @@ DockPanelWindowPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
+DockPanelWindowPresenter >> initializePrivateAnnouncements [
+
+	self 
+		property: #titleHolder 
+		whenChangedDo: [ :aString | self withAdapterDo: [ :anAdapter | anAdapter title: aString ] ].
+	"panel windows do not have layout"
+	"self
+		property: #layout 
+		whenChangedDo: [ :newLayout | self replaceLayoutWith: newLayout ]"
+]
+
+{ #category : 'initialization' }
 DockPanelWindowPresenter >> initializeWindow [
 
 	super initializeWindow.
