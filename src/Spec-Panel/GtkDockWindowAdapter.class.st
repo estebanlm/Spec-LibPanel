@@ -155,7 +155,9 @@ GtkDockWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 
 	panelArea := aDockableWindow dockArea asPanelArea.
 	(gtkWindow dock isAreaRevealed: panelArea)
-		ifFalse: [ gtkWindow dock revealArea: panelArea ]	
+		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.
+			
+	aDockableWindow windowIsOpened
 ]
 
 { #category : 'accessing' }
