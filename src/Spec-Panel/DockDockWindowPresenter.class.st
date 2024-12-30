@@ -282,6 +282,16 @@ DockDockWindowPresenter >> whenClosedDo: aBlock [
 ]
 
 { #category : 'api - events' }
+DockDockWindowPresenter >> whenOpenedDo: aBlock [
+	"Inform when window is opened. 
+	 `aBlock` receives zero arguments."
+
+	self 
+		property: #isClosed 
+		whenChangedDo: [ :value | value ifFalse: aBlock ]
+]
+
+{ #category : 'api - events' }
 DockDockWindowPresenter >> whenResizingDo: aBlock [
 	"Inform when window is resizing. 
 	 `aBlock` receives one optional argument (an instance of the announcement `SpWindowResizing`)"
