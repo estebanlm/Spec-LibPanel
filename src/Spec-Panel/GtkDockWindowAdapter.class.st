@@ -195,7 +195,7 @@ GtkDockWindowAdapter >> newWidget [
 
 	^ self widgetClass new 
 		autoRelease;
-		hideOnClose: false;
+		hideOnClose: true;
 		yourself
 ]
 
