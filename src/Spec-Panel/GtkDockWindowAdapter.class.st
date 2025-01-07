@@ -23,8 +23,9 @@ GtkDockWindowAdapter >> addModelTo: gtkWindow [
 	self presenter presenters do: [ :each | 
 		self dockWindow: each to: gtkWindow ].
 
-	"gtkWindow dock forEachFrameDo: [ :aPanelFrame | aPanelFrame crTrace ].
-	gtkWindow dock connectCreateFrame: [ :handle :position :user_data |
+	"gtkWindow dock forEachFrameDo: [ :aPanelFrame | aPanelFrame crTrace ]."
+	
+	"gtkWindow grid connectCreateFrame: [
 		'HERE' crTrace.
 		PanelFrame new getHandle ]"
 ]

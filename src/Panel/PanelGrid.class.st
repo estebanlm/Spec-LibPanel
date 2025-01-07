@@ -21,3 +21,12 @@ PanelGrid class >> new [
 
 	^ self gtkNew initialize
 ]
+
+{ #category : 'signaling' }
+PanelGrid >> connectCreateFrame: aBlock [
+
+	self 
+		connect: 'create-frame' 
+		signature: #(void *( void *handle, gpointer user_data ))
+		do: [ :self_handle :user_data | aBlock value ]
+]

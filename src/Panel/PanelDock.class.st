@@ -45,8 +45,8 @@ PanelDock >> connectCreateFrame: aBlock [
 
 	self 
 		connect: 'create-frame' 
-		signature: #(void* (void* handle, void* position, gpointer data)) 
-		do: aBlock
+		signature: #(void* (void* selfHandle, void* position, gpointer user_data)) 
+		do: [ :self_handle :position :user_data | aBlock value: position ]
 ]
 
 { #category : 'accessing' }
