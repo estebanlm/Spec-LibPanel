@@ -1,6 +1,8 @@
 Class {
 	#name : 'GtkDockWindowAdapter',
 	#superclass : 'GtkAdapter',
+	#traits : 'GtkTSpecialCharacterForText',
+	#classTraits : 'GtkTSpecialCharacterForText classTrait',
 	#instVars : [
 		'lastSizeAllocation'
 	],
