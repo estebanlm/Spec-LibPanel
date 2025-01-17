@@ -17,6 +17,12 @@ DockPanelWindowPresenter class >> adapterName [
 	^ #PanelWindowAdapter
 ]
 
+{ #category : 'visiting' }
+DockPanelWindowPresenter >> acceptVisitor: aVisitor [
+
+	aVisitor visitPanelWindowPresenter: self
+]
+
 { #category : 'api' }
 DockPanelWindowPresenter >> close [
 	"Close current window."
