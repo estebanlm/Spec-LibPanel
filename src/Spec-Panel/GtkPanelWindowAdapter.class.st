@@ -118,6 +118,18 @@ GtkPanelWindowAdapter >> raise [
 	self innerWidgetDo: [ :w | w raise ]
 ]
 
+{ #category : 'private - building' }
+GtkPanelWindowAdapter >> specialActionsForListWidgetGroupName [
+		
+	^ #'panel-window-special-characters-list'
+]
+
+{ #category : 'private - building' }
+GtkPanelWindowAdapter >> specialActionsForTextWidgetGroupName [
+		
+	^ #'panel-window-special-characters-text'
+]
+
 { #category : 'accessing' }
 GtkPanelWindowAdapter >> title: aString [
 

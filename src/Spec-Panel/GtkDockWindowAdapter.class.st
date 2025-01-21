@@ -1,8 +1,6 @@
 Class {
 	#name : 'GtkDockWindowAdapter',
 	#superclass : 'GtkAdapter',
-	#traits : 'GtkTSpecialCharacterForText',
-	#classTraits : 'GtkTSpecialCharacterForText classTrait',
 	#instVars : [
 		'lastSizeAllocation'
 	],
@@ -219,6 +217,18 @@ GtkDockWindowAdapter >> processInitializationDeferredActions [
 	self presenter traversePresentersDo: [ :each | 
 		each adapter ifNotNil: [ :anAdapter |
 			anAdapter doInitializationDeferredActions ] ] 
+]
+
+{ #category : 'private - building' }
+GtkDockWindowAdapter >> specialActionsForListWidgetGroupName [
+		
+	^ #'dock-window-special-characters-list'
+]
+
+{ #category : 'private - building' }
+GtkDockWindowAdapter >> specialActionsForTextWidgetGroupName [
+		
+	^ #'dock-window-special-characters-text'
 ]
 
 { #category : 'accessing' }

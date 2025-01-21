@@ -110,6 +110,12 @@ DockPanelWindowPresenter >> nearWindow [
 	^ self owner ifNotNil: [ :anOwner | anOwner nearWindow ]
 ]
 
+{ #category : 'private' }
+DockPanelWindowPresenter >> nearWindowLike [
+
+	^ self
+]
+
 { #category : 'api' }
 DockPanelWindowPresenter >> raise [
 

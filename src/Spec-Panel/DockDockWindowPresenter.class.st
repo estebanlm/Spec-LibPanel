@@ -203,6 +203,12 @@ DockDockWindowPresenter >> nearWindow [
 	^ self
 ]
 
+{ #category : 'private' }
+DockDockWindowPresenter >> nearWindowLike [
+
+	^ self
+]
+
 { #category : 'showing' }
 DockDockWindowPresenter >> open [
 

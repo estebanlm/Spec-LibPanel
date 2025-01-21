@@ -1,15 +1,6 @@
 Extension { #name : 'SpPresenter' }
 
 { #category : '*Spec-Panel' }
-SpPresenter >> firstWindowLike [
-	
-	(self isWindow or: [ self isPanelWindow or: [ self isPopover ] ]) 
-		ifTrue: [ ^ self ].
-		
-	^ self owner ifNotNil: [ :anOwner | anOwner firstWindowLike ]
-]
-
-{ #category : '*Spec-Panel' }
 SpPresenter >> initializePanelWindow: aPanelWindowPresenter [
 	"override to add PanelWindow specific settings"
 ]
