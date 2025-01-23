@@ -1,19 +1,19 @@
 Class {
-	#name : 'DockAreaBottom',
-	#superclass : 'DockArea',
+	#name : 'SpPanelAreaBottom',
+	#superclass : 'SpPanelArea',
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
 	#tag : 'Presenter'
 }
 
 { #category : 'converting' }
-DockAreaBottom >> asPanelArea [
+SpPanelAreaBottom >> asPanelArea [
 
 	^ PanelArea PANEL_AREA_BOTTOM
 ]
 
 { #category : 'converting' }
-DockAreaBottom >> toPanelPosition [
+SpPanelAreaBottom >> toPanelPosition [
 
 	^ PanelPosition bottom
 ]

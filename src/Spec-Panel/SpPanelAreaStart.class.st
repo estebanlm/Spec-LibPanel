@@ -1,19 +1,19 @@
 Class {
-	#name : 'DockAreaStart',
-	#superclass : 'DockArea',
+	#name : 'SpPanelAreaStart',
+	#superclass : 'SpPanelArea',
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
 	#tag : 'Presenter'
 }
 
 { #category : 'converting' }
-DockAreaStart >> asPanelArea [
+SpPanelAreaStart >> asPanelArea [
 
 	^ PanelArea PANEL_AREA_START
 ]
 
 { #category : 'converting' }
-DockAreaStart >> toPanelPosition [
+SpPanelAreaStart >> toPanelPosition [
 
 	^ PanelPosition start
 ]

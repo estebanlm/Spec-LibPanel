@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockPanelPresenter',
+	#name : 'SpPanelWidgetPresenter',
 	#superclass : 'SpWindowPresenter',
 	#instVars : [
 		'#modified => ObservableSlot',
@@ -11,19 +11,19 @@ Class {
 }
 
 { #category : 'specs' }
-DockPanelPresenter class >> adapterName [
+SpPanelWidgetPresenter class >> adapterName [
 
-	^ #DockPanelAdapter
+	^ #PanelWidgetAdapter
 ]
 
 { #category : 'visiting' }
-DockPanelPresenter >> acceptVisitor: aVisitor [
+SpPanelWidgetPresenter >> acceptVisitor: aVisitor [
 
 	aVisitor visitPanelWindowPresenter: self
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> close [
+SpPanelWidgetPresenter >> close [
 	"Close current window."
 
 	self withAdapterDo: [ :anAdapter | 
@@ -31,41 +31,41 @@ DockPanelPresenter >> close [
 ]
 
 { #category : 'private' }
-DockPanelPresenter >> closeFromKeyboard [
+SpPanelWidgetPresenter >> closeFromKeyboard [
 	"a close signal has been triggered. I need to verify I am in a panel that is closable like that."
 
 	"Just panels in the center can be closed with meta+w"
-	self dockPosition area = DockArea center ifFalse: [ ^ self ].
+	self dockPosition area = SpPanelArea center ifFalse: [ ^ self ].
 	
 	self close
 ]
 
 { #category : 'api - focus' }
-DockPanelPresenter >> defaultKeyboardFocus [
+SpPanelWidgetPresenter >> defaultKeyboardFocus [
 
 	^ self presenter
 ]
 
 { #category : 'accessing' }
-DockPanelPresenter >> dockArea [
+SpPanelWidgetPresenter >> dockArea [
 	
 	^ self dockPosition area
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> dockPosition [
+SpPanelWidgetPresenter >> dockPosition [
 
 	^ dockPosition
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> dockPosition: aDockPosition [
+SpPanelWidgetPresenter >> dockPosition: aDockPosition [
 
 	dockPosition := aDockPosition
 ]
 
 { #category : 'initialization' }
-DockPanelPresenter >> initialize [
+SpPanelWidgetPresenter >> initialize [
 
 	super initialize.
 	modified := false.
@@ -73,7 +73,7 @@ DockPanelPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
-DockPanelPresenter >> initializePrivateAnnouncements [
+SpPanelWidgetPresenter >> initializePrivateAnnouncements [
 
 	self 
 		property: #titleHolder 
@@ -85,56 +85,56 @@ DockPanelPresenter >> initializePrivateAnnouncements [
 ]
 
 { #category : 'initialization' }
-DockPanelPresenter >> initializeWindow [
+SpPanelWidgetPresenter >> initializeWindow [
 
 	super initializeWindow.
 	self presenter initializePanelWindow: self
 ]
 
 { #category : 'testing' }
-DockPanelPresenter >> isModified [
+SpPanelWidgetPresenter >> isModified [
 
 	^ modified
 ]
 
 { #category : 'testing' }
-DockPanelPresenter >> isPanelWindow [
+SpPanelWidgetPresenter >> isPanelWindow [
 
 	^ true
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> maximize [
+SpPanelWidgetPresenter >> maximize [
 
 	self withAdapterDo: [ :anAdapter | anAdapter maximize ]
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> modified: aBoolean [
+SpPanelWidgetPresenter >> modified: aBoolean [
 
 	modified := aBoolean
 ]
 
 { #category : 'private' }
-DockPanelPresenter >> nearWindow [
+SpPanelWidgetPresenter >> nearWindow [
 
 	^ self owner ifNotNil: [ :anOwner | anOwner nearWindow ]
 ]
 
 { #category : 'private' }
-DockPanelPresenter >> nearWindowLike [
+SpPanelWidgetPresenter >> nearWindowLike [
 
 	^ self
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> raise [
+SpPanelWidgetPresenter >> raise [
 
 	self withAdapterDo: [ :anAdapter | anAdapter raise ]
 ]
 
 { #category : 'initialization' }
-DockPanelPresenter >> registerActions [
+SpPanelWidgetPresenter >> registerActions [
 
 	self ensureInternalActions 
 		addShortcutWith: [ :action | action
@@ -143,13 +143,13 @@ DockPanelPresenter >> registerActions [
 ]
 
 { #category : 'api' }
-DockPanelPresenter >> unmaximize [
+SpPanelWidgetPresenter >> unmaximize [
 
 	self withAdapterDo: [ :anAdapter | anAdapter unmaximize ]
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenDiscardDo: aBlock [ 
+SpPanelWidgetPresenter >> whenDiscardDo: aBlock [ 
 
 	self announcer 
 		when: DockPanelWindowDiscard
@@ -158,13 +158,13 @@ DockPanelPresenter >> whenDiscardDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenDockPositionChangedDo: aBlock [
+SpPanelWidgetPresenter >> whenDockPositionChangedDo: aBlock [
 
 	self property: #dockPosition whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenFocusLostDo: aBlock [
+SpPanelWidgetPresenter >> whenFocusLostDo: aBlock [
 
 	self announcer
 		when: DockPanelWindowFocusLost
@@ -173,7 +173,7 @@ DockPanelPresenter >> whenFocusLostDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenFocusReceivedDo: aBlock [
+SpPanelWidgetPresenter >> whenFocusReceivedDo: aBlock [
 
 	self announcer
 		when: DockPanelWindowFocusReceived 
@@ -182,13 +182,13 @@ DockPanelPresenter >> whenFocusReceivedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenModifiedChangedDo: aBlock [
+SpPanelWidgetPresenter >> whenModifiedChangedDo: aBlock [
 
 	self property: #modified whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenPresentedDo: aBlock [
+SpPanelWidgetPresenter >> whenPresentedDo: aBlock [
 
 	self announcer 
 		when: DockPanelWindowPresented 
@@ -197,7 +197,7 @@ DockPanelPresenter >> whenPresentedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelPresenter >> whenSaveDo: aBlock [
+SpPanelWidgetPresenter >> whenSaveDo: aBlock [
 	"Announces when the window is dirty (modified) and user wants to close it by pressing the 
 	 close button (or with <meta+w>. 
 	 DockPanelWindowSave ann needs to be setted to success (using beSuccess) for the window to
@@ -210,7 +210,7 @@ DockPanelPresenter >> whenSaveDo: aBlock [
 ]
 
 { #category : 'private' }
-DockPanelPresenter >> window [
+SpPanelWidgetPresenter >> window [
 	"Answer window containing this composition (windows can be nested, so we 
 	 need to answer the closest one)."
 	
@@ -218,7 +218,7 @@ DockPanelPresenter >> window [
 ]
 
 { #category : 'private' }
-DockPanelPresenter >> windowClosed [
+SpPanelWidgetPresenter >> windowClosed [
 
 	isClosed := true
 ]

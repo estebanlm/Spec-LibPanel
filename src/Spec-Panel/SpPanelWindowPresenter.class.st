@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockWindowPresenter',
+	#name : 'SpPanelWindowPresenter',
 	#superclass : 'SpAbstractWidgetPresenter',
 	#instVars : [
 		'#title => ObservableSlot',
@@ -13,27 +13,27 @@ Class {
 }
 
 { #category : 'specs' }
-DockWindowPresenter class >> adapterName [
+SpPanelWindowPresenter class >> adapterName [
 
-	^ #DockWindowAdapter
+	^ #PanelWindowAdapter
 ]
 
 { #category : 'accessing' }
-DockWindowPresenter class >> defaultTitle [
+SpPanelWindowPresenter class >> defaultTitle [
 	
 	^ 'Untitled Dock'
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> addPresenter: aPresenter [
+SpPanelWindowPresenter >> addPresenter: aPresenter [
 
 	self 
 		addPresenter: aPresenter 
-		at: DockArea center
+		at: SpPanelArea center
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
+SpPanelWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 
 	self addWindow: (aPresenter asDockableWindow 
 		dockPosition: aPositionOrArea toPosition;
@@ -41,7 +41,7 @@ DockWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> addWindow: aDockableWindow [
+SpPanelWindowPresenter >> addWindow: aDockableWindow [
 	
 	aDockableWindow owner: self.
 	aDockableWindow whenClosedDo: [
@@ -52,37 +52,37 @@ DockWindowPresenter >> addWindow: aDockableWindow [
 ]
 
 { #category : 'showing' }
-DockWindowPresenter >> asWindow [
+SpPanelWindowPresenter >> asWindow [
 
 	^ self
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> basicAddPresenter: aDockableWindow [
+SpPanelWindowPresenter >> basicAddPresenter: aDockableWindow [
 	
 	presenters := self presenters copyWith: aDockableWindow
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> basicRemovePresenter: aDockableWindow [
+SpPanelWindowPresenter >> basicRemovePresenter: aDockableWindow [
 	
 	presenters := self presenters copyWithout: aDockableWindow
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> bottomHeight: aNumber [
+SpPanelWindowPresenter >> bottomHeight: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter bottomHeight: aNumber ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> bottomVisible: aBoolean [
+SpPanelWindowPresenter >> bottomVisible: aBoolean [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter bottomVisible: aBoolean ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> close [
+SpPanelWindowPresenter >> close [
 	"Close current window."
 
 	"Only manage closing if the presenter is really open"
@@ -92,25 +92,25 @@ DockWindowPresenter >> close [
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> defaultInitialExtent [
+SpPanelWindowPresenter >> defaultInitialExtent [
 	
 	^ 800@600
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> endVisible: aBoolean [
+SpPanelWindowPresenter >> endVisible: aBoolean [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter endVisible: aBoolean ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> endWidth: aNumber [
+SpPanelWindowPresenter >> endWidth: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter endWidth: aNumber ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> initialExtent [
+SpPanelWindowPresenter >> initialExtent [
 	"Answer initial extent of the window. By default, it answer what is defined 
 	 in `#defaultInitialExtent`"
 
@@ -118,13 +118,13 @@ DockWindowPresenter >> initialExtent [
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> initialExtent: aPoint [
+SpPanelWindowPresenter >> initialExtent: aPoint [
 
 	initialExtent := aPoint
 ]
 
 { #category : 'initialization' }
-DockWindowPresenter >> initialize [
+SpPanelWindowPresenter >> initialize [
 
 	super initialize.
 
@@ -143,19 +143,19 @@ DockWindowPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
-DockWindowPresenter >> initializeWindow: aWindowPresenter [
+SpPanelWindowPresenter >> initializeWindow: aWindowPresenter [
 	"override this to initialize the workspace window"
 	
 	super initializeWindow: aWindowPresenter
 ]
 
 { #category : 'initialization' }
-DockWindowPresenter >> initializeWorkspace [
+SpPanelWindowPresenter >> initializeWorkspace [
 	"override this to initialize the workspace"
 ]
 
 { #category : 'testing' }
-DockWindowPresenter >> isAreaVisible: aDockArea [
+SpPanelWindowPresenter >> isAreaVisible: aDockArea [
 
 	self withAdapterDo: [ :anAdapter | 
 		^ anAdapter isAreaVisible: aDockArea ].
@@ -164,21 +164,21 @@ DockWindowPresenter >> isAreaVisible: aDockArea [
 ]
 
 { #category : 'testing' }
-DockWindowPresenter >> isClosed [
+SpPanelWindowPresenter >> isClosed [
 	"Answer if window has is closed"
 
 	^ isClosed
 ]
 
 { #category : 'testing' }
-DockWindowPresenter >> isOpen [
+SpPanelWindowPresenter >> isOpen [
 	"Answer if window is open."
 	
 	^ self isClosed not
 ]
 
 { #category : 'testing' }
-DockWindowPresenter >> isTopWindow [
+SpPanelWindowPresenter >> isTopWindow [
 
 	self withAdapterDo: [ :anAdapter | ^ anAdapter isTopWindow ].
 	
@@ -186,7 +186,7 @@ DockWindowPresenter >> isTopWindow [
 ]
 
 { #category : 'initialization' }
-DockWindowPresenter >> maybeInitializeWorkspace [
+SpPanelWindowPresenter >> maybeInitializeWorkspace [
 	"Initialization may happen when setting application by "
 
 	"not owner/application yet"
@@ -198,19 +198,19 @@ DockWindowPresenter >> maybeInitializeWorkspace [
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> nearWindow [
+SpPanelWindowPresenter >> nearWindow [
 
 	^ self
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> nearWindowLike [
+SpPanelWindowPresenter >> nearWindowLike [
 
 	^ self
 ]
 
 { #category : 'showing' }
-DockWindowPresenter >> open [
+SpPanelWindowPresenter >> open [
 
 	self initializeWindow: self.
 	self build.
@@ -221,19 +221,19 @@ DockWindowPresenter >> open [
 ]
 
 { #category : 'private - traversing' }
-DockWindowPresenter >> presenters [
+SpPanelWindowPresenter >> presenters [
 
 	^ presenters ifNil: [ #() ]
 ]
 
 { #category : 'private - traversing' }
-DockWindowPresenter >> presentersDo: aBlock [
+SpPanelWindowPresenter >> presentersDo: aBlock [
 
 	self presenters do: aBlock
 ]
 
 { #category : 'initialization' }
-DockWindowPresenter >> registerActions [
+SpPanelWindowPresenter >> registerActions [
 
 	self ensureInternalActions 
 		addShortcutWith: [ :action | action 
@@ -242,43 +242,43 @@ DockWindowPresenter >> registerActions [
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> startVisible: aBoolean [
+SpPanelWindowPresenter >> startVisible: aBoolean [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter startVisible: aBoolean ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> startWidth: aNumber [
+SpPanelWindowPresenter >> startWidth: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter startWidth: aNumber ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> title [
+SpPanelWindowPresenter >> title [
 
 	^ title
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> title: aString [
+SpPanelWindowPresenter >> title: aString [
 
 	title := aString
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> topHeight: aNumber [
+SpPanelWindowPresenter >> topHeight: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter topHeight: aNumber ]
 ]
 
 { #category : 'api' }
-DockWindowPresenter >> topVisible: aBoolean [
+SpPanelWindowPresenter >> topVisible: aBoolean [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter topVisible: aBoolean ]
 ]
 
 { #category : 'api - events' }
-DockWindowPresenter >> whenClosedDo: aBlock [
+SpPanelWindowPresenter >> whenClosedDo: aBlock [
 	"Inform when window is closed.
 	 `aBlock` receives zero arguments."
 	
@@ -288,7 +288,7 @@ DockWindowPresenter >> whenClosedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockWindowPresenter >> whenOpenedDo: aBlock [
+SpPanelWindowPresenter >> whenOpenedDo: aBlock [
 	"Inform when window is opened. 
 	 `aBlock` receives zero arguments."
 
@@ -298,7 +298,7 @@ DockWindowPresenter >> whenOpenedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockWindowPresenter >> whenResizingDo: aBlock [
+SpPanelWindowPresenter >> whenResizingDo: aBlock [
 	"Inform when window is resizing. 
 	 `aBlock` receives one optional argument (an instance of the announcement `SpWindowResizing`)"
 
@@ -309,13 +309,13 @@ DockWindowPresenter >> whenResizingDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockWindowPresenter >> whenTitleChangedDo: aBlock [
+SpPanelWindowPresenter >> whenTitleChangedDo: aBlock [
 
 	self property: #title whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }
-DockWindowPresenter >> whenWillCloseDo: aBlock [
+SpPanelWindowPresenter >> whenWillCloseDo: aBlock [
 	"Inform when window will close, allowing process before the close happen. 
 	 Note that user cannot cancel the close operation using this event. 
 	 `aBlock` receives one optional argument (an instance of the announcement `SpWindowWillClose`)."
@@ -327,7 +327,7 @@ DockWindowPresenter >> whenWillCloseDo: aBlock [
 ]
 
 { #category : 'accessing' }
-DockWindowPresenter >> window [
+SpPanelWindowPresenter >> window [
 	"this is for compatibility with SpWindowPresenter... not convinced"
 
 	self withAdapterDo: [ :anAdapter | ^ anAdapter widget ].
@@ -336,26 +336,26 @@ DockWindowPresenter >> window [
 ]
 
 { #category : 'private' }
-DockWindowPresenter >> windowClosed [
+SpPanelWindowPresenter >> windowClosed [
 	
 	isClosed := true.
 	self application windowClosed: self
 ]
 
 { #category : 'accessing' }
-DockWindowPresenter >> windowIcon: anIcon [
+SpPanelWindowPresenter >> windowIcon: anIcon [
 	"For background compatibility"
 ]
 
 { #category : 'updating' }
-DockWindowPresenter >> windowIsClosing [
+SpPanelWindowPresenter >> windowIsClosing [
 	
 	self flag: #TODO.
 	"inform the presenters they will be closed"
 ]
 
 { #category : 'updating' }
-DockWindowPresenter >> windowIsOpened [
+SpPanelWindowPresenter >> windowIsOpened [
 
 	isClosed := false
 ]

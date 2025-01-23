@@ -1,5 +1,5 @@
 Class {
-	#name : 'GtkDockWindowAdapter',
+	#name : 'GtkPanelWindowAdapter',
 	#superclass : 'GtkAdapter',
 	#instVars : [
 		'lastSizeAllocation'
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'building' }
-GtkDockWindowAdapter >> addModelTo: gtkWindow [
+GtkPanelWindowAdapter >> addModelTo: gtkWindow [
 
 	super addModelTo: gtkWindow.
 
@@ -31,7 +31,7 @@ GtkDockWindowAdapter >> addModelTo: gtkWindow [
 ]
 
 { #category : 'building' }
-GtkDockWindowAdapter >> addTitlebarTo: gtkWindow [
+GtkPanelWindowAdapter >> addTitlebarTo: gtkWindow [
 	
 	gtkWindow titlebar: (AdwHeaderBar new  
 		titleWidget: (GtkLabel newLabel: self presenter title);
@@ -39,19 +39,19 @@ GtkDockWindowAdapter >> addTitlebarTo: gtkWindow [
 ]
 
 { #category : 'building' }
-GtkDockWindowAdapter >> addVisibleSettingsTo: gtkWidget [
+GtkPanelWindowAdapter >> addVisibleSettingsTo: gtkWidget [
 	"windows fo not have visibility settings, they are shown or hide"
 ]
 
 { #category : 'private - announcing' }
-GtkDockWindowAdapter >> announceClosed [
+GtkPanelWindowAdapter >> announceClosed [
 
 	self presenter windowIsClosing.
 	self presenter windowClosed
 ]
 
 { #category : 'private - announcing' }
-GtkDockWindowAdapter >> announceOpened [
+GtkPanelWindowAdapter >> announceOpened [
 	"ensure not in callback"
 	
 	self runInSystem: [ 
@@ -59,7 +59,7 @@ GtkDockWindowAdapter >> announceOpened [
 ]
 
 { #category : 'private - announcing' }
-GtkDockWindowAdapter >> announceResized: newSize [
+GtkPanelWindowAdapter >> announceResized: newSize [
 	| windowSize |
 
 	"We keep last size allocation to compare, because size-allocate can be signaled 
@@ -80,7 +80,7 @@ GtkDockWindowAdapter >> announceResized: newSize [
 ]
 
 { #category : 'private - announcing' }
-GtkDockWindowAdapter >> announceWillClose [
+GtkPanelWindowAdapter >> announceWillClose [
 	| ann |
 
 	ann := SpWindowWillClose new
@@ -93,26 +93,26 @@ GtkDockWindowAdapter >> announceWillClose [
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> bottomHeight: aNumber [
+GtkPanelWindowAdapter >> bottomHeight: aNumber [
 
 	self widgetDo: [ :w | w dock bottomHeight: aNumber ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> bottomVisible: aBoolean [
+GtkPanelWindowAdapter >> bottomVisible: aBoolean [
 
 	self widgetDo: [ :w | w dock revealBottom: aBoolean ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> close [
+GtkPanelWindowAdapter >> close [
 
 	self announceWillClose ifFalse: [ ^ self ].
 	self widgetDo: [ :w | w beNotVisible ]
 ]
 
 { #category : 'private' }
-GtkDockWindowAdapter >> closeFromSignal [
+GtkPanelWindowAdapter >> closeFromSignal [
 	"this is called from connectDestroy (just one time)"
 
 	self announceClosed.
@@ -120,7 +120,7 @@ GtkDockWindowAdapter >> closeFromSignal [
 ]
 
 { #category : 'private - building' }
-GtkDockWindowAdapter >> connectToGtkSignals: gtkWindow [
+GtkPanelWindowAdapter >> connectToGtkSignals: gtkWindow [
 
 	"add close events (delete is sent before)"
 
@@ -135,7 +135,7 @@ GtkDockWindowAdapter >> connectToGtkSignals: gtkWindow [
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> dockWindow: aDockableWindow [
+GtkPanelWindowAdapter >> dockWindow: aDockableWindow [
 
 	self widgetDo: [ :w |
 		self dockWindow: aDockableWindow to: w ]
@@ -145,7 +145,7 @@ GtkDockWindowAdapter >> dockWindow: aDockableWindow [
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
+GtkPanelWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 	| panelWidget panelPosition panelArea |
  
 	panelPosition := aDockableWindow dockPosition toPanelPosition.
@@ -162,28 +162,28 @@ GtkDockWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> endVisible: aBoolean [
+GtkPanelWindowAdapter >> endVisible: aBoolean [
 
 	self widgetDo: [ :w | w dock revealEnd: aBoolean ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> endWidth: aNumber [
+GtkPanelWindowAdapter >> endWidth: aNumber [
 
 	self widgetDo: [ :w | w dock endWidth: aNumber ]
 ]
 
 { #category : 'testing' }
-GtkDockWindowAdapter >> isAreaVisible: aDockArea [
+GtkPanelWindowAdapter >> isAreaVisible: aDockArea [
 
-	aDockArea = DockArea center ifTrue: [ ^ true ].
+	aDockArea = SpPanelArea center ifTrue: [ ^ true ].
 	
 	^ self widgetDo: [ :w |
 		 w dock isAreaRevealed: aDockArea asPanelArea ]
 ]
 
 { #category : 'testing' }
-GtkDockWindowAdapter >> isTopWindow [
+GtkPanelWindowAdapter >> isTopWindow [
 
 	^ self widgetDo: [ :w |
 		GEngine current ensureApplication activeWindow
@@ -192,7 +192,7 @@ GtkDockWindowAdapter >> isTopWindow [
 ]
 
 { #category : 'building' }
-GtkDockWindowAdapter >> newWidget [
+GtkPanelWindowAdapter >> newWidget [
 
 	^ self widgetClass new 
 		autoRelease;
@@ -201,7 +201,7 @@ GtkDockWindowAdapter >> newWidget [
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> openWithDeferredAction: aBlock [
+GtkPanelWindowAdapter >> openWithDeferredAction: aBlock [
  
 	self hasWidget ifFalse: [ ^ nil ].
 	self widgetDo: [ :w | w present ].
@@ -212,7 +212,7 @@ GtkDockWindowAdapter >> openWithDeferredAction: aBlock [
 ]
 
 { #category : 'private' }
-GtkDockWindowAdapter >> processInitializationDeferredActions [
+GtkPanelWindowAdapter >> processInitializationDeferredActions [
 	
 	self presenter traversePresentersDo: [ :each | 
 		each adapter ifNotNil: [ :anAdapter |
@@ -220,56 +220,56 @@ GtkDockWindowAdapter >> processInitializationDeferredActions [
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> startVisible: aBoolean [
+GtkPanelWindowAdapter >> startVisible: aBoolean [
 
 	self widgetDo: [ :w | w dock revealStart: aBoolean ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> startWidth: aNumber [
+GtkPanelWindowAdapter >> startWidth: aNumber [
 
 	self widgetDo: [ :w | w dock startWidth: aNumber ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> title: aString [ 
+GtkPanelWindowAdapter >> title: aString [ 
 	
 	self widgetDo: [ :w | 
 		w titlebar titleWidget label: aString ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> topHeight: aNumber [
+GtkPanelWindowAdapter >> topHeight: aNumber [
 
 	self widgetDo: [ :w | w dock topHeight: aNumber ]
 ]
 
 { #category : 'accessing' }
-GtkDockWindowAdapter >> topVisible: aBoolean [
+GtkPanelWindowAdapter >> topVisible: aBoolean [
 
 	self widgetDo: [ :w | w dock revealTop: aBoolean ]
 ]
 
 { #category : 'building' }
-GtkDockWindowAdapter >> widgetClass [
+GtkPanelWindowAdapter >> widgetClass [
 
 	^ PanelDocumentWorkspaceWindow
 ]
 
 { #category : 'test support' }
-GtkDockWindowAdapter >> widgetIsVisible [
+GtkPanelWindowAdapter >> widgetIsVisible [
 
 	^ self widgetDo: [ :w | w isVisible ]
 ]
 
 { #category : 'test support' }
-GtkDockWindowAdapter >> widgetSize [
+GtkPanelWindowAdapter >> widgetSize [
 
 	^ self widgetDo: [ :w | w defaultSize ]
 ]
 
 { #category : 'test support' }
-GtkDockWindowAdapter >> widgetTitle [
+GtkPanelWindowAdapter >> widgetTitle [
 
 	^ self widgetDo: [ :w | w titlebar titleWidget label ]
 ]

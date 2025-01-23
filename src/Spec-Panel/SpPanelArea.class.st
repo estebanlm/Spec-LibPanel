@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockArea',
+	#name : 'SpPanelArea',
 	#superclass : 'Object',
 	#classInstVars : [
 		'uniqueInstance'
@@ -10,63 +10,63 @@ Class {
 }
 
 { #category : 'accessing' }
-DockArea class >> bottom [
+SpPanelArea class >> bottom [
 
-	^ DockAreaBottom uniqueInstance
+	^ SpPanelAreaBottom uniqueInstance
 ]
 
 { #category : 'accessing' }
-DockArea class >> center [
+SpPanelArea class >> center [
 
-	^ DockAreaCenter uniqueInstance
+	^ SpPanelAreaCenter uniqueInstance
 ]
 
 { #category : 'accessing' }
-DockArea class >> end [
+SpPanelArea class >> end [
 
-	^ DockAreaEnd uniqueInstance
+	^ SpPanelAreaEnd uniqueInstance
 ]
 
 { #category : 'instance creation' }
-DockArea class >> new [
+SpPanelArea class >> new [
 
 	self error: 'Use #uniqueInstance'
 ]
 
 { #category : 'accessing' }
-DockArea class >> start [
+SpPanelArea class >> start [
 
-	^ DockAreaStart uniqueInstance
+	^ SpPanelAreaStart uniqueInstance
 ]
 
 { #category : 'accessing' }
-DockArea class >> top [
+SpPanelArea class >> top [
 
-	^ DockAreaTop uniqueInstance
+	^ SpPanelAreaTop uniqueInstance
 ]
 
 { #category : 'instance creation' }
-DockArea class >> uniqueInstance [
+SpPanelArea class >> uniqueInstance [
 
-	self = DockArea 
+	self = SpPanelArea 
 		ifTrue: [ self error: 'This is an abstract class, use one of my children' ].
 	^ uniqueInstance ifNil: [ uniqueInstance := self basicNew initialize ]
 ]
 
 { #category : 'converting' }
-DockArea >> asPanelArea [
+SpPanelArea >> asPanelArea [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'converting' }
-DockArea >> toPanelPosition [
+SpPanelArea >> toPanelPosition [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'converting' }
-DockArea >> toPosition [
+SpPanelArea >> toPosition [
 
-	^ DockPanelPosition newArea: self
+	^ SpPanelPosition newArea: self
 ]

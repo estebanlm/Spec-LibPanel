@@ -1,5 +1,5 @@
 Class {
-	#name : 'GtkDockPanelAdapter',
+	#name : 'GtkPanelWidgetAdapter',
 	#superclass : 'GtkAdapter',
 	#category : 'Spec-Panel-Adapter',
 	#package : 'Spec-Panel',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'building' }
-GtkDockPanelAdapter >> addModelTo: panelWidget [
+GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	| childWidget |
 
 	panelWidget saveDelegate: (PanelSaveDelegate new
@@ -45,13 +45,13 @@ GtkDockPanelAdapter >> addModelTo: panelWidget [
 ]
 
 { #category : 'private - announcing' }
-GtkDockPanelAdapter >> announceClosed [
+GtkPanelWidgetAdapter >> announceClosed [
 
 	self presenter windowClosed
 ]
 
 { #category : 'private - announcing' }
-GtkDockPanelAdapter >> announceDiscard [
+GtkPanelWidgetAdapter >> announceDiscard [
 	| ann |
 
 	ann := DockPanelWindowDiscard new.
@@ -61,7 +61,7 @@ GtkDockPanelAdapter >> announceDiscard [
 ]
 
 { #category : 'private - announcing' }
-GtkDockPanelAdapter >> announceFocusEnter [
+GtkPanelWidgetAdapter >> announceFocusEnter [
 
 	self presenter announce: (DockPanelWindowFocusReceived new 
 		window: self presenter;
@@ -69,7 +69,7 @@ GtkDockPanelAdapter >> announceFocusEnter [
 ]
 
 { #category : 'private - announcing' }
-GtkDockPanelAdapter >> announceFocusLeave [
+GtkPanelWidgetAdapter >> announceFocusLeave [
 
 	self presenter announce: (DockPanelWindowFocusLost new 
 		window: self presenter;
@@ -77,7 +77,7 @@ GtkDockPanelAdapter >> announceFocusLeave [
 ]
 
 { #category : 'private - announcing' }
-GtkDockPanelAdapter >> announcePresented [
+GtkPanelWidgetAdapter >> announcePresented [
 
 	self presenter announce: (DockPanelWindowPresented new 
 		window: self presenter;
@@ -85,7 +85,7 @@ GtkDockPanelAdapter >> announcePresented [
 ]
 
 { #category : 'private - announcing' }
-GtkDockPanelAdapter >> announceSave [
+GtkPanelWidgetAdapter >> announceSave [
 	| ann |
 
 	ann := DockPanelWindowSave new.
@@ -95,31 +95,31 @@ GtkDockPanelAdapter >> announceSave [
 ]
 
 { #category : 'accessing' }
-GtkDockPanelAdapter >> close [ 
+GtkPanelWidgetAdapter >> close [ 
 
 	self widgetDo: [ :w | w close ]
 ]
 
 { #category : 'private' }
-GtkDockPanelAdapter >> forceClose [
+GtkPanelWidgetAdapter >> forceClose [
 
 	self widgetDo: [ :w | w forceClose ]
 ]
 
 { #category : 'accessing' }
-GtkDockPanelAdapter >> maximize [
+GtkPanelWidgetAdapter >> maximize [
 
 	self widgetDo: [ :w | w maximize ]
 ]
 
 { #category : 'accessing' }
-GtkDockPanelAdapter >> raise [
+GtkPanelWidgetAdapter >> raise [
 
 	self innerWidgetDo: [ :w | w raise ]
 ]
 
 { #category : 'accessing' }
-GtkDockPanelAdapter >> title: aString [
+GtkPanelWidgetAdapter >> title: aString [
 	| newTitle |
 	
 	newTitle := aString ifNil: [ '' ].
@@ -129,25 +129,25 @@ GtkDockPanelAdapter >> title: aString [
 ]
 
 { #category : 'accessing' }
-GtkDockPanelAdapter >> unmaximize [
+GtkPanelWidgetAdapter >> unmaximize [
 
 	self widgetDo: [ :w | w unmaximize ]
 ]
 
 { #category : 'private - updating' }
-GtkDockPanelAdapter >> updateModifiedTo: aBoolean [
+GtkPanelWidgetAdapter >> updateModifiedTo: aBoolean [
 
 	self widgetDo: [ :w | w modified: aBoolean ]
 ]
 
 { #category : 'building' }
-GtkDockPanelAdapter >> widgetClass [
+GtkPanelWidgetAdapter >> widgetClass [
 
 	^ PanelWidget
 ]
 
 { #category : 'test support' }
-GtkDockPanelAdapter >> widgetTitle [
+GtkPanelWidgetAdapter >> widgetTitle [
 	
 	^ self widgetDo: [ :w | w title ]
 ]

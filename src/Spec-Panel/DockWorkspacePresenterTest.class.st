@@ -17,7 +17,7 @@ DockWorkspacePresenterTest >> application [
 { #category : 'accessing' }
 DockWorkspacePresenterTest >> classToTest [
 
-	^ DockWindowPresenter
+	^ SpPanelWindowPresenter
 ]
 
 { #category : 'running' }
@@ -36,13 +36,13 @@ DockWorkspacePresenterTest >> testAddPresenterAt [
 		addPresenter: (SpLabelPresenter new
 			label: 'START';
 			yourself)
-		at: DockArea start.
+		at: SpPanelArea start.
 		
 	self openInstance.
 	
 	self assert: presenter presenters size equals: 1.
 	dockablePresenter := presenter presenters first.
-	self assert: dockablePresenter dockArea equals: DockArea start.
+	self assert: dockablePresenter dockArea equals: SpPanelArea start.
 	self assert: dockablePresenter adapter notNil.
 	self assert: dockablePresenter adapter widgetTitle equals: dockablePresenter title.
 	
@@ -51,11 +51,11 @@ DockWorkspacePresenterTest >> testAddPresenterAt [
 		addPresenter: (SpLabelPresenter new
 			label: 'CENTER';
 			yourself)
-		at: DockArea center.
+		at: SpPanelArea center.
 		
 	self assert: presenter presenters size equals: 2.
 	dockablePresenter := presenter presenters last.
-	self assert: dockablePresenter dockArea equals: DockArea center.
+	self assert: dockablePresenter dockArea equals: SpPanelArea center.
 	self assert: dockablePresenter adapter notNil.
 	self assert: dockablePresenter adapter widgetTitle equals: dockablePresenter title
 ]
@@ -65,15 +65,15 @@ DockWorkspacePresenterTest >> testAddingAPresenterInAreaShowsIt [
 		
 	self openInstance.
 
-	self deny: (presenter isAreaVisible: DockArea start).
+	self deny: (presenter isAreaVisible: SpPanelArea start).
 	
 	presenter 
 		addPresenter: (SpLabelPresenter new
 			label: 'START';
 			yourself)
-		at: DockArea start.
+		at: SpPanelArea start.
 		
-	self assert: (presenter isAreaVisible: DockArea start)
+	self assert: (presenter isAreaVisible: SpPanelArea start)
 ]
 
 { #category : 'tests - showing' }
