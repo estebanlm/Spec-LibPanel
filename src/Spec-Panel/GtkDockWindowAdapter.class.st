@@ -219,18 +219,6 @@ GtkDockWindowAdapter >> processInitializationDeferredActions [
 			anAdapter doInitializationDeferredActions ] ] 
 ]
 
-{ #category : 'private - building' }
-GtkDockWindowAdapter >> specialActionsForListWidgetGroupName [
-		
-	^ #'dock-window-special-characters-list'
-]
-
-{ #category : 'private - building' }
-GtkDockWindowAdapter >> specialActionsForTextWidgetGroupName [
-		
-	^ #'dock-window-special-characters-text'
-]
-
 { #category : 'accessing' }
 GtkDockWindowAdapter >> startVisible: aBoolean [
 

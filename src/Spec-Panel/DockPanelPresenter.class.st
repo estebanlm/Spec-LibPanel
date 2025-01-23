@@ -1,10 +1,9 @@
 Class {
-	#name : 'DockPanelWindowPresenter',
+	#name : 'DockPanelPresenter',
 	#superclass : 'SpWindowPresenter',
-	#traits : 'DockTPanelWindow',
-	#classTraits : 'DockTPanelWindow classTrait',
 	#instVars : [
-		'#modified => ObservableSlot'
+		'#modified => ObservableSlot',
+		'#dockPosition => ObservableSlot'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -12,19 +11,19 @@ Class {
 }
 
 { #category : 'specs' }
-DockPanelWindowPresenter class >> adapterName [
+DockPanelPresenter class >> adapterName [
 
-	^ #PanelWindowAdapter
+	^ #DockPanelAdapter
 ]
 
 { #category : 'visiting' }
-DockPanelWindowPresenter >> acceptVisitor: aVisitor [
+DockPanelPresenter >> acceptVisitor: aVisitor [
 
 	aVisitor visitPanelWindowPresenter: self
 ]
 
 { #category : 'api' }
-DockPanelWindowPresenter >> close [
+DockPanelPresenter >> close [
 	"Close current window."
 
 	self withAdapterDo: [ :anAdapter | 
@@ -32,7 +31,7 @@ DockPanelWindowPresenter >> close [
 ]
 
 { #category : 'private' }
-DockPanelWindowPresenter >> closeFromKeyboard [
+DockPanelPresenter >> closeFromKeyboard [
 	"a close signal has been triggered. I need to verify I am in a panel that is closable like that."
 
 	"Just panels in the center can be closed with meta+w"
@@ -42,19 +41,31 @@ DockPanelWindowPresenter >> closeFromKeyboard [
 ]
 
 { #category : 'api - focus' }
-DockPanelWindowPresenter >> defaultKeyboardFocus [
+DockPanelPresenter >> defaultKeyboardFocus [
 
 	^ self presenter
 ]
 
 { #category : 'accessing' }
-DockPanelWindowPresenter >> dockArea [
+DockPanelPresenter >> dockArea [
 	
 	^ self dockPosition area
 ]
 
+{ #category : 'api' }
+DockPanelPresenter >> dockPosition [
+
+	^ dockPosition
+]
+
+{ #category : 'api' }
+DockPanelPresenter >> dockPosition: aDockPosition [
+
+	dockPosition := aDockPosition
+]
+
 { #category : 'initialization' }
-DockPanelWindowPresenter >> initialize [
+DockPanelPresenter >> initialize [
 
 	super initialize.
 	modified := false.
@@ -62,7 +73,7 @@ DockPanelWindowPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
-DockPanelWindowPresenter >> initializePrivateAnnouncements [
+DockPanelPresenter >> initializePrivateAnnouncements [
 
 	self 
 		property: #titleHolder 
@@ -74,56 +85,56 @@ DockPanelWindowPresenter >> initializePrivateAnnouncements [
 ]
 
 { #category : 'initialization' }
-DockPanelWindowPresenter >> initializeWindow [
+DockPanelPresenter >> initializeWindow [
 
 	super initializeWindow.
 	self presenter initializePanelWindow: self
 ]
 
 { #category : 'testing' }
-DockPanelWindowPresenter >> isModified [
+DockPanelPresenter >> isModified [
 
 	^ modified
 ]
 
 { #category : 'testing' }
-DockPanelWindowPresenter >> isPanelWindow [
+DockPanelPresenter >> isPanelWindow [
 
 	^ true
 ]
 
 { #category : 'api' }
-DockPanelWindowPresenter >> maximize [
+DockPanelPresenter >> maximize [
 
 	self withAdapterDo: [ :anAdapter | anAdapter maximize ]
 ]
 
 { #category : 'api' }
-DockPanelWindowPresenter >> modified: aBoolean [
+DockPanelPresenter >> modified: aBoolean [
 
 	modified := aBoolean
 ]
 
 { #category : 'private' }
-DockPanelWindowPresenter >> nearWindow [
+DockPanelPresenter >> nearWindow [
 
 	^ self owner ifNotNil: [ :anOwner | anOwner nearWindow ]
 ]
 
 { #category : 'private' }
-DockPanelWindowPresenter >> nearWindowLike [
+DockPanelPresenter >> nearWindowLike [
 
 	^ self
 ]
 
 { #category : 'api' }
-DockPanelWindowPresenter >> raise [
+DockPanelPresenter >> raise [
 
 	self withAdapterDo: [ :anAdapter | anAdapter raise ]
 ]
 
 { #category : 'initialization' }
-DockPanelWindowPresenter >> registerActions [
+DockPanelPresenter >> registerActions [
 
 	self ensureInternalActions 
 		addShortcutWith: [ :action | action
@@ -132,13 +143,13 @@ DockPanelWindowPresenter >> registerActions [
 ]
 
 { #category : 'api' }
-DockPanelWindowPresenter >> unmaximize [
+DockPanelPresenter >> unmaximize [
 
 	self withAdapterDo: [ :anAdapter | anAdapter unmaximize ]
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenDiscardDo: aBlock [ 
+DockPanelPresenter >> whenDiscardDo: aBlock [ 
 
 	self announcer 
 		when: DockPanelWindowDiscard
@@ -147,7 +158,13 @@ DockPanelWindowPresenter >> whenDiscardDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenFocusLostDo: aBlock [
+DockPanelPresenter >> whenDockPositionChangedDo: aBlock [
+
+	self property: #dockPosition whenChangedDo: aBlock
+]
+
+{ #category : 'api - events' }
+DockPanelPresenter >> whenFocusLostDo: aBlock [
 
 	self announcer
 		when: DockPanelWindowFocusLost
@@ -156,7 +173,7 @@ DockPanelWindowPresenter >> whenFocusLostDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenFocusReceivedDo: aBlock [
+DockPanelPresenter >> whenFocusReceivedDo: aBlock [
 
 	self announcer
 		when: DockPanelWindowFocusReceived 
@@ -165,13 +182,13 @@ DockPanelWindowPresenter >> whenFocusReceivedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenModifiedChangedDo: aBlock [
+DockPanelPresenter >> whenModifiedChangedDo: aBlock [
 
 	self property: #modified whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenPresentedDo: aBlock [
+DockPanelPresenter >> whenPresentedDo: aBlock [
 
 	self announcer 
 		when: DockPanelWindowPresented 
@@ -180,7 +197,7 @@ DockPanelWindowPresenter >> whenPresentedDo: aBlock [
 ]
 
 { #category : 'api - events' }
-DockPanelWindowPresenter >> whenSaveDo: aBlock [
+DockPanelPresenter >> whenSaveDo: aBlock [
 	"Announces when the window is dirty (modified) and user wants to close it by pressing the 
 	 close button (or with <meta+w>. 
 	 DockPanelWindowSave ann needs to be setted to success (using beSuccess) for the window to
@@ -193,7 +210,7 @@ DockPanelWindowPresenter >> whenSaveDo: aBlock [
 ]
 
 { #category : 'private' }
-DockPanelWindowPresenter >> window [
+DockPanelPresenter >> window [
 	"Answer window containing this composition (windows can be nested, so we 
 	 need to answer the closest one)."
 	
@@ -201,7 +218,7 @@ DockPanelWindowPresenter >> window [
 ]
 
 { #category : 'private' }
-DockPanelWindowPresenter >> windowClosed [
+DockPanelPresenter >> windowClosed [
 
 	isClosed := true
 ]

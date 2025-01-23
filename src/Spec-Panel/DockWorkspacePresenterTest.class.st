@@ -17,7 +17,7 @@ DockWorkspacePresenterTest >> application [
 { #category : 'accessing' }
 DockWorkspacePresenterTest >> classToTest [
 
-	^ DockDockWindowPresenter
+	^ DockWindowPresenter
 ]
 
 { #category : 'running' }

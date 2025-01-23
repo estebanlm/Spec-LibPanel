@@ -3,5 +3,5 @@ Extension { #name : 'SpAbstractPresenter' }
 { #category : '*Spec-Panel' }
 SpAbstractPresenter >> asDockableWindow [
 
-	^ DockPanelWindowPresenter presenter: self
+	^ DockPanelPresenter presenter: self
 ]
