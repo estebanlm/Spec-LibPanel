@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Application.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Application.html
 "
 Class {
 	#name : 'PanelApplication',

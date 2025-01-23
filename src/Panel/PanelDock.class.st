@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Dock.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Dock.html
 "
 Class {
 	#name : 'PanelDock',

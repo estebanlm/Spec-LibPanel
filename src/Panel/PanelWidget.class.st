@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Widget.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Widget.html
 "
 Class {
 	#name : 'PanelWidget',

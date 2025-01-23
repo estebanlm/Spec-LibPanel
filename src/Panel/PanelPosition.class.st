@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Position.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Position.html
 "
 Class {
 	#name : 'PanelPosition',

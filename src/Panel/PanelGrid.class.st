@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Grid.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Grid.html
 "
 Class {
 	#name : 'PanelGrid',

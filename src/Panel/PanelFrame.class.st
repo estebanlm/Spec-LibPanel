@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Frame.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Frame.html
 "
 Class {
 	#name : 'PanelFrame',

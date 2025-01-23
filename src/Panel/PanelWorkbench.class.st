@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Workbench.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Workbench.html
 "
 Class {
 	#name : 'PanelWorkbench',

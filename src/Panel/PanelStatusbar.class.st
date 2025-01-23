@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.Statusbar.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.Statusbar.html
 "
 Class {
 	#name : 'PanelStatusbar',

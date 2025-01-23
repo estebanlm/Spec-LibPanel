@@ -1,5 +1,5 @@
 "
-https://gnome.pages.gitlab.gnome.org/libpanel/class.SaveDelegate.html
+https://gnome.pages.gitlab.gnome.org/libpanel/panel-1.0/class.SaveDelegate.html
 "
 Class {
 	#name : 'PanelSaveDelegate',
