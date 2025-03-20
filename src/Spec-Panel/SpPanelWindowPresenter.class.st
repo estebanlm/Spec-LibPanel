@@ -70,6 +70,13 @@ SpPanelWindowPresenter >> basicRemovePresenter: aDockableWindow [
 ]
 
 { #category : 'api' }
+SpPanelWindowPresenter >> bottomHeight [
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter bottomHeight ].
+	^ nil
+]
+
+{ #category : 'api' }
 SpPanelWindowPresenter >> bottomHeight: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter bottomHeight: aNumber ]
@@ -101,6 +108,15 @@ SpPanelWindowPresenter >> defaultInitialExtent [
 SpPanelWindowPresenter >> endVisible: aBoolean [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter endVisible: aBoolean ]
+]
+
+{ #category : 'api' }
+SpPanelWindowPresenter >> endWidth [
+
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter endWidth ].
+	^ nil
+	
 ]
 
 { #category : 'api' }
@@ -171,10 +187,34 @@ SpPanelWindowPresenter >> isClosed [
 ]
 
 { #category : 'testing' }
+SpPanelWindowPresenter >> isMaximized [
+	"Answer if window is maximized"
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter isMaximized ].
+	^ false
+]
+
+{ #category : 'testing' }
+SpPanelWindowPresenter >> isMinimized [
+	"Answer if window is minimized"
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter isMinimized ].
+	^ false
+]
+
+{ #category : 'testing' }
 SpPanelWindowPresenter >> isOpen [
 	"Answer if window is open."
 	
 	^ self isClosed not
+]
+
+{ #category : 'testing' }
+SpPanelWindowPresenter >> isResizable [
+	
+	self flag: #TODO. "I need to extend this to adapt to the same as a SpWindowPresenter"
+
+	^ true
 ]
 
 { #category : 'testing' }
@@ -220,6 +260,15 @@ SpPanelWindowPresenter >> open [
 			self allPresenters do: [ :each | each announceDisplayed ] ] ]
 ]
 
+{ #category : 'accessing' }
+SpPanelWindowPresenter >> preferredExtent: aSize [
+
+	(self isMaximized 
+		or: [ self isMinimized ])
+		ifTrue: [ ^ self ].
+	self class preferredExtent: aSize
+]
+
 { #category : 'private - traversing' }
 SpPanelWindowPresenter >> presenters [
 
@@ -248,6 +297,13 @@ SpPanelWindowPresenter >> startVisible: aBoolean [
 ]
 
 { #category : 'api' }
+SpPanelWindowPresenter >> startWidth [
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter startWidth ].
+	^ nil
+]
+
+{ #category : 'api' }
 SpPanelWindowPresenter >> startWidth: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter startWidth: aNumber ]
@@ -263,6 +319,14 @@ SpPanelWindowPresenter >> title [
 SpPanelWindowPresenter >> title: aString [
 
 	title := aString
+]
+
+{ #category : 'api' }
+SpPanelWindowPresenter >> topHeight [
+
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter topHeight ].
+	^ nil
 ]
 
 { #category : 'api' }

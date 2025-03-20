@@ -20,6 +20,16 @@ PanelWidget class >> gtkNew [
 	^ self ffiCall: #(PanelWidget* panel_widget_new (void))
 ]
 
+{ #category : 'private' }
+PanelWidget >> basicInsertActionGroup: prefix actions: group [
+
+	super basicInsertActionGroup: prefix actions: group.
+	"self ffiCall: #(void panel_widget_insert_action_group (
+		self,
+  		const char* prefix,
+  		GObject* group))" 
+]
+
 { #category : 'testing' }
 PanelWidget >> canMaximize [
 
@@ -177,7 +187,9 @@ PanelWidget >> setChild: aWidget [
 { #category : 'private' }
 PanelWidget >> setMenuModel: menu_model [
 
-	self ffiCall: #(void panel_widget_set_menu_model (self, GMenuModel* menu_model))
+	self ffiCall: #(void panel_widget_set_menu_model (
+  		self,
+  		GMenuModel* menu_model))
 ]
 
 { #category : 'private' }

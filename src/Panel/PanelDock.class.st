@@ -35,6 +35,12 @@ PanelDock >> basicForEachFrame: callback [
 ]
 
 { #category : 'accessing' }
+PanelDock >> bottomHeight [
+
+	^ self gObjectGetInteger: 'bottom-height'
+]
+
+{ #category : 'accessing' }
 PanelDock >> bottomHeight: height [
 
 	self ffiCall: #(void panel_dock_set_bottom_height (self, int height))
@@ -47,6 +53,12 @@ PanelDock >> connectCreateFrame: aBlock [
 		connect: 'create-frame' 
 		signature: #(void* (void* selfHandle, void* position, gpointer user_data)) 
 		do: [ :self_handle :position :user_data | aBlock value: position ]
+]
+
+{ #category : 'accessing' }
+PanelDock >> endWidth [
+
+	^ self gObjectGetInteger: 'end-width'
 ]
 
 { #category : 'accessing' }
@@ -143,9 +155,21 @@ PanelDock >> revealTop: reveal_top [
 ]
 
 { #category : 'accessing' }
+PanelDock >> startWidth [
+
+	^ self gObjectGetInteger: 'start-width'
+]
+
+{ #category : 'accessing' }
 PanelDock >> startWidth: width [
 
 	self ffiCall: #(void panel_dock_set_start_width (self, int width))
+]
+
+{ #category : 'accessing' }
+PanelDock >> topHeight [
+
+	^ self gObjectGetInteger: 'top-height'
 ]
 
 { #category : 'accessing' }

@@ -25,9 +25,11 @@ GtkPanelWindowAdapter >> addModelTo: gtkWindow [
 
 	"gtkWindow dock forEachFrameDo: [ :aPanelFrame | aPanelFrame crTrace ]."
 	
-	"gtkWindow grid connectCreateFrame: [
-		'HERE' crTrace.
-		PanelFrame new getHandle ]"
+	gtkWindow grid connectCreateFrame: [		
+		| frame |
+		frame := PanelFrame new.
+		frame header: PanelFrameTabBar new.
+		frame getHandle ]
 ]
 
 { #category : 'building' }
@@ -90,6 +92,12 @@ GtkPanelWindowAdapter >> announceWillClose [
 	self presenter announce: ann.
 	
 	^ ann canClose
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> bottomHeight [
+
+	^ self widgetDo: [ :w | w dock bottomHeight ]
 ]
 
 { #category : 'accessing' }
@@ -168,6 +176,12 @@ GtkPanelWindowAdapter >> endVisible: aBoolean [
 ]
 
 { #category : 'accessing' }
+GtkPanelWindowAdapter >> endWidth [
+
+	^ self widgetDo: [ :w | w dock endWidth ]
+]
+
+{ #category : 'accessing' }
 GtkPanelWindowAdapter >> endWidth: aNumber [
 
 	self widgetDo: [ :w | w dock endWidth: aNumber ]
@@ -180,6 +194,45 @@ GtkPanelWindowAdapter >> isAreaVisible: aDockArea [
 	
 	^ self widgetDo: [ :w |
 		 w dock isAreaRevealed: aDockArea asPanelArea ]
+]
+
+{ #category : 'testing' }
+GtkPanelWindowAdapter >> isBottomVisible [
+
+	^ self isAreaVisible: SpPanelArea bottom
+]
+
+{ #category : 'testing' }
+GtkPanelWindowAdapter >> isEndVisible [
+
+	^ self isAreaVisible: SpPanelArea end
+]
+
+{ #category : 'testing' }
+GtkPanelWindowAdapter >> isMaximized [
+	| maximized |
+
+	maximized := self widgetDo: [ :w | w isMaximized ].
+	^ maximized ifNil: [ false ]
+]
+
+{ #category : 'testing' }
+GtkPanelWindowAdapter >> isMinimized [
+
+	^ self widgetDo: [ :w |
+		w surface state isMinimized ]
+]
+
+{ #category : 'testing' }
+GtkPanelWindowAdapter >> isStartVisible [
+
+	^ self isAreaVisible: SpPanelArea start
+]
+
+{ #category : 'testing' }
+GtkPanelWindowAdapter >> isTopVisible [
+
+	^ self isAreaVisible: SpPanelArea top
 ]
 
 { #category : 'testing' }
@@ -226,6 +279,12 @@ GtkPanelWindowAdapter >> startVisible: aBoolean [
 ]
 
 { #category : 'accessing' }
+GtkPanelWindowAdapter >> startWidth [
+
+	^ self widgetDo: [ :w | w dock startWidth ]
+]
+
+{ #category : 'accessing' }
 GtkPanelWindowAdapter >> startWidth: aNumber [
 
 	self widgetDo: [ :w | w dock startWidth: aNumber ]
@@ -236,6 +295,12 @@ GtkPanelWindowAdapter >> title: aString [
 	
 	self widgetDo: [ :w | 
 		w titlebar titleWidget label: aString ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> topHeight [
+
+	^ self widgetDo: [ :w | w dock topHeight ]
 ]
 
 { #category : 'accessing' }

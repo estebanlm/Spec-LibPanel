@@ -6,9 +6,32 @@ Class {
 	#tag : 'Adapter'
 }
 
+{ #category : 'private - building' }
+GtkPanelWidgetAdapter >> addActionsTo: gtkWindow [
+
+	super addActionsTo: gtkWindow.
+	"this part is now defined at the presenter level (which is where it belongs)"
+	"self addDefaultKeyBindings: gtkWindow"
+]
+
+{ #category : 'private - building' }
+GtkPanelWidgetAdapter >> addDefaultKeyBindings: gtkWindow [
+	| actionGroup |
+	
+	actionGroup := self defaultActionGroup.
+	actionGroup ifNil: [ ^ self ].
+
+	self ensureActionManager
+		installGroup: actionGroup 
+		on: gtkWindow
+]
+
 { #category : 'building' }
 GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	| childWidget |
+
+	"panels are maximizable by default"
+	panelWidget canMaximize: true.
 
 	panelWidget saveDelegate: (PanelSaveDelegate new
 		title: self presenter title;
@@ -46,7 +69,6 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceClosed [
-
 	self presenter windowClosed
 ]
 
@@ -96,20 +118,69 @@ GtkPanelWidgetAdapter >> announceSave [
 
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> close [ 
+	self widgetDo: [ :w | 
+		w
+			objectRef;
+			close;
+			objectUnref ]
+]
 
-	self widgetDo: [ :w | w close ]
+{ #category : 'accessing' }
+GtkPanelWidgetAdapter >> closeFromKeyboard [
+
+	self close
+]
+
+{ #category : 'private - building' }
+GtkPanelWidgetAdapter >> defaultActionGroup [
+		
+	^ SpActionGroup new 
+		name: 'adapterWindowActions';
+		addActionWith: [ :action | action 
+			name: 'closeWindow';
+			shortcutKey: $w actionModifier;
+			action: [ self closeFromKeyboard ] ];
+		yourself
 ]
 
 { #category : 'private' }
 GtkPanelWidgetAdapter >> forceClose [
 
-	self widgetDo: [ :w | w forceClose ]
+	self widgetDo: [ :w | 
+		w 
+			objectRef; 
+			forceClose;
+			objectUnref ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWidgetAdapter >> markBusy [
+
+	self widgetDo: [ :w | w markBusy ]
 ]
 
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> maximize [
 
 	self widgetDo: [ :w | w maximize ]
+]
+
+{ #category : 'testing' }
+GtkPanelWidgetAdapter >> needsAttention [
+
+	^ self widgetDo: [ :w | w needsAttention ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWidgetAdapter >> needsAttention: aBoolean [
+
+	self widgetDo: [ :w | w needsAttention: aBoolean ]
+]
+
+{ #category : 'private - actions' }
+GtkPanelWidgetAdapter >> newActionManager [
+
+	^ GtkAdapterActionPanelWidgetManager on: self
 ]
 
 { #category : 'accessing' }
@@ -126,6 +197,12 @@ GtkPanelWidgetAdapter >> title: aString [
 	self widgetDo: [ :w |
 		w title: newTitle.
 		w saveDelegate title: newTitle ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWidgetAdapter >> unmarkBusy [
+
+	self widgetDo: [ :w | w unmarkBusy ]
 ]
 
 { #category : 'accessing' }

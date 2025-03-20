@@ -92,6 +92,12 @@ SpPanelWidgetPresenter >> initializeWindow [
 ]
 
 { #category : 'testing' }
+SpPanelWidgetPresenter >> isDirty [
+
+	^ self isModified
+]
+
+{ #category : 'testing' }
 SpPanelWidgetPresenter >> isModified [
 
 	^ modified
@@ -101,6 +107,13 @@ SpPanelWidgetPresenter >> isModified [
 SpPanelWidgetPresenter >> isPanelWindow [
 
 	^ true
+]
+
+{ #category : 'api' }
+SpPanelWidgetPresenter >> markBusy [
+	"this setting just has sense if it is visible"
+
+	self withAdapterDo: [ :anAdapter | anAdapter markBusy ]
 ]
 
 { #category : 'api' }
@@ -127,6 +140,22 @@ SpPanelWidgetPresenter >> nearWindowLike [
 	^ self
 ]
 
+{ #category : 'testing' }
+SpPanelWidgetPresenter >> needsAttention [
+	"this setting just has sense if it is visible"
+
+	self withAdapterDo: [ :anAdapter | ^ anAdapter needsAttention ].
+	
+	^ false
+]
+
+{ #category : 'api' }
+SpPanelWidgetPresenter >> needsAttention: aBoolean [
+	"this setting just has sense if it is visible"
+
+	self withAdapterDo: [ :anAdapter | anAdapter needsAttention: aBoolean ]
+]
+
 { #category : 'api' }
 SpPanelWidgetPresenter >> raise [
 
@@ -136,10 +165,17 @@ SpPanelWidgetPresenter >> raise [
 { #category : 'initialization' }
 SpPanelWidgetPresenter >> registerActions [
 
-	self ensureInternalActions 
+	self ensureInternalActions
 		addShortcutWith: [ :action | action
 			shortcutKey: $w actionModifier;
 			action: [ self closeFromKeyboard ] ]
+]
+
+{ #category : 'api' }
+SpPanelWidgetPresenter >> unmarkBusy [
+	"this setting just has sense if it is visible"
+
+	self withAdapterDo: [ :anAdapter | anAdapter unmarkBusy ]
 ]
 
 { #category : 'api' }

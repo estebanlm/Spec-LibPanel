@@ -6,6 +6,9 @@ Class {
 	#superclass : 'GtkWidget',
 	#traits : 'LibTPanel',
 	#classTraits : 'LibTPanel classTrait',
+	#instVars : [
+		'header'
+	],
 	#category : 'Panel',
 	#package : 'Panel'
 }
@@ -20,4 +23,20 @@ PanelFrame class >> gtkNew [
 PanelFrame class >> new [
 
 	^ self gtkNew initialize
+]
+
+{ #category : 'accessing' }
+PanelFrame >> header: aHeader [
+
+	self withReferenceOf: header do: [
+		header := aHeader.
+		self setHeader: header.
+		"caller (me) is owner of the reference, so no, do not unref"
+		"header objectUnrefNow" ]
+]
+
+{ #category : 'private' }
+PanelFrame >> setHeader: aHeader [
+
+	self ffiCall: #(void panel_frame_set_header (self, PanelFrameHeader* aHeader))
 ]
