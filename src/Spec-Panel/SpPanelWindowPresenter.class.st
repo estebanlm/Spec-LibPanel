@@ -162,7 +162,7 @@ SpPanelWindowPresenter >> initialize [
 SpPanelWindowPresenter >> initializeWindow: aWindowPresenter [
 	"override this to initialize the workspace window"
 	
-	super initializeWindow: aWindowPresenter
+	"super initializeWindow: aWindowPresenter"
 ]
 
 { #category : 'initialization' }
