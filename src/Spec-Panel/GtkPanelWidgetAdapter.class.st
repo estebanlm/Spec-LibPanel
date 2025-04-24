@@ -117,18 +117,21 @@ GtkPanelWidgetAdapter >> announceSave [
 ]
 
 { #category : 'accessing' }
-GtkPanelWidgetAdapter >> close [ 
-	self widgetDo: [ :w | 
-		w
-			objectRef;
-			close;
-			objectUnref ]
+GtkPanelWidgetAdapter >> close [
+
+	self performClose: #close
 ]
 
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> closeFromKeyboard [
 
 	self close
+]
+
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> contentWidget [
+
+	^ self presenter presenter adapter widget
 ]
 
 { #category : 'private - building' }
@@ -146,11 +149,7 @@ GtkPanelWidgetAdapter >> defaultActionGroup [
 { #category : 'private' }
 GtkPanelWidgetAdapter >> forceClose [
 
-	self widgetDo: [ :w | 
-		w 
-			objectRef; 
-			forceClose;
-			objectUnref ]
+	self performClose: #forceClose
 ]
 
 { #category : 'accessing' }
@@ -181,6 +180,16 @@ GtkPanelWidgetAdapter >> needsAttention: aBoolean [
 GtkPanelWidgetAdapter >> newActionManager [
 
 	^ GtkAdapterActionPanelWidgetManager on: self
+]
+
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> performClose: aSelector [
+
+	logger trace: aSelector.
+	self widgetDo: [ :w | 
+		self contentWidget withObjectReferenceDo: [ 
+			w withObjectReferenceDo: [ 
+				w perform: aSelector ] ] ]
 ]
 
 { #category : 'accessing' }
