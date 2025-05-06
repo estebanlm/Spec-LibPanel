@@ -63,6 +63,8 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 		addFocusLeaveEvent: [ :event |
 			self runInSystem: [ self announceFocusLeave ] ].
 	
+	self presenter isModified
+		ifTrue: [ panelWidget modified: true ].
 	self presenter whenModifiedChangedDo: [ :aBoolean |
 		self updateModifiedTo: aBoolean ]
 ]

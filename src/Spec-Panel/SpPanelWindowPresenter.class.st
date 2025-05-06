@@ -40,6 +40,12 @@ SpPanelWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 		yourself)
 ]
 
+{ #category : 'adding' }
+SpPanelWindowPresenter >> addToast: aToast [
+
+	self withAdapterDo: [ :anAdapter | anAdapter addToast: aToast ]
+]
+
 { #category : 'private' }
 SpPanelWindowPresenter >> addWindow: aDockableWindow [
 	

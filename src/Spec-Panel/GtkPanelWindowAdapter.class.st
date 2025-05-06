@@ -2,7 +2,8 @@ Class {
 	#name : 'GtkPanelWindowAdapter',
 	#superclass : 'GtkAdapter',
 	#instVars : [
-		'lastSizeAllocation'
+		'lastSizeAllocation',
+		'toastOverlay'
 	],
 	#category : 'Spec-Panel-Adapter',
 	#package : 'Spec-Panel',
@@ -38,6 +39,21 @@ GtkPanelWindowAdapter >> addTitlebarTo: gtkWindow [
 	gtkWindow titlebar: (AdwHeaderBar new  
 		titleWidget: (GtkLabel newLabel: self presenter title);
 		yourself) 
+]
+
+{ #category : 'adding' }
+GtkPanelWindowAdapter >> addToast: aToast [
+
+	self innerWidgetDo: [ :w |
+		| toast |
+		toast := aToast asAdwToast.
+		toastOverlay ifNil: [
+			toastOverlay := AdwToastOverlay new
+				hAlign: GtkAlign GTK_ALIGN_CENTER;
+				vAlign: GtkAlign GTK_ALIGN_END;
+				yourself.
+			w dock overlay addOverlay: toastOverlay ].
+		toastOverlay addToast: toast ]
 ]
 
 { #category : 'building' }

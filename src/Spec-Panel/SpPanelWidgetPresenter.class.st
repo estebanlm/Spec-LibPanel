@@ -162,6 +162,13 @@ SpPanelWidgetPresenter >> raise [
 	self withAdapterDo: [ :anAdapter | anAdapter raise ]
 ]
 
+{ #category : 'api' }
+SpPanelWidgetPresenter >> raiseAndTakeKeyboardFocus [
+
+	self raise.
+	self takeKeyboardFocus
+]
+
 { #category : 'initialization' }
 SpPanelWidgetPresenter >> registerActions [
 

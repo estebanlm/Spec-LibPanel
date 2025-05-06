@@ -6,6 +6,9 @@ Class {
 	#superclass : 'GtkWidget',
 	#traits : 'LibTPanel',
 	#classTraits : 'LibTPanel classTrait',
+	#instVars : [
+		'overlay'
+	],
 	#pools : [
 		'PanelArea'
 	],
@@ -79,6 +82,16 @@ PanelDock >> forEachFrameDo: aBlock [
 	self basicForEachFrame: callback
 ]
 
+{ #category : 'private' }
+PanelDock >> getOverlay [
+
+	self flag: #HACK. "I know a panel dock has an overlay as first children, but I 
+	do not have a real access to it, so I need to hack its access. 
+	THIS MAY FAIL IN THE FUTURE :("
+	
+	^ self firstChild asConcreteType
+]
+
 { #category : 'testing' }
 PanelDock >> isAreaRevealed: aPanelArea [
 
@@ -113,6 +126,12 @@ PanelDock >> isStartRevealed [
 PanelDock >> isTopRevealed [
 
 	^ self ffiCall: #(gboolean panel_dock_get_reveal_top (self))
+]
+
+{ #category : 'accessing' }
+PanelDock >> overlay [
+
+	^ overlay ifNil: [ overlay := self getOverlay ]
 ]
 
 { #category : 'accessing' }
