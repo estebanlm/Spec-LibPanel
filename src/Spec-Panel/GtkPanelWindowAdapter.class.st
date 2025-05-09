@@ -38,10 +38,10 @@ GtkPanelWindowAdapter >> addTitlebarTo: gtkWindow [
 	
 	gtkWindow titlebar: (AdwHeaderBar new  
 		titleWidget: (GtkLabel newLabel: self presenter title);
-		yourself) 
+		yourself)
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 GtkPanelWindowAdapter >> addToast: aToast [
 
 	self innerWidgetDo: [ :w |
@@ -50,7 +50,7 @@ GtkPanelWindowAdapter >> addToast: aToast [
 		toastOverlay ifNil: [
 			toastOverlay := AdwToastOverlay new
 				hAlign: GtkAlign GTK_ALIGN_CENTER;
-				vAlign: GtkAlign GTK_ALIGN_END;
+				vAlign: GtkAlign GTK_ALIGN_END; "in fact, this could be a setting"
 				yourself.
 			w dock overlay addOverlay: toastOverlay ].
 		toastOverlay addToast: toast ]
@@ -258,6 +258,12 @@ GtkPanelWindowAdapter >> isTopWindow [
 		GEngine current ensureApplication activeWindow
 			ifNotNil: [ :active | active getHandle = w getHandle ]
 			ifNil: [ false ] ]
+]
+
+{ #category : 'private - actions' }
+GtkPanelWindowAdapter >> newActionManager [
+
+	^ GtkAdapterActionPanelWindowManager on: self
 ]
 
 { #category : 'building' }
