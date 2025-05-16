@@ -5,7 +5,8 @@ Class {
 		'#title => ObservableSlot',
 		'#isClosed => ObservableSlot',
 		'#presenters',
-		'#initialExtent'
+		'#initialExtent',
+		'#overlayLayout'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -25,6 +26,22 @@ SpPanelWindowPresenter class >> defaultTitle [
 ]
 
 { #category : 'api' }
+SpPanelWindowPresenter >> addOverlay: aPresenter [
+
+	self addOverlay: aPresenter withConstraints: [ :c |]
+]
+
+{ #category : 'api' }
+SpPanelWindowPresenter >> addOverlay: aPresenter withConstraints: aBlock [
+
+	overlayLayout addOverlay: aPresenter withConstraints: aBlock.
+	self withAdapterDo: [ :anAdapter |
+		anAdapter 
+			addOverlay: aPresenter 
+			constraints: (overlayLayout constraintsFor: aPresenter) ]
+]
+
+{ #category : 'api' }
 SpPanelWindowPresenter >> addPresenter: aPresenter [
 
 	self 
@@ -40,7 +57,7 @@ SpPanelWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 		yourself)
 ]
 
-{ #category : 'adding' }
+{ #category : 'api' }
 SpPanelWindowPresenter >> addToast: aToast [
 
 	self withAdapterDo: [ :anAdapter | anAdapter addToast: aToast ]
@@ -155,6 +172,9 @@ SpPanelWindowPresenter >> initialize [
 	"resizable := true.
 	centered := false.
 	decorations := true."
+	"this is just used to keep and display overlays. 
+	 Child api cannot be used as it does not has sense"
+	overlayLayout := SpOverlayLayout new.
 
 	self whenTitleChangedDo: [ :aString |
 		self withAdapterDo: [ :anAdapter | anAdapter title: aString ] ].
@@ -264,6 +284,12 @@ SpPanelWindowPresenter >> open [
 	self withAdapterDo: [ :anAdapter | 
 		anAdapter openWithDeferredAction: [ 
 			self allPresenters do: [ :each | each announceDisplayed ] ] ]
+]
+
+{ #category : 'private' }
+SpPanelWindowPresenter >> overlayLayout [ 
+
+	^ overlayLayout
 ]
 
 { #category : 'accessing' }

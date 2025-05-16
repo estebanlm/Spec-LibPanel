@@ -30,7 +30,41 @@ GtkPanelWindowAdapter >> addModelTo: gtkWindow [
 		| frame |
 		frame := PanelFrame new.
 		frame header: PanelFrameTabBar new.
-		frame getHandle ]
+		frame getHandle ].
+		
+	self addOverlaysTo: gtkWindow
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> addOverlay: aPresenter constraints: constraints [
+
+	self innerWidgetDo: [ :w |
+		self 
+			addOverlay: aPresenter 
+			constraints: constraints 
+			to: w ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> addOverlay: aPresenter constraints: constraints to: gtkWindow [
+	| overlayWidget |
+	
+	overlayWidget := aPresenter build.
+	constraints hAlign ifNotNil: [ :hAlign | overlayWidget hAlign: hAlign asGtkAlign ].
+	constraints vAlign ifNotNil: [ :vAlign | overlayWidget vAlign: vAlign asGtkAlign ].
+	gtkWindow dock overlay addOverlay: overlayWidget
+]
+
+{ #category : 'building' }
+GtkPanelWindowAdapter >> addOverlaysTo: gtkWindow [
+	| overlayLayout |
+
+	overlayLayout := self presenter overlayLayout.
+	overlayLayout children do: [ :each | 
+		self 
+			addOverlay: each 
+			constraints: (overlayLayout constraintsFor: each)
+			to: gtkWindow ]
 ]
 
 { #category : 'building' }
