@@ -154,6 +154,12 @@ PanelWidget >> needsAttention: needs_attention [
 ]
 
 { #category : 'accessing' }
+PanelWidget >> position [
+
+	^ self ffiCall: #(PanelPosition* panel_widget_get_position (self))
+]
+
+{ #category : 'accessing' }
 PanelWidget >> raise [
 
 	self ffiCall: #(void panel_widget_raise (self))

@@ -44,6 +44,15 @@ SpPanelPosition >> column: aNumber [
 	column := aNumber
 ]
 
+{ #category : 'instance creation' }
+SpPanelPosition >> fromPanelPosition: aPanelPosition [
+
+	self 
+		area: (SpPanelArea fromPanelArea: aPanelPosition area);
+		column: aPanelPosition column + 1;
+		row: aPanelPosition row + 1
+]
+
 { #category : 'accessing' }
 SpPanelPosition >> row [
 

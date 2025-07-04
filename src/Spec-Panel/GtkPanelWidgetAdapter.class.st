@@ -54,13 +54,7 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	
 	"Events"
 	panelWidget
-		connectPresented: [
-			self runInSystem: [  
-				self announcePresented.
-				self flag: #REVIEW. "I am trying to see why system crashes, and this is in general 
-				when I close a lot of editors at a time. In the stack there is always a lot of 
-				take keyboard focus coming from here, so I am taking it out to see how it works.".
-				"self presenter presenter takeKeyboardFocus" ] ];
+		connectPresented: [ self presented ];
 		addFocusEnterEvent: [ :event |
 			self runInSystem: [ self announceFocusEnter ] ];
 		addFocusLeaveEvent: [ :event |
@@ -197,6 +191,18 @@ GtkPanelWidgetAdapter >> performClose: aSelector [
 				w perform: aSelector ] ] ]
 ]
 
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> presented [
+	
+	self updatePosition.
+	self runInSystem: [
+		self announcePresented.
+		self flag: #REVIEW. "I am trying to see why system crashes, and this is in general 
+		when I close a lot of editors at a time. In the stack there is always a lot of 
+		take keyboard focus coming from here, so I am taking it out to see how it works.".
+		"self presenter presenter takeKeyboardFocus" ]
+]
+
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> raise [
 
@@ -229,6 +235,19 @@ GtkPanelWidgetAdapter >> unmaximize [
 GtkPanelWidgetAdapter >> updateModifiedTo: aBoolean [
 
 	self widgetDo: [ :w | w modified: aBoolean ]
+]
+
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> updatePosition [
+	| panelPosition dockPosition |
+
+	dockPosition := self presenter dockPosition.
+	dockPosition ifNil: [ ^ self ].
+	
+	panelPosition := self innerWidgetDo: [ :w | w position ].
+	(panelPosition isNil or: [ panelPosition getHandle isNull ]) ifTrue: [ ^ self ].
+
+	dockPosition fromPanelPosition: panelPosition
 ]
 
 { #category : 'building' }

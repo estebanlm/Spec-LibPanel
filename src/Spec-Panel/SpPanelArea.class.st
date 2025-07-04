@@ -28,6 +28,19 @@ SpPanelArea class >> end [
 ]
 
 { #category : 'instance creation' }
+SpPanelArea class >> fromPanelArea: aPanelArea [
+
+	aPanelArea = PanelArea PANEL_AREA_END ifTrue: [ ^ self end ].
+	aPanelArea = PanelArea PANEL_AREA_TOP ifTrue: [ ^ self top ].
+	aPanelArea = PanelArea PANEL_AREA_CENTER ifTrue: [ ^ self center ].
+	aPanelArea = PanelArea PANEL_AREA_BOTTOM ifTrue: [ ^ self bottom ].
+	aPanelArea = PanelArea PANEL_AREA_START ifTrue: [ ^ self start ].
+	
+	self error: 'Should not arrive here'
+	
+]
+
+{ #category : 'instance creation' }
 SpPanelArea class >> new [
 
 	self error: 'Use #uniqueInstance'
