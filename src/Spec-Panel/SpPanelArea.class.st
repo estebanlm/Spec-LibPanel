@@ -66,6 +66,12 @@ SpPanelArea class >> uniqueInstance [
 	^ uniqueInstance ifNil: [ uniqueInstance := self basicNew initialize ]
 ]
 
+{ #category : 'visiting' }
+SpPanelArea >> accept: aVisitor [
+
+	self subclassResponsibility
+]
+
 { #category : 'converting' }
 SpPanelArea >> asPanelArea [
 

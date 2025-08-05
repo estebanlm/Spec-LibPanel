@@ -6,6 +6,12 @@ Class {
 	#tag : 'Presenter'
 }
 
+{ #category : 'visiting' }
+SpPanelAreaCenter >> accept: aVisitor [
+
+	^ aVisitor visitCenter: self 
+]
+
 { #category : 'converting' }
 SpPanelAreaCenter >> asPanelArea [
 
