@@ -54,6 +54,9 @@ PanelStatusbar >> initialize [
 
 { #category : 'private' }
 PanelStatusbar >> keepWidget: aWidget [
+
+	"since this component can be initialized in gtk side"
+	children ifNil: [ children := #() ].
 	children := children copyWith: aWidget
 ]
 

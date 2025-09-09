@@ -25,6 +25,16 @@ PanelFrame class >> new [
 	^ self gtkNew initialize
 ]
 
+{ #category : 'signaling' }
+PanelFrame >> connectPageClosed: aBlock [
+
+	self 
+		connect: 'page-closed' 
+		signature: #(void (void* selfHandle, void* widget, gpointer user_data)) 
+		do: [ :selfHandle :widget :user_data |
+			aBlock value: widget ]
+]
+
 { #category : 'accessing' }
 PanelFrame >> header: aHeader [
 

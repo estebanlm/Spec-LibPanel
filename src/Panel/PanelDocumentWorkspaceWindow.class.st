@@ -10,3 +10,13 @@ Class {
 	#category : 'Panel',
 	#package : 'Panel'
 }
+
+{ #category : 'signaling' }
+PanelDocumentWorkspaceWindow >> connectCreateFrame: aBlock [
+
+	self 
+		connect: 'create-frame' 
+		signature: #(void* (void* selfHandle, void* position, gpointer user_data)) 
+		do: [ :self_handle :position :user_data |
+			aBlock value: (PanelPosition fromHandleUnreferenced: position) ]
+]

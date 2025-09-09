@@ -6,7 +6,8 @@ Class {
 		'#isClosed => ObservableSlot',
 		'#presenters',
 		'#initialExtent',
-		'#overlayLayout'
+		'#overlayLayout',
+		'#statusbar'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -181,7 +182,10 @@ SpPanelWindowPresenter >> initialize [
 	
 	self registerActions.
 	
-	self initializeWorkspace
+	self initializeWorkspace.
+	
+	self whenBuiltDo: [
+		self statusbar build ]
 ]
 
 { #category : 'initialization' }
@@ -339,6 +343,12 @@ SpPanelWindowPresenter >> startWidth [
 SpPanelWindowPresenter >> startWidth: aNumber [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter startWidth: aNumber ]
+]
+
+{ #category : 'api' }
+SpPanelWindowPresenter >> statusbar [
+
+	^ statusbar ifNil: [ statusbar := self instantiate: SpPanelStatusbarPresenter ]
 ]
 
 { #category : 'api' }

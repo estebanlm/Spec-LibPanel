@@ -3,7 +3,8 @@ Class {
 	#superclass : 'GtkAdapter',
 	#instVars : [
 		'lastSizeAllocation',
-		'toastOverlay'
+		'toastOverlay',
+		'frames'
 	],
 	#category : 'Spec-Panel-Adapter',
 	#package : 'Spec-Panel',
@@ -14,19 +15,29 @@ Class {
 GtkPanelWindowAdapter >> addModelTo: gtkWindow [
 
 	super addModelTo: gtkWindow.
+	
+	"frames := OrderedCollection new.
+	gtkWindow connectCreateFrame: [ :position |
+		| frame |
+		
+		position area printToStdout.
+		
+		frame := PanelFrame new.
+		frames add: frame.
+		(position area = PanelArea PANEL_AREA_CENTER)
+			ifTrue: [ frame header: PanelFrameTabBar new ].
+		frame connectPageClosed: [ :widget | widget printToStdout ].
+		frame getHandle ]."
 
 	gtkWindow defaultSize: self presenter initialExtent.
 	
 	self addTitlebarTo: gtkWindow.
 
 	self connectToGtkSignals: gtkWindow.
-
-	self presenter presenters do: [ :each | 
+	self presenter presenters do: [ :each |
 		self dockWindow: each to: gtkWindow ].
-
-	"gtkWindow dock forEachFrameDo: [ :aPanelFrame | aPanelFrame crTrace ]."
 	
-	gtkWindow grid connectCreateFrame: [		
+	gtkWindow grid connectCreateFrame: [
 		| frame |
 		frame := PanelFrame new.
 		frame header: PanelFrameTabBar new.
