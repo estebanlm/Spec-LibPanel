@@ -88,10 +88,9 @@ GtkPanelWindowAdapter >> addTitlebarTo: gtkWindow [
 
 { #category : 'accessing' }
 GtkPanelWindowAdapter >> addToast: aToast [
-
 	self innerWidgetDo: [ :w |
 		| toast |
-		toast := aToast asAdwToast.
+		toast := self toAdwToast: aToast.
 		toastOverlay ifNil: [
 			toastOverlay := AdwToastOverlay new
 				hAlign: GtkAlign GTK_ALIGN_CENTER;
@@ -311,6 +310,31 @@ GtkPanelWindowAdapter >> newActionManager [
 	^ GtkAdapterActionPanelWindowManager on: self
 ]
 
+{ #category : 'private - toast' }
+GtkPanelWindowAdapter >> newToastWidgetFrom: aPanelToast in: aToast [
+	| toastPresenter |
+	
+	toastPresenter := self presenter instantiate: SpPresenter.
+	toastPresenter layout: (SpBoxLayout newHorizontal
+		vAlignCenter;
+		spacing: 5;
+		add: ((toastPresenter newLabel 
+			addStyle: 'heading';
+			label: aPanelToast title; 
+			yourself));
+		add: (toastPresenter newButton 
+				label: (aPanelToast actionLabel ifNil: [ 'Accept' ]);
+				action: [ 
+					aPanelToast action value. 
+					aToast dismiss ] ) 
+			expand: false;
+	yourself).
+
+	toastPresenter build.
+	
+	^ toastPresenter adapter widget
+]
+
 { #category : 'building' }
 GtkPanelWindowAdapter >> newWidget [
 
@@ -362,6 +386,20 @@ GtkPanelWindowAdapter >> title: aString [
 	
 	self widgetDo: [ :w | 
 		w titlebar titleWidget label: aString ]
+]
+
+{ #category : 'private - toast' }
+GtkPanelWindowAdapter >> toAdwToast: aPanelToast [
+	| toast |
+
+	toast := AdwToast new. 
+	aPanelToast action 
+		ifNotNil: [ toast customTitle: (self newToastWidgetFrom: aPanelToast in: toast) ]
+		ifNil: [ toast title: (aPanelToast title ifNil: [ 'Unnamed' ]) ].
+	aPanelToast timeout 
+		ifNotNil: [ :aNumber | toast timeout: aNumber ].
+	
+	^ toast
 ]
 
 { #category : 'accessing' }
