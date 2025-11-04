@@ -12,38 +12,42 @@ Class {
 }
 
 { #category : 'building' }
-GtkPanelWindowAdapter >> addModelTo: gtkWindow [
+GtkPanelWindowAdapter >> addModelTo: panelWindow [
 
-	super addModelTo: gtkWindow.
+	super addModelTo: panelWindow.
+
+	"Creation of frames (both in window and in dock) are not doing anythign extra to 
+	 what they already do without hanging  on them, but I will need them when working on 
+	 other menus, etc."
 	
-	"frames := OrderedCollection new.
-	gtkWindow connectCreateFrame: [ :position |
+	frames := OrderedCollection new.
+	panelWindow connectCreateFrame: [ :position |
 		| frame |
-		
-		position area printToStdout.
 		
 		frame := PanelFrame new.
 		frames add: frame.
 		(position area = PanelArea PANEL_AREA_CENTER)
 			ifTrue: [ frame header: PanelFrameTabBar new ].
-		frame connectPageClosed: [ :widget | widget printToStdout ].
-		frame getHandle ]."
+		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
+		frame getHandle ].
 
-	gtkWindow defaultSize: self presenter initialExtent.
+	panelWindow defaultSize: self presenter initialExtent.
 	
-	self addTitlebarTo: gtkWindow.
+	self addTitlebarTo: panelWindow.
 
-	self connectToGtkSignals: gtkWindow.
+	self connectToGtkSignals: panelWindow.
 	self presenter presenters do: [ :each |
-		self dockWindow: each to: gtkWindow ].
+		self dockWindow: each to: panelWindow ].
 	
-	gtkWindow grid connectCreateFrame: [
+	panelWindow grid connectCreateFrame: [
 		| frame |
 		frame := PanelFrame new.
 		frame header: PanelFrameTabBar new.
+		frames add: frame.
+		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
 		frame getHandle ].
 		
-	self addOverlaysTo: gtkWindow
+	self addOverlaysTo: panelWindow
 ]
 
 { #category : 'accessing' }
