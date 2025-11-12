@@ -255,6 +255,15 @@ SpPanelWindowPresenter >> isTopWindow [
 	^ false
 ]
 
+{ #category : 'api' }
+SpPanelWindowPresenter >> lastPresenterFocused [
+
+	self withAdapterDo: [ :anAdapter | 
+		^ anAdapter lastPresenterFocused ].
+		
+	^ nil
+]
+
 { #category : 'initialization' }
 SpPanelWindowPresenter >> maybeInitializeWorkspace [
 	"Initialization may happen when setting application by "
@@ -381,6 +390,14 @@ SpPanelWindowPresenter >> topHeight: aNumber [
 SpPanelWindowPresenter >> topVisible: aBoolean [
 
 	self withAdapterPerformOrDefer: [ :anAdapter | anAdapter topVisible: aBoolean ]
+]
+
+{ #category : 'private - traversing' }
+SpPanelWindowPresenter >> traversePresentersDo: aBlock excluding: excludes [
+
+	super traversePresentersDo: aBlock excluding: excludes.
+	self presentersDo: [ :each |
+		each traversePresentersDo: aBlock excluding: excludes ]
 ]
 
 { #category : 'api - events' }

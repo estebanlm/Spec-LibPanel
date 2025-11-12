@@ -251,6 +251,16 @@ GtkPanelWindowAdapter >> endWidth: aNumber [
 	self widgetDo: [ :w | w dock endWidth: aNumber ]
 ]
 
+{ #category : 'private' }
+GtkPanelWindowAdapter >> findPresenterFocused: widgetFocused inTopLevel: aPresenter [
+
+	aPresenter traversePresentersDo: [ :each | 
+		(each adapter isFocusedWidgetSameAsMe: widgetFocused) 
+			ifTrue: [ ^ each ] ].
+
+	^ nil
+]
+
 { #category : 'testing' }
 GtkPanelWindowAdapter >> isAreaVisible: aDockArea [
 
@@ -306,6 +316,25 @@ GtkPanelWindowAdapter >> isTopWindow [
 		GEngine current ensureApplication activeWindow
 			ifNotNil: [ :active | active getHandle = w getHandle ]
 			ifNil: [ false ] ]
+]
+
+{ #category : 'api - focus' }
+GtkPanelWindowAdapter >> lastPresenterFocused [
+	| widgetFocused |
+
+	widgetFocused := self innerWidget widgetFocused.
+	widgetFocused isNullOrNil ifTrue: [ ^ nil ].
+	
+	(self findPresenterFocused: widgetFocused inTopLevel: self presenter)
+		ifNotNil: [ :aPresenter | ^ aPresenter ].
+	"but it may also be in a popover"
+	self presenter application windows 
+		select: [ :each | each isPopover ]
+		thenDo: [ :each | 
+			(self findPresenterFocused: widgetFocused inTopLevel: each presenter)
+				ifNotNil: [ :aPresenter | ^ aPresenter ] ].
+
+	^ nil
 ]
 
 { #category : 'private - actions' }
