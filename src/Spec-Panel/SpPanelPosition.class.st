@@ -20,6 +20,16 @@ SpPanelPosition class >> newArea: aDockArea [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+SpPanelPosition class >> newArea: aDockArea position: aPoint [
+
+	^ self new 
+		area: aDockArea;
+		column: aPoint x;
+		row: aPoint y;
+		yourself
+]
+
 { #category : 'accessing' }
 SpPanelPosition >> area [
 
