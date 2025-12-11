@@ -42,11 +42,12 @@ SpPanelStatusbarPresenter >> addSuffix: aPresenter [
 SpPanelStatusbarPresenter >> initialize [
 
 	super initialize.
+	
 	prefixPresenters := OrderedCollection new asValueHolder.
 	suffixPresenters := OrderedCollection new asValueHolder.
 	
-	self whenPrefixAddedDo: [ :aPresenter | 
-		self withAdapterDo: [ :anAdapter | 
+	self whenPrefixAddedDo: [ :aPresenter |
+		self withAdapterDo: [ :anAdapter |
 			anAdapter addPrefix: aPresenter ] ].
 			
 	self whenSuffixAddedDo: [ :aPresenter | 
@@ -67,8 +68,10 @@ SpPanelStatusbarPresenter >> prefixPresenters [
 { #category : 'api' }
 SpPanelStatusbarPresenter >> remove: aPresenter [
 
-	prefixPresenters remove: aPresenter ifAbsent: [ ].
-	suffixPresenters remove: aPresenter ifAbsent: [ ]
+	(prefixPresenters includes: aPresenter) 
+		ifTrue: [ prefixPresenters remove: aPresenter ].
+	(suffixPresenters includes: aPresenter) 
+		ifTrue: [ suffixPresenters remove: aPresenter ]
 ]
 
 { #category : 'api' }
