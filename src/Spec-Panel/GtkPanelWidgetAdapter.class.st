@@ -196,11 +196,7 @@ GtkPanelWidgetAdapter >> presented [
 	
 	self updatePosition.
 	self runInSystem: [
-		self announcePresented.
-		self flag: #REVIEW. "I am trying to see why system crashes, and this is in general 
-		when I close a lot of editors at a time. In the stack there is always a lot of 
-		take keyboard focus coming from here, so I am taking it out to see how it works.".
-		"self presenter presenter takeKeyboardFocus" ]
+		self announcePresented ]
 ]
 
 { #category : 'accessing' }
