@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'accessing - platform' }
+LibPanel >> macLibraryName [
+
+	^ FFIMacLibraryFinder findLibrary: 'libpanel-1.1.dylib'
+]
+
+{ #category : 'accessing - platform' }
 LibPanel >> unix64LibraryName [
 
 	^ FFIUnix64LibraryFinder findLibrary: 'libpanel-1.so'
