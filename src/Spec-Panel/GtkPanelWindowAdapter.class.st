@@ -26,8 +26,9 @@ GtkPanelWindowAdapter >> addModelTo: panelWindow [
 		
 		frame := PanelFrame new.
 		frames add: frame.
-		(position area = PanelArea PANEL_AREA_CENTER)
-			ifTrue: [ frame header: PanelFrameTabBar new ].
+		frame header: ((position area = PanelArea PANEL_AREA_CENTER)
+			ifTrue: [ PanelFrameTabBar new ]
+			ifFalse: [ PanelFrameHeaderBar new ]).
 		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
 		frame getHandle ].
 
@@ -173,7 +174,10 @@ GtkPanelWindowAdapter >> bottomHeight: aNumber [
 { #category : 'accessing' }
 GtkPanelWindowAdapter >> bottomVisible: aBoolean [
 
-	self widgetDo: [ :w | w dock revealBottom: aBoolean ]
+	self widgetDo: [ :w | 
+		aBoolean ifTrue: [ 
+			self ensureDropAreaIn: PanelArea PANEL_AREA_BOTTOM ].	
+		w dock revealBottom: aBoolean ]
 ]
 
 { #category : 'accessing' }
@@ -236,7 +240,10 @@ GtkPanelWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 { #category : 'accessing' }
 GtkPanelWindowAdapter >> endVisible: aBoolean [
 
-	self widgetDo: [ :w | w dock revealEnd: aBoolean ]
+	self widgetDo: [ :w | 
+		aBoolean ifTrue: [ 
+			self ensureDropAreaIn: PanelArea PANEL_AREA_END ].
+		w dock revealEnd: aBoolean ]
 ]
 
 { #category : 'accessing' }
@@ -249,6 +256,29 @@ GtkPanelWindowAdapter >> endWidth [
 GtkPanelWindowAdapter >> endWidth: aNumber [
 
 	self widgetDo: [ :w | w dock endWidth: aNumber ]
+]
+
+{ #category : 'private' }
+GtkPanelWindowAdapter >> ensureDropAreaIn: aPanelArea [ 
+	"since an area without any widgets does not adds by default any placeholder for widgets making them 
+	 not really usable, I need to be sure the widget will add it, by adding and removing one immediately, 
+	 effectively forcing the workspace to add it. 
+	 Yes, this is a hack, but otherwise I can just open an area by moving a component there, and I want 
+	 the other behavior."
+	| anyWidgetPresent placeholder |
+	
+	anyWidgetPresent := self presenter presenters 
+		anySatisfy: [ :each | each adapter widget position area = aPanelArea ].
+	anyWidgetPresent ifTrue: [ ^ self ].
+	
+	placeholder := PanelWidget new.
+	placeholder visible: false.
+	self widget 
+		basicAddWidget: placeholder 
+		at: (PanelPosition new 
+			area: aPanelArea;
+			yourself).
+	placeholder close
 ]
 
 { #category : 'private' }
@@ -399,7 +429,10 @@ GtkPanelWindowAdapter >> processInitializationDeferredActions [
 { #category : 'accessing' }
 GtkPanelWindowAdapter >> startVisible: aBoolean [
 
-	self widgetDo: [ :w | w dock revealStart: aBoolean ]
+	self widgetDo: [ :w | 
+		aBoolean ifTrue: [ 
+			self ensureDropAreaIn: PanelArea PANEL_AREA_START ].	
+		w dock revealStart: aBoolean ]
 ]
 
 { #category : 'accessing' }
@@ -450,7 +483,10 @@ GtkPanelWindowAdapter >> topHeight: aNumber [
 { #category : 'accessing' }
 GtkPanelWindowAdapter >> topVisible: aBoolean [
 
-	self widgetDo: [ :w | w dock revealTop: aBoolean ]
+	self widgetDo: [ :w | 
+		aBoolean ifTrue: [ 
+			self ensureDropAreaIn: PanelArea PANEL_AREA_TOP ].
+		w dock revealTop: aBoolean ]
 ]
 
 { #category : 'building' }

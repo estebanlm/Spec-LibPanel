@@ -45,8 +45,32 @@ PanelFrame >> header: aHeader [
 		"header objectUnrefNow" ]
 ]
 
+{ #category : 'accessing' }
+PanelFrame >> placeholder [
+
+	^ self ffiCall: #(GtkWidget* panel_frame_get_placeholder (self))
+]
+
+{ #category : 'accessing' }
+PanelFrame >> placeholder: aWidget [
+
+	self setPlaceholder: aWidget
+]
+
+{ #category : 'accessing' }
+PanelFrame >> position [
+
+	^ self ffiCall: #(PanelPosition* panel_frame_get_position (self))
+]
+
 { #category : 'private' }
 PanelFrame >> setHeader: aHeader [
 
 	self ffiCall: #(void panel_frame_set_header (self, PanelFrameHeader* aHeader))
+]
+
+{ #category : 'private' }
+PanelFrame >> setPlaceholder: placeholder [
+
+	^ self ffiCall: #(void panel_frame_set_placeholder (self, GtkWidget* placeholder))
 ]

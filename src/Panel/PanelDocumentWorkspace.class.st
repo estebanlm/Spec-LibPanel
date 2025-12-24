@@ -104,6 +104,12 @@ PanelDocumentWorkspace >> initialize [
 	widgets := Set new
 ]
 
+{ #category : 'removing' }
+PanelDocumentWorkspace >> remove: widget [
+
+	self ffiCall: #(void panel_dock_remove (self, GtkWidget* widget))
+]
+
 { #category : 'private' }
 PanelDocumentWorkspace >> setDock: aPanelDock [
 

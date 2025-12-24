@@ -64,6 +64,14 @@ SpPanelWidgetPresenter >> dockPosition: aDockPosition [
 	dockPosition := aDockPosition
 ]
 
+{ #category : 'api' }
+SpPanelWidgetPresenter >> forceClose [
+	"Force close current window (if is dirty, it closes it anyway)."
+
+	self withAdapterDo: [ :anAdapter | 
+		anAdapter forceClose ]
+]
+
 { #category : 'initialization' }
 SpPanelWidgetPresenter >> initialize [
 
