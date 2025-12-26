@@ -239,6 +239,15 @@ SpPanelWidgetPresenter >> whenModifiedChangedDo: aBlock [
 ]
 
 { #category : 'api - events' }
+SpPanelWidgetPresenter >> whenPlacedDo: aBlock [
+
+	self announcer
+		when: DockPanelWidgetPlaced
+		do: aBlock
+		for: aBlock receiver
+]
+
+{ #category : 'api - events' }
 SpPanelWidgetPresenter >> whenPresentedDo: aBlock [
 
 	self announcer 
@@ -258,6 +267,12 @@ SpPanelWidgetPresenter >> whenSaveDo: aBlock [
 		when: DockPanelWindowSave
 		do: aBlock
 		for: aBlock receiver
+]
+
+{ #category : 'api - events' }
+SpPanelWidgetPresenter >> whenWindowIconChangedDo: aBlock [
+
+	self property: #windowIcon whenChangedDo: aBlock
 ]
 
 { #category : 'private' }

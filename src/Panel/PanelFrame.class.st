@@ -26,6 +26,16 @@ PanelFrame class >> new [
 ]
 
 { #category : 'signaling' }
+PanelFrame >> connectAdoptWidget: aBlock [
+
+	self 
+		connect: 'adopt-widget' 
+		signature: #(int (void* selfHandle, void* panelWidget, gpointer user_data)) 
+		do: [ :selfHandle :panelWidget :user_data |
+			aBlock value: (PanelWidget fromHandleUnreferenced: panelWidget) ]
+]
+
+{ #category : 'signaling' }
 PanelFrame >> connectPageClosed: aBlock [
 
 	self 

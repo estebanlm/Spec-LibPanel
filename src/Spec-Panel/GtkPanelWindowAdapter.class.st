@@ -26,9 +26,9 @@ GtkPanelWindowAdapter >> addModelTo: panelWindow [
 		
 		frame := PanelFrame new.
 		frames add: frame.
-		frame header: ((position area = PanelArea PANEL_AREA_CENTER)
-			ifTrue: [ PanelFrameTabBar new ]
-			ifFalse: [ PanelFrameHeaderBar new ]).
+		((position area = PanelArea PANEL_AREA_CENTER)
+			ifTrue: [ frame header: PanelFrameTabBar new ]
+			"ifFalse: [ PanelFrameHeaderBar new ]").
 		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
 		frame getHandle ].
 
@@ -39,6 +39,9 @@ GtkPanelWindowAdapter >> addModelTo: panelWindow [
 	self connectToGtkSignals: panelWindow.
 	self presenter presenters do: [ :each |
 		self dockWindow: each to: panelWindow ].
+	
+	panelWindow dock connectDragEnd: [ :aWidget | 
+		self panelWidgetDragEnd: aWidget ].
 	
 	panelWindow grid connectCreateFrame: [
 		| frame |
@@ -234,7 +237,9 @@ GtkPanelWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 	(gtkWindow dock isAreaRevealed: panelArea)
 		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.
 			
-	aDockableWindow windowIsOpened
+	aDockableWindow windowIsOpened.
+	
+	aDockableWindow announcer announce: DockPanelWidgetPlaced
 ]
 
 { #category : 'accessing' }
@@ -289,6 +294,14 @@ GtkPanelWindowAdapter >> findPresenterFocused: widgetFocused inTopLevel: aPresen
 			ifTrue: [ ^ each ] ].
 
 	^ nil
+]
+
+{ #category : 'private' }
+GtkPanelWindowAdapter >> findPresenterSuchAs: aBlock [
+
+	^ self presenter presenters 
+		detect: aBlock
+		ifNone: [ nil ]
 ]
 
 { #category : 'testing' }
@@ -416,6 +429,17 @@ GtkPanelWindowAdapter >> openWithDeferredAction: aBlock [
 	self announceOpened.
 	self presenter takeKeyboardFocus.
 	aBlock value
+]
+
+{ #category : 'private' }
+GtkPanelWindowAdapter >> panelWidgetDragEnd: aWidget [
+	| draggedPresenter |
+
+	draggedPresenter := self findPresenterSuchAs: [ :aPresenter | aPresenter adapter widget = aWidget ].
+	draggedPresenter ifNil: [ ^ self ].
+	
+	self runInSystem: [
+		draggedPresenter announcer announce: DockPanelWidgetPlaced ]
 ]
 
 { #category : 'private' }

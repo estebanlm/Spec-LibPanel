@@ -50,6 +50,16 @@ PanelDock >> bottomHeight: height [
 ]
 
 { #category : 'signaling' }
+PanelDock >> connectAdoptWidget: aBlock [
+
+	self 
+		connect: 'adopt-widget' 
+		signature: #(gboolean (void* selfHandle, void* panelWidget, gpointer user_data)) 
+		do: [ :selfHandle :panelWidget :user_data |
+			aBlock value: (PanelWidget fromHandleUnreferenced: panelWidget) ]
+]
+
+{ #category : 'signaling' }
 PanelDock >> connectCreateFrame: aBlock [
 
 	self 
@@ -57,6 +67,16 @@ PanelDock >> connectCreateFrame: aBlock [
 		signature: #(void* (void* selfHandle, void* position, gpointer user_data)) 
 		do: [ :self_handle :position :user_data |
 			aBlock value: (PanelPosition fromHandleUnreferenced: position) ]
+]
+
+{ #category : 'signaling' }
+PanelDock >> connectDragEnd: aBlock [
+
+	self 
+		connect: 'panel-drag-end' 
+		signature: #(void (void* selfHandle, void* panelWidget, gpointer user_data)) 
+		do: [ :selfHandle :panelWidget :user_data |
+			aBlock value: (PanelWidget fromHandleUnreferenced: panelWidget) ]
 ]
 
 { #category : 'accessing' }

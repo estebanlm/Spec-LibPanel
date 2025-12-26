@@ -63,7 +63,11 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	self presenter isModified
 		ifTrue: [ panelWidget modified: true ].
 	self presenter whenModifiedChangedDo: [ :aBoolean |
-		self updateModifiedTo: aBoolean ]
+		self updateModifiedTo: aBoolean ].
+		
+	self presenter whenWindowIconChangedDo: [ :aForm |
+		self updateWindowIconTo: aForm ].
+	
 ]
 
 { #category : 'private - announcing' }
@@ -244,6 +248,15 @@ GtkPanelWidgetAdapter >> updatePosition [
 	(panelPosition isNil or: [ panelPosition getHandle isNull ]) ifTrue: [ ^ self ].
 
 	dockPosition fromPanelPosition: panelPosition
+]
+
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> updateWindowIconTo: aForm [
+	
+	self widgetDo: [ :w |
+		 w icon: (aForm 
+		 	ifNotNil: [ aForm asGdkPaintable ]
+		 	ifNil: [ GdkPaintable null ]) ]
 ]
 
 { #category : 'building' }
