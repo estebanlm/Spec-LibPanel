@@ -12,6 +12,24 @@ Class {
 	#tag : 'Presenter'
 }
 
+{ #category : 'accessing' }
+SpPanelPosition class >> bottomArea [
+
+	^ self newArea: SpPanelArea bottom
+]
+
+{ #category : 'accessing' }
+SpPanelPosition class >> centerArea [
+
+	^ self newArea: SpPanelArea center
+]
+
+{ #category : 'accessing' }
+SpPanelPosition class >> endArea [
+
+	^ self newArea: SpPanelArea end
+]
+
 { #category : 'instance creation' }
 SpPanelPosition class >> newArea: aDockArea [
 
@@ -28,6 +46,18 @@ SpPanelPosition class >> newArea: aDockArea position: aPoint [
 		column: aPoint x;
 		row: aPoint y;
 		yourself
+]
+
+{ #category : 'accessing' }
+SpPanelPosition class >> startArea [
+
+	^ self newArea: SpPanelArea start
+]
+
+{ #category : 'accessing' }
+SpPanelPosition class >> topArea [
+
+	^ self newArea: SpPanelArea top
 ]
 
 { #category : 'accessing' }

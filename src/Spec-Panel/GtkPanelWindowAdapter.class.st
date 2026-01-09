@@ -227,13 +227,13 @@ GtkPanelWindowAdapter >> dockWindow: aDockableWindow [
 GtkPanelWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
 	| panelWidget panelPosition panelArea |
  
-	panelPosition := aDockableWindow dockPosition toPanelPosition.
+	panelPosition := aDockableWindow panelPosition toPanelPosition.
 	panelWidget := aDockableWindow build.
 	gtkWindow 
 		addWidget: panelWidget 
 		at: panelPosition.
 
-	panelArea := aDockableWindow dockArea asPanelArea.
+	panelArea := aDockableWindow panelArea asPanelArea.
 	(gtkWindow dock isAreaRevealed: panelArea)
 		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.
 			
@@ -305,12 +305,12 @@ GtkPanelWindowAdapter >> findPresenterSuchAs: aBlock [
 ]
 
 { #category : 'testing' }
-GtkPanelWindowAdapter >> isAreaVisible: aDockArea [
+GtkPanelWindowAdapter >> isAreaVisible: aSpPanelArea [
 
-	aDockArea = SpPanelArea center ifTrue: [ ^ true ].
+	aSpPanelArea = SpPanelArea center ifTrue: [ ^ true ].
 	
 	^ self widgetDo: [ :w |
-		 w dock isAreaRevealed: aDockArea asPanelArea ]
+		 w dock isAreaRevealed: aSpPanelArea asPanelArea ]
 ]
 
 { #category : 'testing' }

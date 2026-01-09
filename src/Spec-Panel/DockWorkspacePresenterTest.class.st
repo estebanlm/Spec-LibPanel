@@ -42,7 +42,7 @@ DockWorkspacePresenterTest >> testAddPresenterAt [
 	
 	self assert: presenter presenters size equals: 1.
 	dockablePresenter := presenter presenters first.
-	self assert: dockablePresenter dockArea equals: SpPanelArea start.
+	self assert: dockablePresenter panelArea equals: SpPanelArea start.
 	self assert: dockablePresenter adapter notNil.
 	self assert: dockablePresenter adapter widgetTitle equals: dockablePresenter title.
 	
@@ -55,7 +55,7 @@ DockWorkspacePresenterTest >> testAddPresenterAt [
 		
 	self assert: presenter presenters size equals: 2.
 	dockablePresenter := presenter presenters last.
-	self assert: dockablePresenter dockArea equals: SpPanelArea center.
+	self assert: dockablePresenter panelArea equals: SpPanelArea center.
 	self assert: dockablePresenter adapter notNil.
 	self assert: dockablePresenter adapter widgetTitle equals: dockablePresenter title
 ]

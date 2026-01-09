@@ -72,6 +72,9 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceClosed [
+
+	"trying to get a clean output..."
+	self innerWidget getHandle beNull.
 	self presenter windowClosed
 ]
 
@@ -190,9 +193,10 @@ GtkPanelWidgetAdapter >> performClose: aSelector [
 
 	logger trace: aSelector.
 	self widgetDo: [ :w | 
-		self contentWidget withObjectReferenceDo: [ 
-			w withObjectReferenceDo: [ 
-				w perform: aSelector ] ] ]
+		w isNullOrNil ifFalse: [
+			self contentWidget withObjectReferenceDo: [ 
+				w withObjectReferenceDo: [
+					w perform: aSelector ] ] ] ]
 ]
 
 { #category : 'private' }
@@ -241,7 +245,7 @@ GtkPanelWidgetAdapter >> updateModifiedTo: aBoolean [
 GtkPanelWidgetAdapter >> updatePosition [
 	| panelPosition dockPosition |
 
-	dockPosition := self presenter dockPosition.
+	dockPosition := self presenter panelPosition.
 	dockPosition ifNil: [ ^ self ].
 	
 	panelPosition := self innerWidgetDo: [ :w | w position ].

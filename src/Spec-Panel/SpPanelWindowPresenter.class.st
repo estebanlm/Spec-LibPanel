@@ -54,7 +54,7 @@ SpPanelWindowPresenter >> addPresenter: aPresenter [
 SpPanelWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 
 	self addWindow: (aPresenter asDockableWindow 
-		dockPosition: aPositionOrArea toPosition;
+		panelPosition: aPositionOrArea toPosition;
 		yourself)
 ]
 

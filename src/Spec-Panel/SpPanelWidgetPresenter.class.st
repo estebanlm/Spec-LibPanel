@@ -35,7 +35,7 @@ SpPanelWidgetPresenter >> closeFromKeyboard [
 	"a close signal has been triggered. I need to verify I am in a panel that is closable like that."
 
 	"Just panels in the center can be closed with meta+w"
-	self dockPosition area = SpPanelArea center ifFalse: [ ^ self ].
+	self panelPosition area = SpPanelArea center ifFalse: [ ^ self ].
 	
 	self close
 ]
@@ -44,24 +44,6 @@ SpPanelWidgetPresenter >> closeFromKeyboard [
 SpPanelWidgetPresenter >> defaultKeyboardFocus [
 
 	^ self presenter
-]
-
-{ #category : 'accessing' }
-SpPanelWidgetPresenter >> dockArea [
-	
-	^ self dockPosition area
-]
-
-{ #category : 'api' }
-SpPanelWidgetPresenter >> dockPosition [
-
-	^ dockPosition
-]
-
-{ #category : 'api' }
-SpPanelWidgetPresenter >> dockPosition: aDockPosition [
-
-	dockPosition := aDockPosition
 ]
 
 { #category : 'api' }
@@ -164,6 +146,24 @@ SpPanelWidgetPresenter >> needsAttention: aBoolean [
 	self withAdapterDo: [ :anAdapter | anAdapter needsAttention: aBoolean ]
 ]
 
+{ #category : 'accessing' }
+SpPanelWidgetPresenter >> panelArea [
+	
+	^ self panelPosition area
+]
+
+{ #category : 'api' }
+SpPanelWidgetPresenter >> panelPosition [
+
+	^ dockPosition
+]
+
+{ #category : 'api' }
+SpPanelWidgetPresenter >> panelPosition: aDockPosition [
+
+	dockPosition := aDockPosition
+]
+
 { #category : 'api' }
 SpPanelWidgetPresenter >> raise [
 
@@ -211,7 +211,7 @@ SpPanelWidgetPresenter >> whenDiscardDo: aBlock [
 { #category : 'api - events' }
 SpPanelWidgetPresenter >> whenDockPositionChangedDo: aBlock [
 
-	self property: #dockPosition whenChangedDo: aBlock
+	self property: #panelPosition whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }
