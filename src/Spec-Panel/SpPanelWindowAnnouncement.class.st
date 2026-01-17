@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockPanelWindowAnnouncement',
+	#name : 'SpPanelWindowAnnouncement',
 	#superclass : 'Announcement',
 	#instVars : [
 		'success'
@@ -10,38 +10,38 @@ Class {
 }
 
 { #category : 'accessing' }
-DockPanelWindowAnnouncement >> beFailed [
+SpPanelWindowAnnouncement >> beFailed [
 
 	self success: false
 ]
 
 { #category : 'accessing' }
-DockPanelWindowAnnouncement >> beSuccess [
+SpPanelWindowAnnouncement >> beSuccess [
 
 	self success: true
 ]
 
 { #category : 'initialization' }
-DockPanelWindowAnnouncement >> initialize [
+SpPanelWindowAnnouncement >> initialize [
 
 	super initialize.
 	success := true
 ]
 
 { #category : 'testing' }
-DockPanelWindowAnnouncement >> isFailed [
+SpPanelWindowAnnouncement >> isFailed [
 
 	^ self isSuccess not
 ]
 
 { #category : 'testing' }
-DockPanelWindowAnnouncement >> isSuccess [
+SpPanelWindowAnnouncement >> isSuccess [
 
 	^ success
 ]
 
 { #category : 'accessing' }
-DockPanelWindowAnnouncement >> success: aBoolean [
+SpPanelWindowAnnouncement >> success: aBoolean [
 
 	success := aBoolean
 ]

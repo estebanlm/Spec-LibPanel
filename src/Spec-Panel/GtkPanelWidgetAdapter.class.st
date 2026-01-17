@@ -32,6 +32,7 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 
 	"panels are maximizable by default"
 	panelWidget canMaximize: true.
+	"panelWidget connectParentChanged: [ 'OK' printToStdout ]."
 
 	panelWidget saveDelegate: (PanelSaveDelegate new
 		title: self presenter title;
@@ -82,7 +83,7 @@ GtkPanelWidgetAdapter >> announceClosed [
 GtkPanelWidgetAdapter >> announceDiscard [
 	| ann |
 
-	ann := DockPanelWindowDiscard new.
+	ann := SpPanelWindowDiscard new.
 	self presenter announce: ann.
 	ann isSuccess ifTrue: [ 
 		self forceClose ]
@@ -91,7 +92,7 @@ GtkPanelWidgetAdapter >> announceDiscard [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceFocusEnter [
 
-	self presenter announce: (DockPanelWindowFocusReceived new 
+	self presenter announce: (SpPanelWindowFocusReceived new 
 		window: self presenter;
 		yourself)
 ]
@@ -99,7 +100,7 @@ GtkPanelWidgetAdapter >> announceFocusEnter [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceFocusLeave [
 
-	self presenter announce: (DockPanelWindowFocusLost new 
+	self presenter announce: (SpPanelWindowFocusLost new 
 		window: self presenter;
 		yourself)
 ]
@@ -107,7 +108,7 @@ GtkPanelWidgetAdapter >> announceFocusLeave [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announcePresented [
 
-	self presenter announce: (DockPanelWindowPresented new 
+	self presenter announce: (SpPanelWindowPresented new 
 		window: self presenter;
 		yourself)
 ]
@@ -116,7 +117,7 @@ GtkPanelWidgetAdapter >> announcePresented [
 GtkPanelWidgetAdapter >> announceSave [
 	| ann |
 
-	ann := DockPanelWindowSave new.
+	ann := SpPanelWindowSave new.
 	self presenter announce: ann.
 	ann isSuccess ifTrue: [ 
 		self forceClose ]
@@ -202,6 +203,7 @@ GtkPanelWidgetAdapter >> performClose: aSelector [
 { #category : 'private' }
 GtkPanelWidgetAdapter >> presented [
 	
+	self updateParent.
 	self updatePosition.
 	self runInSystem: [
 		self announcePresented ]
@@ -223,6 +225,19 @@ GtkPanelWidgetAdapter >> title: aString [
 		w saveDelegate title: newTitle ]
 ]
 
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> transferFrom: oldWindow toWindowWithHandle: newWindowHandle [
+	| newWindow |
+	
+	newWindow := self presenter application windows
+		detect: [ :each | each adapter innerWidget getHandle = newWindowHandle ].
+	oldWindow basicRemovePresenter: self presenter.
+	newWindow basicAddPresenter: self presenter.
+	self presenter owner: newWindow.
+	self runInSystem: [
+		self presenter announce: (SpPanelWidgetTransferred from: oldWindow to: newWindow) ] 
+]
+
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> unmarkBusy [
 
@@ -239,6 +254,24 @@ GtkPanelWidgetAdapter >> unmaximize [
 GtkPanelWidgetAdapter >> updateModifiedTo: aBoolean [
 
 	self widgetDo: [ :w | w modified: aBoolean ]
+]
+
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> updateParent [
+
+	[ 
+		| oldWindow |
+		oldWindow := self presenter window. 
+		oldWindow withAdapterDo: [ :oldAdapter | 
+			oldAdapter innerWidget ifNotNil: [ :oldWidget |
+				self innerWidget ifNotNil: [ :currentWidget |
+					| rootHandle |
+					rootHandle := currentWidget root getHandle.
+					"just act if this is not the same"
+					oldWidget getHandle = rootHandle 
+						ifFalse: [ self transferFrom: oldWindow toWindowWithHandle: rootHandle ] ] ] ] ]
+	on: Error 
+	fork: [ :e | e pass ]
 ]
 
 { #category : 'private' }

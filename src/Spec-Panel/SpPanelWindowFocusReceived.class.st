@@ -1,6 +1,6 @@
 Class {
-	#name : 'DockPanelWindowDiscard',
-	#superclass : 'DockPanelWindowAnnouncement',
+	#name : 'SpPanelWindowFocusReceived',
+	#superclass : 'SpWindowAnnouncement',
 	#category : 'Spec-Panel-Announcement',
 	#package : 'Spec-Panel',
 	#tag : 'Announcement'

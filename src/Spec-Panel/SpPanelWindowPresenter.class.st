@@ -65,14 +65,16 @@ SpPanelWindowPresenter >> addToast: aToast [
 ]
 
 { #category : 'private' }
-SpPanelWindowPresenter >> addWindow: aDockableWindow [
+SpPanelWindowPresenter >> addWindow: aPanelWidget [
 	
-	aDockableWindow owner: self.
-	aDockableWindow whenClosedDo: [
-		self basicRemovePresenter: aDockableWindow ].
-	self basicAddPresenter: aDockableWindow.
+	aPanelWidget owner: self.
+	aPanelWidget whenClosedDo: [
+		"this is like this because we can change the window of the PanelWidget  
+		 when dragging it to another window, hence, we cannot do just 'self basicRemovePresenter' :)"
+		aPanelWidget window basicRemovePresenter: aPanelWidget ].
+	self basicAddPresenter: aPanelWidget.
 	self withAdapterDo: [ :anAdapter |
-		anAdapter dockWindow: aDockableWindow ]
+		anAdapter placeWindow: aPanelWidget ]
 ]
 
 { #category : 'showing' }

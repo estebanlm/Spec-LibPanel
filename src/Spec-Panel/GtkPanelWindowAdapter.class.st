@@ -16,33 +16,31 @@ GtkPanelWindowAdapter >> addModelTo: panelWindow [
 
 	super addModelTo: panelWindow.
 
-	"Creation of frames (both in window and in dock) are not doing anythign extra to 
-	 what they already do without hanging  on them, but I will need them when working on 
-	 other menus, etc."
-	
-	frames := OrderedCollection new.
+	frames := OrderedCollection new.	
+
+	"handle creation of main frames"		
 	panelWindow connectCreateFrame: [ :position |
 		| frame |
-		
 		frame := PanelFrame new.
 		frames add: frame.
 		((position area = PanelArea PANEL_AREA_CENTER)
 			ifTrue: [ frame header: PanelFrameTabBar new ]
 			"ifFalse: [ PanelFrameHeaderBar new ]").
 		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
-		frame getHandle ].
-
+		frame getHandle ].		
+		
 	panelWindow defaultSize: self presenter initialExtent.
 	
 	self addTitlebarTo: panelWindow.
 
 	self connectToGtkSignals: panelWindow.
 	self presenter presenters do: [ :each |
-		self dockWindow: each to: panelWindow ].
+		self placeWindow: each to: panelWindow ].
 	
 	panelWindow dock connectDragEnd: [ :aWidget | 
 		self panelWidgetDragEnd: aWidget ].
 	
+	"manage grid frame creation"
 	panelWindow grid connectCreateFrame: [
 		| frame |
 		frame := PanelFrame new.
@@ -50,6 +48,14 @@ GtkPanelWindowAdapter >> addModelTo: panelWindow [
 		frames add: frame.
 		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
 		frame getHandle ].
+		
+	"panelWindow dock forEachFrameDo: [ :aPanelFrame | 
+		aPanelFrame gTypeName printToStdout ].
+	panelWindow dock connectCreateFrame: [ :position |
+		| frame |
+		frame := PanelFrame new.
+		frames add: frame.
+		frame getHandle ]."
 		
 	self addOverlaysTo: panelWindow
 ]
@@ -211,35 +217,6 @@ GtkPanelWindowAdapter >> connectToGtkSignals: gtkWindow [
 		connectHide: [ self closeFromSignal ];
 		connectDefaultWidth: [ self announceResized: self widget defaultSize ];
 		connectDefaultHeight: [ self announceResized: self widget defaultSize ]
-]
-
-{ #category : 'accessing' }
-GtkPanelWindowAdapter >> dockWindow: aDockableWindow [
-
-	self widgetDo: [ :w |
-		self dockWindow: aDockableWindow to: w ]
-	
-
-	
-]
-
-{ #category : 'accessing' }
-GtkPanelWindowAdapter >> dockWindow: aDockableWindow to: gtkWindow [
-	| panelWidget panelPosition panelArea |
- 
-	panelPosition := aDockableWindow panelPosition toPanelPosition.
-	panelWidget := aDockableWindow build.
-	gtkWindow 
-		addWidget: panelWidget 
-		at: panelPosition.
-
-	panelArea := aDockableWindow panelArea asPanelArea.
-	(gtkWindow dock isAreaRevealed: panelArea)
-		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.
-			
-	aDockableWindow windowIsOpened.
-	
-	aDockableWindow announcer announce: DockPanelWidgetPlaced
 ]
 
 { #category : 'accessing' }
@@ -438,8 +415,43 @@ GtkPanelWindowAdapter >> panelWidgetDragEnd: aWidget [
 	draggedPresenter := self findPresenterSuchAs: [ :aPresenter | aPresenter adapter widget = aWidget ].
 	draggedPresenter ifNil: [ ^ self ].
 	
+	"aWidget root printToStdout.
+	self presenter adapter widget printToStdout.
+	self presenter application windows 
+		detect: [ :each | each adapter widget getHandle = aWidget root getHandle ]
+		ifFound: [ :aWindowPresenter | 
+			(aWindowPresenter adapter widget = self presenter adapter widget) 
+				ifFalse: [ 'OTHER' printToStdout ]
+				ifTrue: [ 'SAME' printToStdout ] ]."
+	
 	self runInSystem: [
-		draggedPresenter announcer announce: DockPanelWidgetPlaced ]
+		draggedPresenter announcer announce: SpPanelWidgetPlaced ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> placeWindow: aDockableWindow [
+
+	self widgetDo: [ :w |
+		self placeWindow: aDockableWindow to: w ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: gtkWindow [
+	| panelWidget panelPosition panelArea |
+ 
+	panelPosition := aPanelWidgetPresenter panelPosition toPanelPosition.
+	panelWidget := aPanelWidgetPresenter build.
+	gtkWindow 
+		addWidget: panelWidget 
+		at: panelPosition.
+
+	panelArea := aPanelWidgetPresenter panelArea asPanelArea.
+	(gtkWindow dock isAreaRevealed: panelArea)
+		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.
+			
+	aPanelWidgetPresenter windowIsOpened.
+	
+	aPanelWidgetPresenter announcer announce: SpPanelWidgetPlaced
 ]
 
 { #category : 'private' }

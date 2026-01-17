@@ -203,7 +203,7 @@ SpPanelWidgetPresenter >> unmaximize [
 SpPanelWidgetPresenter >> whenDiscardDo: aBlock [ 
 
 	self announcer 
-		when: DockPanelWindowDiscard
+		when: SpPanelWindowDiscard
 		do: aBlock
 		for: aBlock receiver
 ]
@@ -218,7 +218,7 @@ SpPanelWidgetPresenter >> whenDockPositionChangedDo: aBlock [
 SpPanelWidgetPresenter >> whenFocusLostDo: aBlock [
 
 	self announcer
-		when: DockPanelWindowFocusLost
+		when: SpPanelWindowFocusLost
 		do: aBlock
 		for: aBlock receiver
 ]
@@ -227,7 +227,7 @@ SpPanelWidgetPresenter >> whenFocusLostDo: aBlock [
 SpPanelWidgetPresenter >> whenFocusReceivedDo: aBlock [
 
 	self announcer
-		when: DockPanelWindowFocusReceived 
+		when: SpPanelWindowFocusReceived 
 		do: aBlock
 		for: aBlock receiver
 ]
@@ -242,7 +242,7 @@ SpPanelWidgetPresenter >> whenModifiedChangedDo: aBlock [
 SpPanelWidgetPresenter >> whenPlacedDo: aBlock [
 
 	self announcer
-		when: DockPanelWidgetPlaced
+		when: SpPanelWidgetPlaced
 		do: aBlock
 		for: aBlock receiver
 ]
@@ -251,7 +251,7 @@ SpPanelWidgetPresenter >> whenPlacedDo: aBlock [
 SpPanelWidgetPresenter >> whenPresentedDo: aBlock [
 
 	self announcer 
-		when: DockPanelWindowPresented 
+		when: SpPanelWindowPresented 
 		do: aBlock 
 		for: aBlock receiver
 ]
@@ -264,7 +264,16 @@ SpPanelWidgetPresenter >> whenSaveDo: aBlock [
 	 close effectible"
 
 	self announcer 
-		when: DockPanelWindowSave
+		when: SpPanelWindowSave
+		do: aBlock
+		for: aBlock receiver
+]
+
+{ #category : 'api - events' }
+SpPanelWidgetPresenter >> whenTransferredDo: aBlock [
+
+	self announcer
+		when: SpPanelWidgetTransferred
 		do: aBlock
 		for: aBlock receiver
 ]
