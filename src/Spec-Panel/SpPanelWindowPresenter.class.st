@@ -90,6 +90,17 @@ SpPanelWindowPresenter >> basicAddPresenter: aDockableWindow [
 ]
 
 { #category : 'private' }
+SpPanelWindowPresenter >> basicMoveWindow: panelWindow from: oldWindow [ 
+	"do not call this directly, is more dangerous than it looks!
+	 see #moveWindow:from: for an explanation"
+			
+	"first remove it from this browser"
+	oldWindow remove: panelWindow.
+	"now add it to the new one"
+	self addWindow: panelWindow
+]
+
+{ #category : 'private' }
 SpPanelWindowPresenter >> basicRemovePresenter: aDockableWindow [
 	
 	presenters := self presenters copyWithout: aDockableWindow
@@ -276,6 +287,20 @@ SpPanelWindowPresenter >> maybeInitializeWorkspace [
 	presenters ifNotNil: [ ^ self ].
 	"ok, now I can initialize it"
 	self initializeWorkspace
+]
+
+{ #category : 'api' }
+SpPanelWindowPresenter >> moveWindow: panelWindow from: oldWindow [ 
+	
+	"if this is alive I need to do this in adapter because there is a chance 
+	 the backend (e.g. gtk will collect the external object, so we will need to ensure we retain it."
+	self withAdapterDo: [ :anAdapter |
+		anAdapter moveWindow: panelWindow from: oldWindow.
+		^ self ].
+		
+	self 
+		basicMoveWindow: panelWindow 
+		from: oldWindow
 ]
 
 { #category : 'private' }
