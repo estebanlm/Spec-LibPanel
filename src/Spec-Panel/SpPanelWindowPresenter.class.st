@@ -268,6 +268,12 @@ SpPanelWindowPresenter >> isTopWindow [
 	^ false
 ]
 
+{ #category : 'testing' }
+SpPanelWindowPresenter >> isWindow [
+
+	^ true
+]
+
 { #category : 'api' }
 SpPanelWindowPresenter >> lastPresenterFocused [
 
