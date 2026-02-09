@@ -14,7 +14,7 @@ LibPanel >> macLibraryName [
 { #category : 'accessing - platform' }
 LibPanel >> unix64LibraryName [
 
-	^ FFIUnix64LibraryFinder findLibrary: 'libpanel-1.so'
+	^ FFIUnix64LibraryFinder findAnyLibrary: #('libpanel-1.so' 'libpanel-1.so.1')
 ]
 
 { #category : 'accessing - platform' }
