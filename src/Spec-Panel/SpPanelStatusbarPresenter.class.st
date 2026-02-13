@@ -9,8 +9,10 @@ Class {
 	#name : 'SpPanelStatusbarPresenter',
 	#superclass : 'SpAbstractWidgetPresenter',
 	#instVars : [
-		'prefixPresenters',
-		'suffixPresenters'
+		'#prefixPresenters',
+		'#suffixPresenters',
+		'#messagePresenter => ProcessLocalSlot',
+		'#messageQueue'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -38,6 +40,16 @@ SpPanelStatusbarPresenter >> addSuffix: aPresenter [
 	
 ]
 
+{ #category : 'api' }
+SpPanelStatusbarPresenter >> clearMessage [
+	
+	messagePresenter ifNil: [ ^ self ].
+	
+	self remove: messagePresenter.
+	"flush it"
+	[ self messageQueue nextOrNil isNil ] whileFalse
+]
+
 { #category : 'initialization' }
 SpPanelStatusbarPresenter >> initialize [
 
@@ -59,10 +71,46 @@ SpPanelStatusbarPresenter >> initialize [
 			anAdapter remove: aPresenter ] ]
 ]
 
+{ #category : 'private' }
+SpPanelStatusbarPresenter >> messagePresenter [
+
+	messagePresenter ifNil: [
+		messagePresenter := self newLabel.
+		self addPrefix: messagePresenter ].
+
+	^ messagePresenter
+]
+
+{ #category : 'private' }
+SpPanelStatusbarPresenter >> messageQueue [
+		
+	^ messageQueue ifNil:[ messageQueue := LIFOQueue new ]
+]
+
+{ #category : 'api' }
+SpPanelStatusbarPresenter >> popMessage [
+	"a convenuence method to push messages in the status bar"
+	| nextMessage |
+	
+	messagePresenter ifNil: [ ^ self ].
+	
+	nextMessage := self messageQueue nextOrNil.
+	nextMessage
+		ifNotNil: [ self messagePresenter label: nextMessage ]
+		ifNil: [ self clearMessage ]
+]
+
 { #category : 'api' }
 SpPanelStatusbarPresenter >> prefixPresenters [
 
 	^ prefixPresenters value
+]
+
+{ #category : 'api' }
+SpPanelStatusbarPresenter >> pushMessage: aString [
+	"a convenuence method to push messages in the status bar"
+	
+	self messagePresenter label: (self messageQueue push: aString)
 ]
 
 { #category : 'api' }
@@ -82,6 +130,16 @@ SpPanelStatusbarPresenter >> removeAll [
 			do: [ :each | prefixPresenters remove: each ].
 		suffixPresenters value copy 
 			do: [ :each | suffixPresenters remove: each ] ]
+]
+
+{ #category : 'api' }
+SpPanelStatusbarPresenter >> restoreMessage [
+	| lastMessage |
+
+	lastMessage := self messageQueue peek.
+	lastMessage ifNil: [ ^ self ].
+	
+	self labelPresenter label: lastMessage
 ]
 
 { #category : 'api' }
