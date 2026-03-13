@@ -18,5 +18,5 @@ PanelDocumentWorkspaceWindow >> connectCreateFrame: aBlock [
 		connect: 'create-frame' 
 		signature: #(void* (void* selfHandle, void* position, gpointer user_data)) 
 		do: [ :self_handle :position :user_data |
-			aBlock value: (PanelPosition fromHandleUnreferenced: position) ]
+			aBlock value: (PanelPosition fromHandleUnowned: position) ]
 ]

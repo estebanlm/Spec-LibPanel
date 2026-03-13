@@ -32,7 +32,7 @@ PanelFrame >> connectAdoptWidget: aBlock [
 		connect: 'adopt-widget' 
 		signature: #(int (void* selfHandle, void* panelWidget, gpointer user_data)) 
 		do: [ :selfHandle :panelWidget :user_data |
-			aBlock value: (PanelWidget fromHandleUnreferenced: panelWidget) ]
+			aBlock value: (PanelWidget fromHandleUnowned: panelWidget) ]
 ]
 
 { #category : 'signaling' }

@@ -56,7 +56,7 @@ PanelDock >> connectAdoptWidget: aBlock [
 		connect: 'adopt-widget' 
 		signature: #(gboolean (void* selfHandle, void* panelWidget, gpointer user_data)) 
 		do: [ :selfHandle :panelWidget :user_data |
-			aBlock value: (PanelWidget fromHandleUnreferenced: panelWidget) ]
+			aBlock value: (PanelWidget fromHandleUnowned: panelWidget) ]
 ]
 
 { #category : 'signaling' }
@@ -66,7 +66,7 @@ PanelDock >> connectCreateFrame: aBlock [
 		connect: 'create-frame' 
 		signature: #(void* (void* selfHandle, void* position, gpointer user_data)) 
 		do: [ :self_handle :position :user_data |
-			aBlock value: (PanelPosition fromHandleUnreferenced: position) ]
+			aBlock value: (PanelPosition fromHandleUnowned: position) ]
 ]
 
 { #category : 'signaling' }
@@ -76,7 +76,7 @@ PanelDock >> connectDragEnd: aBlock [
 		connect: 'panel-drag-end' 
 		signature: #(void (void* selfHandle, void* panelWidget, gpointer user_data)) 
 		do: [ :selfHandle :panelWidget :user_data |
-			aBlock value: (PanelWidget fromHandleUnreferenced: panelWidget) ]
+			aBlock value: (PanelWidget fromHandleUnowned: panelWidget) ]
 ]
 
 { #category : 'accessing' }
@@ -98,7 +98,7 @@ PanelDock >> forEachFrameDo: aBlock [
 	callback := GCallback 
 		signature: #(void (void *frameHandle, gpointer user_data)) 
 		block: [ :frameHandle :user_data |
-			aBlock value: (PanelFrame fromHandleUnreferenced: frameHandle) ].
+			aBlock value: (PanelFrame fromHandleUnowned: frameHandle) ].
 		
 	self basicForEachFrame: callback
 ]
