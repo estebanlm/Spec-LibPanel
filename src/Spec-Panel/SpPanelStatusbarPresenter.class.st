@@ -46,6 +46,7 @@ SpPanelStatusbarPresenter >> clearMessage [
 	messagePresenter ifNil: [ ^ self ].
 	
 	self remove: messagePresenter.
+	messagePresenter := nil.
 	"flush it"
 	[ self messageQueue nextOrNil isNil ] whileFalse
 ]
