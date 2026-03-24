@@ -1,8 +1,6 @@
 "
 A presenter to model the statusbar that is included in `SpPanelWindowPresenter`. 
-IT CANNOT BE INSTANTIATED BY ITSELF!
-
-This presenter can just be accessed through `SpPanelWindowPresenter>>#statusbar`
+This presenter can be accessed through `SpPanelWindowPresenter>>#statusbar`
 
 "
 Class {
@@ -12,7 +10,8 @@ Class {
 		'#prefixPresenters',
 		'#suffixPresenters',
 		'#messagePresenter => ProcessLocalSlot',
-		'#messageQueue'
+		'#messageQueue',
+		'#ownerPanelWindow'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -86,6 +85,24 @@ SpPanelStatusbarPresenter >> messagePresenter [
 SpPanelStatusbarPresenter >> messageQueue [
 		
 	^ messageQueue ifNil:[ messageQueue := LIFOQueue new ]
+]
+
+{ #category : 'api' }
+SpPanelStatusbarPresenter >> ownerPanelWindow [
+	"statusbar can be already instantiated on a panel window. 
+	 If this value is set, the adapter build will try to take it from the panel window itself
+	 instead trying to create a new one."
+	
+	^ ownerPanelWindow
+]
+
+{ #category : 'api' }
+SpPanelStatusbarPresenter >> ownerPanelWindow: aPanelWindowPresenter [
+	"statusbar can be already instantiated on a panel window. 
+	 If this value is set, the adapter build will try to take it from the panel window itself
+	 instead trying to create a new one."
+	
+	ownerPanelWindow := aPanelWindowPresenter
 ]
 
 { #category : 'api' }

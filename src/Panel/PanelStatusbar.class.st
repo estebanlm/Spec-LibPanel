@@ -13,6 +13,18 @@ Class {
 	#package : 'Panel'
 }
 
+{ #category : 'private' }
+PanelStatusbar class >> gtkNew [
+
+	^ self ffiCall: #(PanelStatusbar *panel_statusbar_new (void))
+]
+
+{ #category : 'instance creation' }
+PanelStatusbar class >> new [
+
+	^ self gtkNew initialize
+]
+
 { #category : 'accessing' }
 PanelStatusbar >> addPrefix: aWidget priority: aNumber [
 

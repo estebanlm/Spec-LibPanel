@@ -119,6 +119,12 @@ GtkPanelWindowAdapter >> addVisibleSettingsTo: gtkWidget [
 	"windows fo not have visibility settings, they are shown or hide"
 ]
 
+{ #category : 'private' }
+GtkPanelWindowAdapter >> addWindowControl: gtkWidget in: panelWindow [
+
+	panelWindow titlebar packEnd: gtkWidget
+]
+
 { #category : 'private - announcing' }
 GtkPanelWindowAdapter >> announceClosed [
 
@@ -490,6 +496,12 @@ GtkPanelWindowAdapter >> startWidth [
 GtkPanelWindowAdapter >> startWidth: aNumber [
 
 	self widgetDo: [ :w | w dock startWidth: aNumber ]
+]
+
+{ #category : 'accessing' }
+GtkPanelWindowAdapter >> statusbar [
+
+	^ self innerWidget statusbar
 ]
 
 { #category : 'accessing' }

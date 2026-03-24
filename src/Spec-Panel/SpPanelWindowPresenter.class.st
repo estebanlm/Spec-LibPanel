@@ -58,6 +58,12 @@ SpPanelWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 		yourself)
 ]
 
+{ #category : 'private' }
+SpPanelWindowPresenter >> addStatusbarPresenter: aPresenter [ 
+
+	self statusbar addPrefix: aPresenter
+]
+
 { #category : 'api' }
 SpPanelWindowPresenter >> addToast: aToast [
 
@@ -390,7 +396,9 @@ SpPanelWindowPresenter >> startWidth: aNumber [
 { #category : 'api' }
 SpPanelWindowPresenter >> statusbar [
 
-	^ statusbar ifNil: [ statusbar := self instantiate: SpPanelStatusbarPresenter ]
+	^ statusbar ifNil: [ statusbar := (self instantiate: SpPanelStatusbarPresenter)
+			ownerPanelWindow: self;
+			yourself ]
 ]
 
 { #category : 'api' }
