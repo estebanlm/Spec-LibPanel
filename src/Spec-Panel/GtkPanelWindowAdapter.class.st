@@ -366,10 +366,11 @@ GtkPanelWindowAdapter >> lastPresenterFocused [
 { #category : 'api' }
 GtkPanelWindowAdapter >> moveWindow: panelWindow from: oldWindow [
 
-	panelWindow adapter widget withObjectReferenceDo: [
-		self presenter 
-			basicMoveWindow: panelWindow 
-			from: oldWindow ]
+	panelWindow adapter widgetDo: [ :w |
+		w withObjectReferenceDo: [
+			self presenter 
+				basicMoveWindow: panelWindow 
+				from: oldWindow ] ]
 ]
 
 { #category : 'private - actions' }
