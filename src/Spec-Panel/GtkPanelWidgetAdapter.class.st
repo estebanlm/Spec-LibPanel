@@ -32,16 +32,15 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 
 	"panels are maximizable by default"
 	panelWidget canMaximize: true.
-	"panelWidget connectParentChanged: [ 'OK' printToStdout ]."
 
 	panelWidget saveDelegate: (PanelSaveDelegate new
 		title: self presenter title;
 		connectSave: [ self runInSystem: [ self announceSave ] ];
 		connectDiscard: [ self runInSystem: [ self announceDiscard ] ];
-		connectClose: [ "self announceDiscard" ];
+		connectClose: [ self runInSystem: [ self announceClosed ] ];
 		yourself).
-	panelWidget connectDestroy: [ self announceClosed ].
-				
+	panelWidget connectDestroy: [ self runInSystem: [ self widgetDestroyed ] ].
+
 	childWidget := SpBindings
 		value: self presenter application adapterBindings
 		during: [ self presenter presenter build ].
@@ -73,6 +72,11 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceClosed [
+
+	"already announced?"
+	self presenter isClosed ifTrue: [ ^ self ].
+	
+	logger trace.
 
 	"trying to get a clean output..."
 	self innerWidget getHandle beNull.
@@ -300,6 +304,14 @@ GtkPanelWidgetAdapter >> updateWindowIconTo: aForm [
 GtkPanelWidgetAdapter >> widgetClass [
 
 	^ PanelWidget
+]
+
+{ #category : 'private' }
+GtkPanelWidgetAdapter >> widgetDestroyed [
+
+	logger trace. 
+	
+	self announceClosed
 ]
 
 { #category : 'test support' }

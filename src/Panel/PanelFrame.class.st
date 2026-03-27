@@ -46,6 +46,12 @@ PanelFrame >> connectPageClosed: aBlock [
 ]
 
 { #category : 'accessing' }
+PanelFrame >> header [
+
+	^ header
+]
+
+{ #category : 'accessing' }
 PanelFrame >> header: aHeader [
 
 	self withReferenceOf: header do: [
@@ -53,6 +59,12 @@ PanelFrame >> header: aHeader [
 		self setHeader: header.
 		"caller (me) is owner of the reference, so no, do not unref"
 		"header objectUnrefNow" ]
+]
+
+{ #category : 'accessing' }
+PanelFrame >> pages [
+
+	^ self ffiCall: #(GtkSelectionModel* panel_frame_get_pages (self))
 ]
 
 { #category : 'accessing' }

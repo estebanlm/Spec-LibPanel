@@ -12,51 +12,58 @@ Class {
 }
 
 { #category : 'building' }
-GtkPanelWindowAdapter >> addModelTo: panelWindow [
-
-	super addModelTo: panelWindow.
-
+GtkPanelWindowAdapter >> addFrameManagersTo: panelWindow [
+	
 	frames := OrderedCollection new.	
-
-	"handle creation of main frames"		
-	panelWindow connectCreateFrame: [ :position |
-		| frame |
-		frame := PanelFrame new.
-		frames add: frame.
-		((position area = PanelArea PANEL_AREA_CENTER)
-			ifTrue: [ frame header: PanelFrameTabBar new ]
-			"ifFalse: [ PanelFrameHeaderBar new ]").
-		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
-		frame getHandle ].		
-		
-	panelWindow defaultSize: self presenter initialExtent.
-	
-	self addTitlebarTo: panelWindow.
-
-	self connectToGtkSignals: panelWindow.
-	self presenter presenters do: [ :each |
-		self placeWindow: each to: panelWindow ].
-	
-	panelWindow dock connectDragEnd: [ :aWidget | 
-		self panelWidgetDragEnd: aWidget ].
-	
+			
 	"manage grid frame creation"
+	"panelWindow grid forEachFrameDo: [ :aPanelFrame | frames add: aPanelFrame ]."
 	panelWindow grid connectCreateFrame: [
 		| frame |
 		frame := PanelFrame new.
-		frame header: PanelFrameTabBar new.
 		frames add: frame.
-		"frame connectPageClosed: [ :aWidget | aWidget printToStdout ]."
+		frame header: (PanelFrameTabBar new
+			connectClosed: [ self frameClosed: frame ];
+			yourself).
 		frame getHandle ].
-		
-	"panelWindow dock forEachFrameDo: [ :aPanelFrame | 
-		aPanelFrame gTypeName printToStdout ].
+				
+	"manage dock frame creation"
+	"panelWindow dock forEachFrameDo: [ :aPanelFrame | frames add: aPanelFrame ]."
 	panelWindow dock connectCreateFrame: [ :position |
 		| frame |
 		frame := PanelFrame new.
 		frames add: frame.
-		frame getHandle ]."
-		
+		frame getHandle ].
+
+	"handle creation of main frames"		
+	panelWindow connectCreateFrame: [ :position |
+		| frame |
+
+		frame := PanelFrame new.
+		frames add: frame.
+		((position area = PanelArea PANEL_AREA_CENTER)
+			ifTrue: [ 
+				frame header: (PanelFrameTabBar new
+					connectClosed: [ self frameClosed: frame ];
+					yourself) ]
+			"ifFalse: [ PanelFrameHeaderBar new ]").
+		frame getHandle ].
+
+]
+
+{ #category : 'building' }
+GtkPanelWindowAdapter >> addModelTo: panelWindow [
+
+	super addModelTo: panelWindow.
+	self addFrameManagersTo: panelWindow.
+	panelWindow defaultSize: self presenter initialExtent.	
+	self addTitlebarTo: panelWindow.
+	self connectToGtkSignals: panelWindow.
+	self presenter presenters do: [ :each |
+		self placeWindow: each to: panelWindow ].
+	panelWindow dock connectDragEnd: [ :aWidget | 
+		self panelWidgetDragEnd: aWidget ].
+
 	self addOverlaysTo: panelWindow
 ]
 
@@ -287,6 +294,27 @@ GtkPanelWindowAdapter >> findPresenterSuchAs: aBlock [
 		ifNone: [ nil ]
 ]
 
+{ #category : 'building' }
+GtkPanelWindowAdapter >> frameClosed: aPanelFrame [
+	| handles panelWidgets |
+
+	logger trace.
+
+	handles := (aPanelFrame pages asArray collect: [ :each | each asConcreteType child getHandle ]).
+	self runInSystem: [ 
+		panelWidgets := self presenter presenters 
+			select: [ :each | handles includes: each adapter widget getHandle ].
+		panelWidgets do: [ :each |
+			logger trace: each.
+			each close ].		
+		(panelWidgets allSatisfy: [ :each | each isClosed ])
+			ifTrue: [ 
+				GRunLoop defer: [ aPanelFrame activateAction: 'frame.close' ] ] ].
+			
+	"do not send frame.close... I will do it myself as you can check here ;)"
+	^ false
+]
+
 { #category : 'testing' }
 GtkPanelWindowAdapter >> isAreaVisible: aSpPanelArea [
 
@@ -367,10 +395,11 @@ GtkPanelWindowAdapter >> lastPresenterFocused [
 GtkPanelWindowAdapter >> moveWindow: panelWindow from: oldWindow [
 
 	panelWindow adapter widgetDo: [ :w |
-		w withObjectReferenceDo: [
-			self presenter 
-				basicMoveWindow: panelWindow 
-				from: oldWindow ] ]
+		w objectRef.
+		logger debug: w referenceCount asString.
+		self presenter 
+			basicMoveWindow: panelWindow 
+			from: oldWindow ] 
 ]
 
 { #category : 'private - actions' }
@@ -455,12 +484,16 @@ GtkPanelWindowAdapter >> placeWindow: aDockableWindow [
 GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: gtkWindow [
 	| panelWidget panelPosition panelArea |
  
+ 	logger trace: aPanelWidgetPresenter.
+ 
 	panelPosition := aPanelWidgetPresenter panelPosition toPanelPosition.
 	panelWidget := aPanelWidgetPresenter build.
+	
 	gtkWindow 
 		addWidget: panelWidget 
 		at: panelPosition.
-
+	panelWidget objectUnref.
+	
 	panelArea := aPanelWidgetPresenter panelArea asPanelArea.
 	(gtkWindow dock isAreaRevealed: panelArea)
 		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.

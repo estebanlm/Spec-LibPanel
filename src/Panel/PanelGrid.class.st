@@ -22,6 +22,15 @@ PanelGrid class >> new [
 	^ self gtkNew initialize
 ]
 
+{ #category : 'private' }
+PanelGrid >> basicForEachFrame: callback [
+
+	self ffiCall: #(void panel_grid_foreach_frame (
+		self,
+  		"PanelFrameCallback"GCallback callback,
+  		"gpointer user_data"NULL))
+]
+
 { #category : 'signaling' }
 PanelGrid >> connectCreateFrame: aBlock [
 
@@ -29,4 +38,16 @@ PanelGrid >> connectCreateFrame: aBlock [
 		connect: 'create-frame' 
 		signature: #(void *( void *handle, gpointer user_data ))
 		do: [ :self_handle :user_data | aBlock value ]
+]
+
+{ #category : 'enumerating' }
+PanelGrid >> forEachFrameDo: aBlock [ 
+	| callback |
+	
+	callback := GCallback 
+		signature: #(void (void *frameHandle, gpointer user_data)) 
+		block: [ :frameHandle :user_data |
+			aBlock value: (PanelFrame fromHandleUnowned: frameHandle) ].
+		
+	self basicForEachFrame: callback
 ]
