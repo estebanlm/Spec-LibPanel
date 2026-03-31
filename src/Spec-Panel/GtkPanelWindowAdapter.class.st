@@ -38,7 +38,6 @@ GtkPanelWindowAdapter >> addFrameManagersTo: panelWindow [
 	"handle creation of main frames"		
 	panelWindow connectCreateFrame: [ :position |
 		| frame |
-
 		frame := PanelFrame new.
 		frames add: frame.
 		((position area = PanelArea PANEL_AREA_CENTER)
@@ -492,7 +491,9 @@ GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: gtkWindow [
 	gtkWindow 
 		addWidget: panelWidget 
 		at: panelPosition.
-	panelWidget objectUnref.
+	"apparently I cannot do this (the placing of windows do increases reference, but closing it 
+	 will remove both references, the just created one and the incresed on the placing process)"
+	"panelWidget objectUnref."
 	
 	panelArea := aPanelWidgetPresenter panelArea asPanelArea.
 	(gtkWindow dock isAreaRevealed: panelArea)

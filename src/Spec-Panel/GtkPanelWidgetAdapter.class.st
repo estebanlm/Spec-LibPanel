@@ -78,7 +78,6 @@ GtkPanelWidgetAdapter >> announceClosed [
 	
 	logger trace.
 
-	"trying to get a clean output..."
 	self innerWidget getHandle beNull.
 	self presenter windowClosed
 ]
@@ -198,10 +197,9 @@ GtkPanelWidgetAdapter >> performClose: aSelector [
 
 	logger trace: aSelector.
 	self widgetDo: [ :w | 
-		w isNullOrNil ifFalse: [
-			self contentWidget withObjectReferenceDo: [ 
-				w withObjectReferenceDo: [
-					w perform: aSelector ] ] ] ]
+		self contentWidget withObjectReferenceDo: [ 
+			w withObjectReferenceDo: [
+				w perform: aSelector ] ] ]
 ]
 
 { #category : 'private' }
