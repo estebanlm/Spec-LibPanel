@@ -1,7 +1,7 @@
 Extension { #name : 'SpAbstractPresenter' }
 
 { #category : '*Spec-Panel' }
-SpAbstractPresenter >> asDockableWindow [
+SpAbstractPresenter >> asPanelWidget [
 	
 	self owner ifNil: [ 
 		self error: 'Dockable presenter should have an owner' ].

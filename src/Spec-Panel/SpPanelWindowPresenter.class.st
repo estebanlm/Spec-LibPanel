@@ -45,6 +45,9 @@ SpPanelWindowPresenter >> addOverlay: aPresenter withConstraints: aBlock [
 { #category : 'api' }
 SpPanelWindowPresenter >> addPresenter: aPresenter [
 
+	aPresenter hasOwner
+		ifFalse: [ aPresenter owner: self ].
+
 	self 
 		addPresenter: aPresenter 
 		at: SpPanelArea center
@@ -53,7 +56,7 @@ SpPanelWindowPresenter >> addPresenter: aPresenter [
 { #category : 'api' }
 SpPanelWindowPresenter >> addPresenter: aPresenter at: aPositionOrArea [
 
-	self addWindow: (aPresenter asDockableWindow 
+	self addWindow: (aPresenter asPanelWidget 
 		panelPosition: aPositionOrArea toPosition;
 		yourself)
 ]

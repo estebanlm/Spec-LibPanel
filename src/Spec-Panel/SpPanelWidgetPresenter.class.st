@@ -78,7 +78,7 @@ SpPanelWidgetPresenter >> initializePrivateAnnouncements [
 SpPanelWidgetPresenter >> initializeWindow [
 
 	super initializeWindow.
-	self presenter initializePanelWindow: self
+	self presenter initializePanelWidget: self
 ]
 
 { #category : 'testing' }

@@ -1,7 +1,7 @@
 Extension { #name : 'SpPresenter' }
 
 { #category : '*Spec-Panel' }
-SpPresenter >> initializePanelWindow: aPanelWindowPresenter [
+SpPresenter >> initializePanelWidget: aPanelWidgetPresenter [
 	"override to add PanelWindow specific settings"
 ]
 
