@@ -209,12 +209,6 @@ SpPanelWidgetPresenter >> whenDiscardDo: aBlock [
 ]
 
 { #category : 'api - events' }
-SpPanelWidgetPresenter >> whenDockPositionChangedDo: aBlock [
-
-	self property: #panelPosition whenChangedDo: aBlock
-]
-
-{ #category : 'api - events' }
 SpPanelWidgetPresenter >> whenFocusLostDo: aBlock [
 
 	self announcer
@@ -236,6 +230,12 @@ SpPanelWidgetPresenter >> whenFocusReceivedDo: aBlock [
 SpPanelWidgetPresenter >> whenModifiedChangedDo: aBlock [
 
 	self property: #modified whenChangedDo: aBlock
+]
+
+{ #category : 'api - events' }
+SpPanelWidgetPresenter >> whenPanelPositionChangedDo: aBlock [
+
+	self property: #panelPosition whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }
