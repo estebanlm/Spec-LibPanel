@@ -61,13 +61,13 @@ GtkPanelStatusbarAdapter >> addSuffix: aPresenter priority: aNumber to: gtkWidge
 { #category : 'building' }
 GtkPanelStatusbarAdapter >> newWidget [
 
-	^ self panelWindow 
+	^ self panelWidget 
 		ifNotNil: [ :aPanelWindow | aPanelWindow adapter statusbar ]
 		ifNil: [ PanelStatusbar new ]
 ]
 
 { #category : 'private' }
-GtkPanelStatusbarAdapter >> panelWindow [
+GtkPanelStatusbarAdapter >> panelWidget [
 
 	"A panel status bar can just be built on the panel window"
 	^ self presenter ownerPanelWindow

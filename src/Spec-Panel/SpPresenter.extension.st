@@ -6,21 +6,21 @@ SpPresenter >> initializePanelWidget: aPanelWidgetPresenter [
 ]
 
 { #category : '*Spec-Panel' }
-SpPresenter >> isPanelWindow [
+SpPresenter >> isPanelWidget [
 	
 	^ false
 ]
 
 { #category : '*Spec-Panel' }
-SpPresenter >> panelWindow [
+SpPresenter >> panelWidget [
 	"as 'window', but answers the tiled window"
-	self isPanelWindow ifTrue: [ ^ self ].
-	self hasOwner ifTrue: [ ^ self owner panelWindow ].
+	self isPanelWidget ifTrue: [ ^ self ].
+	self hasOwner ifTrue: [ ^ self owner panelWidget ].
 	^ nil
 ]
 
 { #category : '*Spec-Panel' }
-SpPresenter >> withPanelWindowDo: aBlock [
+SpPresenter >> withPanelWidgetDo: aBlock [
 
-	^ self panelWindow ifNotNil: aBlock
+	^ self panelWidget ifNotNil: aBlock
 ]

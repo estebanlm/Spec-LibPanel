@@ -94,7 +94,7 @@ SpPanelWidgetPresenter >> isModified [
 ]
 
 { #category : 'testing' }
-SpPanelWidgetPresenter >> isPanelWindow [
+SpPanelWidgetPresenter >> isPanelWidget [
 
 	^ true
 ]
