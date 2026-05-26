@@ -54,8 +54,10 @@ GtkPanelWindowAdapter >> addFrameManagersTo: panelWindow [
 GtkPanelWindowAdapter >> addModelTo: panelWindow [
 
 	super addModelTo: panelWindow.
+	
+	panelWindow defaultSize: self presenter initialExtent.
 	self addFrameManagersTo: panelWindow.
-	panelWindow defaultSize: self presenter initialExtent.	
+	
 	self addTitlebarTo: panelWindow.
 	self connectToGtkSignals: panelWindow.
 	self presenter presenters do: [ :each |
@@ -458,16 +460,7 @@ GtkPanelWindowAdapter >> panelWidgetDragEnd: aWidget [
 
 	draggedPresenter := self findPresenterSuchAs: [ :aPresenter | aPresenter adapter widget = aWidget ].
 	draggedPresenter ifNil: [ ^ self ].
-	
-	"aWidget root printToStdout.
-	self presenter adapter widget printToStdout.
-	self presenter application windows 
-		detect: [ :each | each adapter widget getHandle = aWidget root getHandle ]
-		ifFound: [ :aWindowPresenter | 
-			(aWindowPresenter adapter widget = self presenter adapter widget) 
-				ifFalse: [ 'OTHER' printToStdout ]
-				ifTrue: [ 'SAME' printToStdout ] ]."
-	
+
 	self runInSystem: [
 		draggedPresenter announcer announce: SpPanelWidgetPlaced ]
 ]

@@ -3,7 +3,7 @@ Class {
 	#superclass : 'SpWindowPresenter',
 	#instVars : [
 		'#modified => ObservableSlot',
-		'#dockPosition => ObservableSlot'
+		'#panelPosition => ObservableSlot'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -155,13 +155,13 @@ SpPanelWidgetPresenter >> panelArea [
 { #category : 'api' }
 SpPanelWidgetPresenter >> panelPosition [
 
-	^ dockPosition
+	^ panelPosition
 ]
 
 { #category : 'api' }
-SpPanelWidgetPresenter >> panelPosition: aDockPosition [
+SpPanelWidgetPresenter >> panelPosition: aPanelPosition [
 
-	dockPosition := aDockPosition
+	panelPosition := aPanelPosition
 ]
 
 { #category : 'api' }

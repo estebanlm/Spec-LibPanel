@@ -278,15 +278,16 @@ GtkPanelWidgetAdapter >> updateParent [
 
 { #category : 'private' }
 GtkPanelWidgetAdapter >> updatePosition [
-	| panelPosition dockPosition |
+	| panelPosition presenterPanelPosition |
 
-	dockPosition := self presenter panelPosition.
-	dockPosition ifNil: [ ^ self ].
+	presenterPanelPosition := self presenter panelPosition copy.
+	presenterPanelPosition ifNil: [ ^ self ].
 	
 	panelPosition := self innerWidgetDo: [ :w | w position ].
 	(panelPosition isNil or: [ panelPosition getHandle isNull ]) ifTrue: [ ^ self ].
 
-	dockPosition fromPanelPosition: panelPosition
+	presenterPanelPosition fromPanelPosition: panelPosition.
+	self presenter panelPosition: presenterPanelPosition
 ]
 
 { #category : 'private' }
