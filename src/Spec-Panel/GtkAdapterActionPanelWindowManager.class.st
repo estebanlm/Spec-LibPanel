@@ -22,6 +22,7 @@ GtkAdapterActionPanelWindowManager >> installHamburgerMenuOn: panelWindow [
 	menu := GtkMenuButton new
 		iconName: 'open-menu-symbolic';
 		menuModel: self buildMenuModel;
+		createPopupFunc: [ self updateActions ];
 		yourself.
 		
 	panelWindow titlebar packEnd: menu
