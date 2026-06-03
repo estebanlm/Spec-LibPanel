@@ -29,27 +29,17 @@ GtkAdapterActionPanelWidgetManager >> activateActionName: aName onPanelWidget: p
 ]
 
 { #category : 'actions' }
-GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroup: anActionGroup on: aPanelWindow [
+GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroup: anActionGroup on: aPanelDocumentWorkspace [
 	| panelActionGroup panelGroupName |
 
 	logger trace.
 	
 	panelGroupName := anActionGroup id.
 
-	"I need to re-insert the group to get new entries to be valid, it seems"
-	panelActionGroup := aPanelWindow actionGroups 
+	panelActionGroup := aPanelDocumentWorkspace actionGroups 
 		at: panelGroupName
-		ifPresent: [ :actionGroup |
-			"and of course I need to retain them or they will be collected"
-			actionGroup objectRef.
-			actionGroup actions do: #objectRef.
-			aPanelWindow removeActionGroupNamed: panelGroupName.
-			actionGroup ]
-		ifAbsent: [ 
-			GSimpleActionGroup new ].
-			
-	"I need to install this on the common ancesor of the tab and the widget so 
-	 it will be recognised"
+		ifAbsent: [ GSimpleActionGroup new ].
+		
 	anActionGroup entries 
 		select: [ :eachAction | eachAction isCommand ]
 		thenDo: [ :eachAction |
@@ -61,7 +51,6 @@ GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroup: anActionGro
 						connectActivate: [ :parameterHandle |
 							| handle |
 							handle := ExternalAddress fromAddress: (GVariant fromHandleUnowned: parameterHandle) getUint64.
-							logger trace: handle.
 							handle isNullOrNil ifFalse: [
 								self 
 									activateActionName: ('{1}.{2}' format: { panelGroupName. eachAction id })  
@@ -69,8 +58,8 @@ GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroup: anActionGro
 						yourself.
 					panelActionGroup insert: newGAction ] ].
 					
-	"insert it back"
-	aPanelWindow insertActionGroup: panelGroupName actions: panelActionGroup
+	(aPanelDocumentWorkspace hasActionGroupNamed: panelGroupName) ifFalse: [
+		aPanelDocumentWorkspace insertActionGroup: panelGroupName actions: panelActionGroup ]
 ]
 
 { #category : 'actions' }
