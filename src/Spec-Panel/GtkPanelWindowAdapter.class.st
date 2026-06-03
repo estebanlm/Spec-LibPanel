@@ -473,7 +473,7 @@ GtkPanelWindowAdapter >> placeWindow: aDockableWindow [
 ]
 
 { #category : 'accessing' }
-GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: gtkWindow [
+GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: panelDocumentWorkspace [
 	| panelWidget panelPosition panelArea |
  
  	logger trace: aPanelWidgetPresenter.
@@ -481,7 +481,7 @@ GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: gtkWindow [
 	panelPosition := aPanelWidgetPresenter panelPosition toPanelPosition.
 	panelWidget := aPanelWidgetPresenter build.
 	
-	gtkWindow 
+	panelDocumentWorkspace
 		addWidget: panelWidget 
 		at: panelPosition.
 	"apparently I cannot do this (the placing of windows do increases reference, but closing it 
@@ -489,10 +489,12 @@ GtkPanelWindowAdapter >> placeWindow: aPanelWidgetPresenter to: gtkWindow [
 	"panelWidget objectUnref."
 	
 	panelArea := aPanelWidgetPresenter panelArea asPanelArea.
-	(gtkWindow dock isAreaRevealed: panelArea)
-		ifFalse: [ gtkWindow dock revealArea: panelArea ]	.
+	(panelDocumentWorkspace dock isAreaRevealed: panelArea)
+		ifFalse: [ panelDocumentWorkspace dock revealArea: panelArea ]	.
 			
 	aPanelWidgetPresenter windowIsOpened.
+	
+	aPanelWidgetPresenter adapter widgetWasPlacedOn: panelDocumentWorkspace.
 	
 	aPanelWidgetPresenter announcer announce: SpPanelWidgetPlaced
 ]

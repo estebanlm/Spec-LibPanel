@@ -20,6 +20,15 @@ PanelWidget class >> gtkNew [
 	^ self ffiCall: #(PanelWidget* panel_widget_new (void))
 ]
 
+{ #category : 'accessing' }
+PanelWidget >> action: action_name setEnabled: enabled [
+
+	self ffiCall: #(void panel_widget_action_set_enabled (
+		self, 
+		const char* action_name, 
+		gboolean enabled))
+]
+
 { #category : 'private' }
 PanelWidget >> basicInsertActionGroup: prefix actions: group [
 

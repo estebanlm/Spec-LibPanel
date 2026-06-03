@@ -1,3 +1,25 @@
+"
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+
+For the Class part:  State a one line summary. For example, ""I represent a paragraph of text"".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them.
+
+Public API and Key Messages
+
+- message one
+- message two
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+
+Internal Representation and Key Implementation Points.
+
+
+    Implementation Points
+"
 Class {
 	#name : 'GtkPanelWidgetAdapter',
 	#superclass : 'GtkAdapter',
@@ -317,4 +339,16 @@ GtkPanelWidgetAdapter >> widgetDestroyed [
 GtkPanelWidgetAdapter >> widgetTitle [
 	
 	^ self widgetDo: [ :w | w title ]
+]
+
+{ #category : 'private - updating' }
+GtkPanelWidgetAdapter >> widgetWasPlacedOn: aPanelDocumentWorkspace [
+	"internal plumbing used from GtkPanelWindowAdapter to inform this side a widget has been 
+	 placed. When this can be in a more burocratic way by sending and subscribing to the 
+	 SpPanelWidgetPlaced announcement, in this case this mechanism is valid because a 
+	 PanelWindow can *just* have PanelWidgets, and I want to economize in announcer 
+	 consumption.
+	 Notice that this needs to be used careful and just for the most low-level functions"
+
+	self newActionManager afterPlacedInstallOn: aPanelDocumentWorkspace
 ]

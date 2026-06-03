@@ -18,6 +18,70 @@ GtkAdapterActionPanelWidgetManager >> actions [
 	^ self presenter actions
 ]
 
+{ #category : 'private' }
+GtkAdapterActionPanelWidgetManager >> activateActionName: aName onPanelWidget: panelWidgetHandle [
+	| panelWidget |
+	
+	logger trace: aName.
+	
+	panelWidget := PanelWidget fromHandleUnowned: panelWidgetHandle. 
+	panelWidget activateAction: aName
+]
+
+{ #category : 'actions' }
+GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroup: anActionGroup on: aPanelWindow [
+	| panelActionGroup panelGroupName |
+
+	logger trace.
+	
+	panelGroupName := anActionGroup id.
+
+	"I need to re-insert the group to get new entries to be valid, it seems"
+	panelActionGroup := aPanelWindow actionGroups 
+		at: panelGroupName
+		ifPresent: [ :actionGroup |
+			"and of course I need to retain them or they will be collected"
+			actionGroup objectRef.
+			actionGroup actions do: #objectRef.
+			aPanelWindow removeActionGroupNamed: panelGroupName.
+			actionGroup ]
+		ifAbsent: [ 
+			GSimpleActionGroup new ].
+			
+	"I need to install this on the common ancesor of the tab and the widget so 
+	 it will be recognised"
+	anActionGroup entries 
+		select: [ :eachAction | eachAction isCommand ]
+		thenDo: [ :eachAction |
+			panelActionGroup actions
+				detect: [ :eachGAction | eachGAction name = eachAction id ]
+				ifNone: [ 
+					| newGAction |
+					newGAction := (GSimpleAction newName: eachAction id type: GVariantType newUint64)
+						connectActivate: [ :parameterHandle |
+							| handle |
+							handle := ExternalAddress fromAddress: (GVariant fromHandleUnowned: parameterHandle) getUint64.
+							logger trace: handle.
+							handle isNullOrNil ifFalse: [
+								self 
+									activateActionName: ('{1}.{2}' format: { panelGroupName. eachAction id })  
+									onPanelWidget: handle ] ];
+						yourself.
+					panelActionGroup insert: newGAction ] ].
+					
+	"insert it back"
+	aPanelWindow insertActionGroup: panelGroupName actions: panelActionGroup
+]
+
+{ #category : 'actions' }
+GtkAdapterActionPanelWidgetManager >> afterPlacedInstallOn: aPanelWindow [
+	
+	"self presenter internalActions ifNotNil: [ :actionGroup |
+		self afterPlacedInstallActionGroup: actionGroup on: aPanelWindow ]."
+	self actions ifNotNil: [ :actionGroup |
+		self afterPlacedInstallActionGroup: actionGroup on: aPanelWindow ]
+]
+
 { #category : 'accessing' }
 GtkAdapterActionPanelWidgetManager >> hasContextMenu [
 
@@ -28,7 +92,7 @@ GtkAdapterActionPanelWidgetManager >> hasContextMenu [
 GtkAdapterActionPanelWidgetManager >> installContextMenuOn: gtkWidget [
 
 	hasContextMenu := true.	
-	gtkWidget menuModel: (GtkActionMenuBuilder new visit: self actions)
+	gtkWidget menuModel: ((self newActionMenuBuilderOn: gtkWidget) visit: self actions)
 ]
 
 { #category : 'actions' }
@@ -38,6 +102,16 @@ GtkAdapterActionPanelWidgetManager >> installGroupsOn: gtkWidget [
 		self installGroup: actionGroup on: gtkWidget ].
 	self actions ifNotNil: [ :actionGroup |
 		self installGroup: actionGroup on: gtkWidget ]
+]
+
+{ #category : 'private - factory' }
+GtkAdapterActionPanelWidgetManager >> newActionMenuBuilderOn: gtkWidget [
+	
+	logger trace: gtkWidget.
+	
+	^ GtkActionWithReferenceMenuBuilder new
+		widget: gtkWidget;
+		yourself
 ]
 
 { #category : 'actions' }
