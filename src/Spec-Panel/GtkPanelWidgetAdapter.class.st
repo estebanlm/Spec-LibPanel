@@ -221,7 +221,11 @@ GtkPanelWidgetAdapter >> performClose: aSelector [
 	self widgetDo: [ :w | 
 		self contentWidget withObjectReferenceDo: [ 
 			w withObjectReferenceDo: [
-				w perform: aSelector ] ] ]
+				w perform: aSelector ] ] ].
+	
+	"apparently force close is not triggering the close element"
+	aSelector == #forceClose
+		ifTrue: [ self announceClosed ]
 ]
 
 { #category : 'private' }
