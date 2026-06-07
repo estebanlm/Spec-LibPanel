@@ -59,7 +59,7 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 		title: self presenter title;
 		connectSave: [ self runInSystem: [ self announceSave ] ];
 		connectDiscard: [ self runInSystem: [ self announceDiscard ] ];
-		connectClose: [ self runInSystem: [ self announceClosed ] ];
+		connectClose: [ self announceClosed ];
 		yourself).
 	panelWidget connectDestroy: [ self runInSystem: [ self widgetDestroyed ] ].
 
@@ -101,7 +101,9 @@ GtkPanelWidgetAdapter >> announceClosed [
 	logger trace.
 
 	self innerWidget getHandle beNull.
-	self presenter windowClosed
+	
+	self runInSystem: [ 
+		self presenter windowClosed ]
 ]
 
 { #category : 'private - announcing' }
@@ -218,10 +220,12 @@ GtkPanelWidgetAdapter >> newActionManager [
 GtkPanelWidgetAdapter >> performClose: aSelector [
 
 	logger trace: aSelector.
+
 	self widgetDo: [ :w | 
-		self contentWidget withObjectReferenceDo: [ 
-			w withObjectReferenceDo: [
-				w perform: aSelector ] ] ].
+		"it may be that somehow somehow this has already been done 
+		 (if everything is fine, and close has already been done, handle should be NULL now)"
+		w isValidHandle ifTrue: [ 
+			w perform: aSelector ] ].
 	
 	"apparently force close is not triggering the close element"
 	aSelector == #forceClose
