@@ -213,9 +213,9 @@ GtkPanelWindowAdapter >> close [
 { #category : 'private' }
 GtkPanelWindowAdapter >> closeFromSignal [
 	"this is called from connectDestroy (just one time)"
-	
-	self widget unregister.
-	self announceClosed
+	self runInSystem: [	
+		self widget unregister.
+		self announceClosed ]
 ]
 
 { #category : 'private - building' }
