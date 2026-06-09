@@ -163,6 +163,15 @@ PanelWidget >> needsAttention: needs_attention [
 ]
 
 { #category : 'accessing' }
+PanelWidget >> pinned: aBoolean [ 
+	| panelFrame |
+	
+	panelFrame := self withAllConcreteParents 
+		detect: [ :each | each class = PanelFrame ].
+	panelFrame setChild: self pinned: aBoolean. 	
+]
+
+{ #category : 'accessing' }
 PanelWidget >> position [
 
 	^ self ffiCall: #(PanelPosition* panel_widget_get_position (self))

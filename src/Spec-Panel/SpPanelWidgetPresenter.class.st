@@ -3,7 +3,8 @@ Class {
 	#superclass : 'SpWindowPresenter',
 	#instVars : [
 		'#modified => ObservableSlot',
-		'#panelPosition => ObservableSlot'
+		'#panelPosition => ObservableSlot',
+		'#pinned => ObservableSlot'
 	],
 	#category : 'Spec-Panel-Presenter',
 	#package : 'Spec-Panel',
@@ -58,6 +59,7 @@ SpPanelWidgetPresenter >> forceClose [
 SpPanelWidgetPresenter >> initialize [
 
 	super initialize.
+	pinned := false.
 	modified := false.
 	self registerActions
 ]
@@ -97,6 +99,12 @@ SpPanelWidgetPresenter >> isModified [
 SpPanelWidgetPresenter >> isPanelWidget [
 
 	^ true
+]
+
+{ #category : 'testing' }
+SpPanelWidgetPresenter >> isPinned [
+
+	^ pinned
 ]
 
 { #category : 'api' }
@@ -162,6 +170,12 @@ SpPanelWidgetPresenter >> panelPosition [
 SpPanelWidgetPresenter >> panelPosition: aPanelPosition [
 
 	panelPosition := aPanelPosition
+]
+
+{ #category : 'api' }
+SpPanelWidgetPresenter >> pinned: aBoolean [
+
+	pinned := aBoolean
 ]
 
 { #category : 'api' }
@@ -236,6 +250,12 @@ SpPanelWidgetPresenter >> whenModifiedChangedDo: aBlock [
 SpPanelWidgetPresenter >> whenPanelPositionChangedDo: aBlock [
 
 	self property: #panelPosition whenChangedDo: aBlock
+]
+
+{ #category : 'api - events' }
+SpPanelWidgetPresenter >> whenPinnedChangedDo: aBlock [
+
+	self property: #pinned whenChangedDo: aBlock
 ]
 
 { #category : 'api - events' }

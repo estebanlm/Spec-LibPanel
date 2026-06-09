@@ -68,6 +68,12 @@ PanelFrame >> pages [
 ]
 
 { #category : 'accessing' }
+PanelFrame >> pinChild: aWidget [
+
+	self setChild: aWidget pinned: true
+]
+
+{ #category : 'accessing' }
 PanelFrame >> placeholder [
 
 	^ self ffiCall: #(GtkWidget* panel_frame_get_placeholder (self))
@@ -86,6 +92,16 @@ PanelFrame >> position [
 ]
 
 { #category : 'private' }
+PanelFrame >> setChild: child pinned: pinned [
+
+	self ffiCall: #(void panel_frame_set_child_pinned (
+  		self,
+  		PanelWidget* child,
+  		gboolean pinned))
+
+]
+
+{ #category : 'private' }
 PanelFrame >> setHeader: aHeader [
 
 	self ffiCall: #(void panel_frame_set_header (self, PanelFrameHeader* aHeader))
@@ -95,4 +111,10 @@ PanelFrame >> setHeader: aHeader [
 PanelFrame >> setPlaceholder: placeholder [
 
 	^ self ffiCall: #(void panel_frame_set_placeholder (self, GtkWidget* placeholder))
+]
+
+{ #category : 'accessing' }
+PanelFrame >> unpinChild: aWidget [
+
+	self setChild: aWidget pinned: false
 ]

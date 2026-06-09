@@ -23,6 +23,9 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : 'GtkPanelWidgetAdapter',
 	#superclass : 'GtkAdapter',
+	#instVars : [
+		'deferredActions'
+	],
 	#category : 'Spec-Panel-Adapter',
 	#package : 'Spec-Panel',
 	#tag : 'Adapter'
@@ -46,6 +49,13 @@ GtkPanelWidgetAdapter >> addDefaultKeyBindings: gtkWindow [
 	self ensureActionManager
 		installGroup: actionGroup 
 		on: gtkWindow
+]
+
+{ #category : 'accessing' }
+GtkPanelWidgetAdapter >> addDeferredAction: aBlock [
+
+	deferredActions ifNil: [ deferredActions := #() ].
+	deferredActions := deferredActions copyWith: aBlock
 ]
 
 { #category : 'building' }
@@ -81,7 +91,10 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 			self runInSystem: [ self announceFocusEnter ] ];
 		addFocusLeaveEvent: [ :event |
 			self runInSystem: [ self announceFocusLeave ] ].
-	
+	self presenter isPinned 
+		ifTrue: [ self addDeferredAction: [ panelWidget pinned: true ] ].
+	self presenter whenPinnedChangedDo: [ :aBoolean |
+		self updatePinnedTo: aBoolean ].
 	self presenter isModified
 		ifTrue: [ panelWidget modified: true ].
 	self presenter whenModifiedChangedDo: [ :aBoolean |
@@ -241,6 +254,14 @@ GtkPanelWidgetAdapter >> presented [
 		self announcePresented ]
 ]
 
+{ #category : 'private - deferring' }
+GtkPanelWidgetAdapter >> processDeferredActions [
+
+	deferredActions ifNil: [ ^ self ].
+	deferredActions do: [ :each | each value ].
+	deferredActions := nil
+]
+
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> raise [
 
@@ -306,6 +327,12 @@ GtkPanelWidgetAdapter >> updateParent [
 	fork: [ :e | e pass ]
 ]
 
+{ #category : 'private - updating' }
+GtkPanelWidgetAdapter >> updatePinnedTo: aBoolean [
+
+	self widgetDo: [ :w | w pinned: aBoolean ]
+]
+
 { #category : 'private' }
 GtkPanelWidgetAdapter >> updatePosition [
 	| panelPosition presenterPanelPosition |
@@ -357,6 +384,6 @@ GtkPanelWidgetAdapter >> widgetWasPlacedOn: aPanelDocumentWorkspace [
 	 PanelWindow can *just* have PanelWidgets, and I want to economize in announcer 
 	 consumption.
 	 Notice that this needs to be used careful and just for the most low-level functions"
-
+	self processDeferredActions.
 	self newActionManager afterPlacedInstallOn: aPanelDocumentWorkspace
 ]
