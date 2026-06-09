@@ -74,7 +74,10 @@ PanelStatusbar >> keepWidget: aWidget [
 
 { #category : 'accessing' }
 PanelStatusbar >> remove: aWidget [
-
-	self basicRemove: aWidget.
+	"I put a guard to call the remove because for some reason it may happen that is 
+	 disposed before I remove... no idea if this is the way (I should maybe ensure 
+	 it disposing in the right order...)"
+	self isAlive ifTrue: [ 
+		self basicRemove: aWidget ].
 	children := children copyWithout: aWidget
 ]
