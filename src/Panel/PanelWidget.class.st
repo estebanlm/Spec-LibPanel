@@ -166,8 +166,7 @@ PanelWidget >> needsAttention: needs_attention [
 PanelWidget >> pinned: aBoolean [ 
 	| panelFrame |
 	
-	panelFrame := self withAllConcreteParents 
-		detect: [ :each | each class = PanelFrame ].
+	panelFrame := self findParentSuchAs: [ :each | each class = PanelFrame ].
 	panelFrame setChild: self pinned: aBoolean. 	
 ]
 
