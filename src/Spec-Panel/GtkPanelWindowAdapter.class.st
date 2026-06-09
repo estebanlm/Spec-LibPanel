@@ -457,6 +457,8 @@ GtkPanelWindowAdapter >> openWithDeferredAction: aBlock [
 { #category : 'private' }
 GtkPanelWindowAdapter >> panelWidgetDragEnd: aWidget [
 	| draggedPresenter |
+	
+	logger trace: aWidget.
 
 	draggedPresenter := self findPresenterSuchAs: [ :aPresenter | aPresenter adapter widget = aWidget ].
 	draggedPresenter ifNil: [ ^ self ].

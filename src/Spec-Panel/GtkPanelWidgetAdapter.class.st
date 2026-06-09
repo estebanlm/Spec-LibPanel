@@ -58,10 +58,10 @@ GtkPanelWidgetAdapter >> addDeferredAction: aBlock [
 	deferredActions := deferredActions copyWith: aBlock
 ]
 
-{ #category : 'building' }
+{ #category : 'private' }
 GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	| childWidget |
-
+	
 	"panels are maximizable by default"
 	panelWidget canMaximize: true.
 
@@ -73,36 +73,32 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 		yourself).
 	panelWidget connectDestroy: [ self runInSystem: [ self widgetDestroyed ] ].
 
-	childWidget := SpBindings
-		value: self presenter application adapterBindings
+	childWidget := SpBindings 
+		value: self presenter application adapterBindings 
 		during: [ self presenter presenter build ].
 
-	panelWidget 
+	panelWidget
 		title: self presenter title;
 		child: childWidget.
-	
+
 	self presenter windowIcon 
-		ifNotNil: [ :aForm | panelWidget icon: aForm asGdkPaintable ].
+		ifNotNil: [ :aForm | panelWidget icon: (aForm asGdkPaintableOnApplication: self presenter application) ]. 
 	
 	"Events"
 	panelWidget
 		connectPresented: [ self presented ];
-		addFocusEnterEvent: [ :event |
-			self runInSystem: [ self announceFocusEnter ] ];
-		addFocusLeaveEvent: [ :event |
-			self runInSystem: [ self announceFocusLeave ] ].
-	self presenter isPinned 
-		ifTrue: [ self addDeferredAction: [ panelWidget pinned: true ] ].
-	self presenter whenPinnedChangedDo: [ :aBoolean |
-		self updatePinnedTo: aBoolean ].
-	self presenter isModified
-		ifTrue: [ panelWidget modified: true ].
-	self presenter whenModifiedChangedDo: [ :aBoolean |
-		self updateModifiedTo: aBoolean ].
-		
-	self presenter whenWindowIconChangedDo: [ :aForm |
-		self updateWindowIconTo: aForm ].
-	
+		addFocusEnterEvent: [ :event | self runInSystem: [ self announceFocusEnter ] ];
+		addFocusLeaveEvent: [ :event | self runInSystem: [ self announceFocusLeave ] ].
+
+	self presenter isPinned ifTrue: [ 
+		"this needs to be deferred because in fact, there pinned action lives at the 
+		 parent (a PanelFrame), so we need to wait until the widget is placed"
+		self addDeferredAction: [ panelWidget pinned: true ] ].
+	self presenter whenPinnedChangedDo: [ :aBoolean | self updatePinnedTo: aBoolean ].
+	self presenter isModified ifTrue: [ panelWidget modified: true ].
+	self presenter whenModifiedChangedDo: [ :aBoolean | self updateModifiedTo: aBoolean ].
+
+	self presenter whenWindowIconChangedDo: [ :aForm | self updateWindowIconTo: aForm ]
 ]
 
 { #category : 'private - announcing' }
@@ -349,11 +345,11 @@ GtkPanelWidgetAdapter >> updatePosition [
 
 { #category : 'private' }
 GtkPanelWidgetAdapter >> updateWindowIconTo: aForm [
-	
+
 	self widgetDo: [ :w |
-		 w icon: (aForm 
-		 	ifNotNil: [ aForm asGdkPaintable ]
-		 	ifNil: [ GdkPaintable null ]) ]
+		w icon: (aForm 
+			ifNotNil: [ aForm asGdkPaintableOnApplication: self presenter application ] 
+			ifNil: [ GdkPaintable null ]) ]
 ]
 
 { #category : 'building' }
