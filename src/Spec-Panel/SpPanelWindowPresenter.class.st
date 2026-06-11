@@ -105,6 +105,8 @@ SpPanelWindowPresenter >> basicMoveWindow: panelWindow from: oldWindow [
 			
 	"first remove it from this browser"
 	oldWindow remove: panelWindow.
+	"ensure owner of the panel"
+	panelWindow owner: self.
 	"now add it to the new one"
 	self addWindow: panelWindow
 ]
