@@ -63,12 +63,27 @@ GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroup: anActionGro
 ]
 
 { #category : 'actions' }
+GtkAdapterActionPanelWidgetManager >> afterPlacedInstallActionGroupShortcuts: actionGroup on: aPanelWindow [
+
+	logger trace.
+
+	actionGroup allCommands 
+		select: [ :each | each hasShortcutKey ]
+		thenDo: [ :each | 
+			self 
+				maybeAddShortcutForCommand: each 
+				ofGroup: actionGroup
+				to: aPanelWindow ]
+]
+
+{ #category : 'actions' }
 GtkAdapterActionPanelWidgetManager >> afterPlacedInstallOn: aPanelWindow [
 	
 	"self presenter internalActions ifNotNil: [ :actionGroup |
 		self afterPlacedInstallActionGroup: actionGroup on: aPanelWindow ]."
 	self actions ifNotNil: [ :actionGroup |
-		self afterPlacedInstallActionGroup: actionGroup on: aPanelWindow ]
+		self afterPlacedInstallActionGroup: actionGroup on: aPanelWindow. 
+		self afterPlacedInstallActionGroupShortcuts: actionGroup on: aPanelWindow ]
 ]
 
 { #category : 'accessing' }
@@ -91,6 +106,28 @@ GtkAdapterActionPanelWidgetManager >> installGroupsOn: gtkWidget [
 		self installGroup: actionGroup on: gtkWidget ].
 	self actions ifNotNil: [ :actionGroup |
 		self installGroup: actionGroup on: gtkWidget ]
+]
+
+{ #category : 'private' }
+GtkAdapterActionPanelWidgetManager >> maybeAddShortcutForCommand: aCommand ofGroup: actionGroup to: aPanelWindow [
+	| shortcut actionName |
+
+	logger trace: aCommand.
+
+	actionName := '{1}.{2}' format: { actionGroup id. aCommand id }.
+	logger debug: actionName.
+	aPanelWindow addGlobalShortcutControllerWith: [ :aController |
+		(aController includesShortcutToActionNamed: actionName) not
+			ifTrue: [
+				logger debug: 'ADDING'.
+				aCommand shortcutKey withAllKeyCombinationsDo: [ :aKeyCombination |
+					aKeyCombination isForPlatform ifTrue: [  
+						shortcut := GtkShortcut 
+							newKeyCombination: aKeyCombination 
+							actionName: actionName.
+						aController addShortcut: shortcut ] ] ]
+			ifFalse: [
+				logger debug: 'SKIPPING' ] ]
 ]
 
 { #category : 'private - factory' }

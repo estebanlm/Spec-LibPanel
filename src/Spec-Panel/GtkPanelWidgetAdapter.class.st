@@ -107,12 +107,7 @@ GtkPanelWidgetAdapter >> announceClosed [
 	"already announced?"
 	self presenter isClosed ifTrue: [ ^ self ].
 	
-	logger trace.
-
-	self innerWidget getHandle beNull.
-	
-	self runInSystem: [ 
-		self presenter windowClosed ]
+	self forceAnnounceClosed
 ]
 
 { #category : 'private - announcing' }
@@ -189,6 +184,16 @@ GtkPanelWidgetAdapter >> defaultActionGroup [
 		yourself
 ]
 
+{ #category : 'private - announcing' }
+GtkPanelWidgetAdapter >> forceAnnounceClosed [
+	
+	logger trace.
+
+	self innerWidget getHandle beNull.
+	self runInSystem: [ 
+		self presenter windowClosed ]
+]
+
 { #category : 'private' }
 GtkPanelWidgetAdapter >> forceClose [
 
@@ -238,7 +243,7 @@ GtkPanelWidgetAdapter >> performClose: aSelector [
 	
 	"apparently force close is not triggering the close element"
 	aSelector == #forceClose
-		ifTrue: [ self announceClosed ]
+		ifTrue: [ self forceAnnounceClosed ]
 ]
 
 { #category : 'private' }

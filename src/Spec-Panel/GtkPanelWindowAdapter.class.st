@@ -397,7 +397,6 @@ GtkPanelWindowAdapter >> moveWindow: panelWindow from: oldWindow [
 
 	panelWindow adapter widgetDo: [ :w |
 		w objectRef.
-		logger debug: w referenceCount asString.
 		self presenter 
 			basicMoveWindow: panelWindow 
 			from: oldWindow ] 
