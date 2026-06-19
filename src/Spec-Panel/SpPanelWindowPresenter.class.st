@@ -75,13 +75,17 @@ SpPanelWindowPresenter >> addToast: aToast [
 
 { #category : 'private' }
 SpPanelWindowPresenter >> addWindow: aPanelWidget [
-	
-	aPanelWidget owner: self.
+	"if transfer = true this comes from a drag&drop operation, which means the widget 
+	 already exists and is already placed. 
+	 Don't do it again"
+		
+	self basicAddPresenter: aPanelWidget.
+
 	aPanelWidget whenClosedDo: [
-		"this is like this because we can change the window of the PanelWidget  
+		"We do it like this because we can change the window of the PanelWidget  
 		 when dragging it to another window, hence, we cannot do just 'self basicRemovePresenter' :)"
 		aPanelWidget window basicRemovePresenter: aPanelWidget ].
-	self basicAddPresenter: aPanelWidget.
+
 	self withAdapterDo: [ :anAdapter |
 		anAdapter placeWindow: aPanelWidget ]
 ]
@@ -93,20 +97,21 @@ SpPanelWindowPresenter >> asWindow [
 ]
 
 { #category : 'private' }
-SpPanelWindowPresenter >> basicAddPresenter: aDockableWindow [
+SpPanelWindowPresenter >> basicAddPresenter: aPanelWidget [
 	
-	presenters := self presenters copyWith: aDockableWindow
+	aPanelWidget owner: self.
+	presenters := self presenters copyWith: aPanelWidget
 ]
 
 { #category : 'private' }
-SpPanelWindowPresenter >> basicMoveWindow: panelWindow from: oldWindow [ 
+SpPanelWindowPresenter >> basicMovePanelWidget: panelWindow from: oldWindow [ 
 	"do not call this directly, is more dangerous than it looks!
 	 see #moveWindow:from: for an explanation"
-			
+
 	"first remove it from this browser"
 	oldWindow remove: panelWindow.
-	"ensure owner of the panel"
-	panelWindow owner: self.
+	"give time to the backend to perform the actions"
+	5 milliSeconds wait.
 	"now add it to the new one"
 	self addWindow: panelWindow
 ]
@@ -316,7 +321,7 @@ SpPanelWindowPresenter >> moveWindow: panelWindow from: oldWindow [
 		^ self ].
 		
 	self 
-		basicMoveWindow: panelWindow 
+		basicMovePanelWidget: panelWindow 
 		from: oldWindow
 ]
 
@@ -377,6 +382,12 @@ SpPanelWindowPresenter >> registerActions [
 		addShortcutWith: [ :action | action 
 			shortcutKey: $w actionModifier;
 			action: [ self close ] ]
+]
+
+{ #category : 'private' }
+SpPanelWindowPresenter >> remove: aPanelWindowPresenter [
+
+	aPanelWindowPresenter forceClose
 ]
 
 { #category : 'api' }

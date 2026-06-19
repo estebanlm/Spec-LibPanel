@@ -58,7 +58,7 @@ GtkPanelWidgetAdapter >> addDeferredAction: aBlock [
 	deferredActions := deferredActions copyWith: aBlock
 ]
 
-{ #category : 'private' }
+{ #category : 'building' }
 GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	| childWidget |
 	
@@ -104,6 +104,8 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceClosed [
 
+	logger trace.
+
 	"already announced?"
 	self presenter isClosed ifTrue: [ ^ self ].
 	
@@ -114,6 +116,8 @@ GtkPanelWidgetAdapter >> announceClosed [
 GtkPanelWidgetAdapter >> announceDiscard [
 	| ann |
 
+	logger trace.
+
 	ann := SpPanelWindowDiscard new.
 	self presenter announce: ann.
 	ann isSuccess ifTrue: [ 
@@ -123,6 +127,8 @@ GtkPanelWidgetAdapter >> announceDiscard [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceFocusEnter [
 
+	logger trace.
+
 	self presenter announce: (SpPanelWindowFocusReceived new 
 		window: self presenter;
 		yourself)
@@ -131,6 +137,8 @@ GtkPanelWidgetAdapter >> announceFocusEnter [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceFocusLeave [
 
+	logger trace.
+	
 	self presenter announce: (SpPanelWindowFocusLost new 
 		window: self presenter;
 		yourself)
@@ -139,6 +147,8 @@ GtkPanelWidgetAdapter >> announceFocusLeave [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announcePresented [
 
+	logger trace.
+	
 	self presenter announce: (SpPanelWindowPresented new 
 		window: self presenter;
 		yourself)
@@ -147,6 +157,8 @@ GtkPanelWidgetAdapter >> announcePresented [
 { #category : 'private - announcing' }
 GtkPanelWidgetAdapter >> announceSave [
 	| ann |
+	
+	logger trace.
 
 	ann := SpPanelWindowSave new.
 	self presenter announce: ann.
@@ -189,9 +201,9 @@ GtkPanelWidgetAdapter >> forceAnnounceClosed [
 	
 	logger trace.
 
-	self innerWidget getHandle beNull.
 	self runInSystem: [ 
-		self presenter windowClosed ]
+		self presenter windowClosed.
+		self innerWidget getHandle beNull ]
 ]
 
 { #category : 'private' }
@@ -283,13 +295,16 @@ GtkPanelWidgetAdapter >> title: aString [
 GtkPanelWidgetAdapter >> transferFrom: oldWindow toWindowWithHandle: newWindowHandle [
 	| newWindow |
 	
+	logger trace.
+	
 	newWindow := self presenter application windows
 		detect: [ :each | each adapter innerWidget getHandle = newWindowHandle ].
+	
 	oldWindow basicRemovePresenter: self presenter.
 	newWindow basicAddPresenter: self presenter.
-	self presenter owner: newWindow.
+	
 	self runInSystem: [
-		self presenter announce: (SpPanelWidgetTransferred from: oldWindow to: newWindow) ] 
+		self presenter announce: (SpPanelWidgetTransferred from: oldWindow to: newWindow) ]
 ]
 
 { #category : 'accessing' }
@@ -312,6 +327,8 @@ GtkPanelWidgetAdapter >> updateModifiedTo: aBoolean [
 
 { #category : 'private' }
 GtkPanelWidgetAdapter >> updateParent [
+
+	logger trace.
 
 	[ 
 		| oldWindow |
