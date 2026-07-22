@@ -169,6 +169,9 @@ GtkPanelWidgetAdapter >> announceSave [
 { #category : 'accessing' }
 GtkPanelWidgetAdapter >> close [
 
+	"do not close if pinned"
+	self presenter isPinned ifTrue: [ ^ self ]. 
+
 	self performClose: #close
 ]
 
