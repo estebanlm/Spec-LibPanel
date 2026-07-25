@@ -8,7 +8,8 @@ Class {
 	#classTraits : 'LibTPanel classTrait + GtkTBin classTrait',
 	#instVars : [
 		'menuModel',
-		'saveDelegate'
+		'saveDelegate',
+		'icon'
 	],
 	#category : 'Panel',
 	#package : 'Panel'
@@ -96,9 +97,10 @@ PanelWidget >> icon [
 ]
 
 { #category : 'accessing' }
-PanelWidget >> icon: icon [
+PanelWidget >> icon: anIcon [
 
-	self ffiCall: #(void panel_widget_set_icon (self, GIcon* icon))
+	icon := anIcon.
+	self setIcon: anIcon
 ]
 
 { #category : 'testing' }
@@ -205,6 +207,12 @@ PanelWidget >> saveDelegate: aSaveDelegate [
 PanelWidget >> setChild: aWidget [
 
 	self ffiCall: #(void panel_widget_set_child (self, GtkWidget* aWidget))
+]
+
+{ #category : 'private' }
+PanelWidget >> setIcon: anIcon [
+
+	self ffiCall: #(void panel_widget_set_icon (self, GIcon* anIcon))
 ]
 
 { #category : 'private' }
