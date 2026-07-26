@@ -78,6 +78,12 @@ SpPanelArea >> asPanelArea [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'testing' }
+SpPanelArea >> isAnyOf: aCollection [
+
+	^ aCollection includes: self
+]
+
 { #category : 'converting' }
 SpPanelArea >> toPanelPosition [
 
