@@ -80,9 +80,6 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	panelWidget
 		title: self presenter title;
 		child: childWidget.
-
-	self presenter windowIcon 
-		ifNotNil: [ :aForm | panelWidget icon: (aForm asGdkPaintableOnApplication: self presenter application) ]. 
 	
 	"Events"
 	panelWidget
@@ -93,12 +90,15 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 	self presenter isPinned ifTrue: [ 
 		"this needs to be deferred because in fact, there pinned action lives at the 
 		 parent (a PanelFrame), so we need to wait until the widget is placed"
-		self addDeferredAction: [ panelWidget pinned: true ] ].
+		self addDeferredAction: [ self updatePinnedTo: true ] ].
 	self presenter whenPinnedChangedDo: [ :aBoolean | self updatePinnedTo: aBoolean ].
 	self presenter isModified ifTrue: [ panelWidget modified: true ].
 	self presenter whenModifiedChangedDo: [ :aBoolean | self updateModifiedTo: aBoolean ].
 
-	self presenter whenWindowIconChangedDo: [ :aForm | self updateWindowIconTo: aForm ]
+	self presenter windowIcon 
+		ifNotNil: [ :aForm | panelWidget icon: (aForm asGdkPaintableOnApplication: self presenter application) ]. 
+	self presenter whenWindowIconChangedDo: [ :aForm | self updateWindowIconTo: aForm ].
+
 ]
 
 { #category : 'private - announcing' }
@@ -371,6 +371,7 @@ GtkPanelWidgetAdapter >> updatePosition [
 { #category : 'private' }
 GtkPanelWidgetAdapter >> updateWindowIconTo: aForm [
 
+	"we do not escape on form == nil because we use nil to clear it" 
 	self widgetDo: [ :w |
 		w icon: (aForm 
 			ifNotNil: [ aForm asGdkPaintableOnApplication: self presenter application ] 
