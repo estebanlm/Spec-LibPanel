@@ -73,9 +73,7 @@ GtkPanelWidgetAdapter >> addModelTo: panelWidget [
 		yourself).
 	panelWidget connectDestroy: [ self runInSystem: [ self widgetDestroyed ] ].
 
-	childWidget := SpBindings 
-		value: self presenter application adapterBindings 
-		during: [ self presenter presenter build ].
+	childWidget := self presenterWidget.
 
 	panelWidget
 		title: self presenter title;
@@ -270,6 +268,14 @@ GtkPanelWidgetAdapter >> presented [
 		self announcePresented ]
 ]
 
+{ #category : 'building' }
+GtkPanelWidgetAdapter >> presenterWidget [
+
+	^ SpBindings 
+		value: self presenter application adapterBindings 
+		during: [ self presenter presenter build ]
+]
+
 { #category : 'private - deferring' }
 GtkPanelWidgetAdapter >> processDeferredActions [
 
@@ -282,6 +288,13 @@ GtkPanelWidgetAdapter >> processDeferredActions [
 GtkPanelWidgetAdapter >> raise [
 
 	self innerWidgetDo: [ :w | w raise ]
+]
+
+{ #category : 'building' }
+GtkPanelWidgetAdapter >> rebuild [
+	
+	self widgetDo: [ :w |
+		w child: self presenterWidget ]
 ]
 
 { #category : 'accessing' }
