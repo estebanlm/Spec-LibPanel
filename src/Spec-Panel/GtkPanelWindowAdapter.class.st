@@ -418,15 +418,19 @@ GtkPanelWindowAdapter >> newToastWidgetFrom: aPanelToast in: aToast [
 		spacing: 5;
 		add: ((toastPresenter newLabel 
 			addStyle: 'heading';
+			useMarkup;
 			label: aPanelToast title; 
 			yourself));
-		add: (toastPresenter newButton 
+	yourself).
+	
+	aPanelToast action ifNotNil: [
+		toastPresenter layout
+			add: (toastPresenter newButton 
 				label: (aPanelToast actionLabel ifNil: [ 'Accept' ]);
 				action: [ 
 					aPanelToast action value. 
 					aToast dismiss ] ) 
-			expand: false;
-	yourself).
+			expand: false ].
 
 	toastPresenter build.
 	
@@ -547,9 +551,7 @@ GtkPanelWindowAdapter >> toAdwToast: aPanelToast [
 	| toast |
 
 	toast := AdwToast new. 
-	aPanelToast action 
-		ifNotNil: [ toast customTitle: (self newToastWidgetFrom: aPanelToast in: toast) ]
-		ifNil: [ toast title: (aPanelToast title ifNil: [ 'Unnamed' ]) ].
+	toast customTitle: (self newToastWidgetFrom: aPanelToast in: toast).
 	aPanelToast timeout 
 		ifNotNil: [ :aNumber | toast timeout: aNumber ].
 	
